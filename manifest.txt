@@ -1,0 +1,127 @@
+3rdparty manifest
+-----------------
+
+ 3rdparty
+
+ dist libraries
+
+     - aces_container - Aces container reference implementation
+ 
+     - alembic - Alembic
+       depends on: glew, hdf5, ilmbase, boost and zlib
+
+     - boost - Boost C++ Libraries
+       depends on: bzip2 zlib
+
+     - bzip2 - Bzip2
+
+     - ffmpeg - FFmpeg
+       depends on: jpeg libpng yasm
+
+     - gettext - Gettext
+       depends on: autoconf
+
+     - glew - The OpenGL Extension Wrangler Library
+
+     - glm - OpenGL Mathematics
+
+     - gtest - Google C++ Testing Framework
+     
+     - hdf5 - HDF5
+       depends on: zlib
+       
+     - ilmbase - Ilmbase
+     
+     - jasper - Jasper
+     
+     - jpeg - Jpeg
+
+     - lcms
+       depends on: jpeg tiff zlib
+     
+     - libpng - LibPNG
+
+     - libquicktime - LibQuicktime
+       depends on: ffmpeg jpeg libpng pkg-config x264 (automake)
+
+     - libwebp - LibWebP
+
+     - ocio - OpenColorIO
+       depends on: oiio
+     
+     - oiio - OpenImageIO
+       depends on: boost glew ilmbase jasper jpeg libpng libwebp openexr ptex qt tiff
+     
+     - openexr - OpenEXR
+       depends on: ilmbase zlib
+
+     - pkg-config
+
+     - portaudio
+
+     - ptex - PTex
+       
+     - qt - Qt framework
+       depends on: libpng tiff jpeg zlib
+
+     - qt-qt3d - Qt3D framework
+       depends on: qt
+
+     - sdl - SDL framework
+     
+     - tiff - LibTiff - TIFF Libraries and Utilities
+       depends on: jpeg zlib
+
+     - x264 - x264
+       depends on: yasm
+
+     - yaml-cpp - Yaml cpp
+       depends on: boost
+
+     - yasm - Yasm
+       
+     - zlib - Zlib
+     
+ development libraries
+
+     - ctl - Color transformation language
+       depends on: ilmbase
+
+     - fltk - Fast Light Tool Kit (FLTK)
+       depends on: jpeg libpng zlib tiff
+       
+     - openexr_ctl - OpenEXR CTL
+       depends on: openexr ctl
+
+ viewers
+     
+     - openexr_viewers
+       depends on: openexr ctl fltk
+     
+ autotools
+
+     - autoconf - Autoconf
+
+     - automake - Automake
+       depends on: autoconf
+
+     - libtool - Libtool
+       depends on: 
+
+ media
+ 
+     - alembic-examples - Alembic Octopus example
+     
+     - jpeg2000_images - Jpeg 2000 images
+     
+     - ocio-images - OpenColorIO images
+     
+     - oiio-images - OpenImageIO images
+ 
+     - openexr-images - OpenEXR images
+     
+ tests
+
+     - QtTest - Qt Test program
+       depends on: qt
+

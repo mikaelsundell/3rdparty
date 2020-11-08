@@ -1,0 +1,40 @@
+*** jmorecfg.h.orig	Tue Apr  9 23:26:18 2013
+--- jmorecfg.h	Wed Apr 10 00:09:26 2013
+***************
+*** 251,268 ****
+   * specific header files that you want to include together with these files.
+   * Defining HAVE_BOOLEAN before including jpeglib.h should make it work.
+   */
+  
+- #ifdef HAVE_BOOLEAN
+  #ifndef FALSE			/* in case these macros already exist */
+  #define FALSE	0		/* values of boolean */
+  #endif
+  #ifndef TRUE
+  #define TRUE	1
+  #endif
+- #else
+- typedef enum { FALSE = 0, TRUE = 1 } boolean;
+- #endif
+- 
+  
+  /*
+   * The remaining options affect code selection within the JPEG library,
+--- 251,267 ----
+   * specific header files that you want to include together with these files.
+   * Defining HAVE_BOOLEAN before including jpeglib.h should make it work.
+   */
++  
++ #ifndef HAVE_BOOLEAN
++ typedef int boolean;
++ #endif
+  
+  #ifndef FALSE			/* in case these macros already exist */
+  #define FALSE	0		/* values of boolean */
+  #endif
+  #ifndef TRUE
+  #define TRUE	1
+  #endif
+  
+  /*
+   * The remaining options affect code selection within the JPEG library,

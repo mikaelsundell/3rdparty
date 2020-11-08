@@ -1,0 +1,11 @@
+--- externalpackages.orig	2020-08-05 23:24:29.000000000 +0200
++++ externalpackages.cmake	2020-10-25 17:48:24.000000000 +0100
+@@ -167,7 +167,7 @@
+     # cmake output (e.g. boost 1.70.0, cmake <= 3.14). Specifically it fails
+     # to set the expected variables printed below. So until that's fixed
+     # force FindBoost.cmake to use the original brute force path.
+-    set (Boost_NO_BOOST_CMAKE ON)
++    add_definitions (-DBoost_NO_BOOST_CMAKE=ON)
+     checked_find_package (Boost 1.53 REQUIRED
+                        COMPONENTS ${Boost_COMPONENTS}
+                        PRINT Boost_INCLUDE_DIRS Boost_LIBRARIES

@@ -1,0 +1,86 @@
+3rdparty install
+------------------
+
+The 3rdparty build system requires CMake.
+Get it from: http://www.cmake.org.
+
+Some build configurations requires python for bootstrapping and setup.
+Get it from: http://www.python.org.
+
+On macOS Cataline the Command Line Tools needs to be installed, not just Xcode.
+Get Xcode from AppStore.
+Get Command Line Tools from "Preferences > Downloads > Command Line Tools", press Install.
+
+Qt is used to build apps.
+http://download.qt.io/official_releases/qt/5.15/5.15.1/single/qt-everywhere-src-5.15.1.tar.xz
+
+    Make sure you download the .tar.xz unix formatted single archive
+
+    To build for 3rdparty first build base libraries and configure Qt
+
+    ./configure -prefix $(path)/3rdparty/build/macosx.debug 
+                -libdir $(path)/git/3rdparty/build/macosx.debug/lib 
+                -opensource 
+                -confirm-license 
+                -system-libpng 
+                -system-libjpeg 
+                -system-zlib 
+                -skip qtactiveqt
+                -skip qtandroidextras
+                -skip qtconnectivity
+                -skip qtgamepad
+                -skip qtlocation
+                -skip qtlottie
+                -skip qtpurchasing
+                -skip qtsensors
+                -skip qtspeech
+                -skip qtvirtualkeyboard
+                -skip qtwayland
+                -skip qtwebchannel
+                -skip qtwebengine
+                -skip qtwebglplugin
+                -skip qtwebsockets
+                -skip qtwebview
+                -I$(path)/git/3rdparty/build/macosx.debug/include 
+                -L$(path)/git/3rdparty/build/macosx.debug/lib &&
+    make install
+
+
+Building 3rdparty on Linux and OS X
+-----------------------------------
+
+The 3rdparty library can be built from the top directory by typing 
+make. Advanced users can use CMake directly, see CMakeLists.txt.
+
+The build will create both a build and a dist directory. The build directory
+contains both libraries and binary files suitable for development and test 
+while the dist directory contains the final library files for distribution.
+Only includes, libraries and pkgconfig files will be copied to the dist 
+directory.
+
+For both the build and dist directory a platform directory will be
+created with the name of the platform you are building for (e.g. linux,
+macosx or win).
+
+See the MANIFEST file for the main projects and their dependencies.
+
+
+Running make
+------------
+
+Make targets you should know about:
+
+    make                      Build all projects for development and test in 
+			                  'build/platform'
+    make debug                Build all projects with debugging symbols when
+			                  possible.
+    make clean                Get rid of all the temporary files in 'build/platform'.
+    make help                 Print all the make options
+
+Additionally, a few helpful modifiers alter some build-time options:
+
+    make verbose=0 ...        Show all compilation commands
+    make build_libs=1 ...     Build libraries
+    make build_viewers=1 ...  Build viewers
+    make build_autotools=1 ...Build autotools
+    make build_media=1 ...    Build media

@@ -1,0 +1,33 @@
+3rdparty platforms
+------------------
+
+ 3rdparty
+
+ Linux versions
+
+     - CentOS 6.3 (Final) - gcc version 4.4.6 
+       
+       Requirements:
+         Yum installer: yum install gcc-c++ python-devel libXi-devel libXmu-devel glut-devel mesa-libGLU-devel gstream* wget
+         
+         Cmake: cmake 2.8 (install from rpm)
+         http://www.cmake.org/cmake/resources/software.html
+
+         CG Toolkit: https://developer.nvidia.com/cg-toolkit-download
+         (Make sure the appropriate arch version is installed, 32/64-bit)
+
+         rpm -ivh Cg-3.1_April2012_x86_64.rpm
+
+         NVIDIA drivers
+         Never install 32-bit compatibility drivers on 64-bit systems, produces configure libdir issues.
+
+ Mac versions
+
+     - MacOSX 10.15.5 (Catalina) - clang version 11.0.3 (clang-1103.0.32.62)
+
+       Requirements:
+         Xcode 4.6
+
+         Use build_autotools=1 when building.
+         wget is optional, will fallback to curl if not found.
+
