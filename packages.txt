@@ -1,0 +1,115 @@
+3rdparty packages:
+
+materialx
+---------------------------------
+CMakeLists.txt
+* Line 8: Changed compiler to 14 for oiio compatibility
+* Line 49: Added OpenImageIO_Util library
+* TODO: Fix nanogui on Mac M1/ arm64 - cannot create opengl context?
+  GLFW error 65544: Cocoa: Failed to retrieve display name
+* Create PR for project @ Github
+
+nanogui
+---------------------------------
+* git submodule update --init --recursive, removed pybind11
+* CPLUS_INCLUDE_PATH and LD_LIBRARY_PATH for pybind11
+* Added Eigen to copy include
+* TODO: Only copies openvg, gltw and Eigen - requires libraries for linking?
+* Create PR for project @ Github
+  
+ptex
+---------------------------------
+CMakeLists.txt
+* Line 40: Removed pkgconfig from cmake
+
+pcre2
+---------------------------------
+* CMakeLists.txt: Added DPCRE2_BUILD_PCRE2_16 to build for 16 bit character support
+
+pyside
+---------------------------------
+* TODO: Build all Qt libraries as a part of Qt build instructions - right now we skip:
+  Qt5Positioning
+  Qt5Location
+  Qt5Sensors
+  Qt5TextToSpeech
+  Qt5WebChannel
+  Qt5WebEngineCore
+  Qt5WebEngine
+  Qt5WebSockets
+* TODO: Change name to pyside2?
+
+opensubdiv
+--------------------------------- 
+examples/common/glPtexMipmapTexture.h
+* Line 28: Added glLoader to glLoader.h include
+
+examples/common/glPtexMipmapTexture.cpp
+* Line 25: Added glLoader to glLoader.h include
+
+* Create PR for project @ Github
+
+qt
+--------------------------------- 
+OSX12.1 SDK fixes
+* https://github.com/microsoft/vcpkg/issues/21055
+
+qt3d/src/3rdparty/assimp/contrib/zip/src/miniz.h 
+* Line 2931: Changed to stat from stat64, deprecated in OSX12.1
+* Line 2932: Changed to stat from stat64, deprecated in OSX12.1
+
+build notes
+
+mkdir build
+cd build
+../configure 
+-prefix /Volumes/Build/3rdparty/build/macosx/arm64.debug 
+-libdir /Volumes/Build/3rdparty/build/macosx/arm64.debug/lib 
+QMAKE_APPLE_DEVICE_ARCHS=arm64 
+-opensource 
+-confirm-license 
+-system-libpng 
+-system-libjpeg 
+-system-zlib 
+-system-pcre 
+-system-harfbuzz 
+-skip qtactiveqt 
+-skip qtandroidextras 
+-skip qtconnectivity -skip qtgamepad 
+-skip qtlocation 
+-skip qtlottie 
+-skip qtpurchasing 
+-skip qtsensors 
+-skip qtspeech 
+-skip qtvirtualkeyboard 
+-skip qtwayland 
+-skip qtwebengine 
+-skip qtwebchannel 
+-skip qtwebengine 
+-skip qtwebglplugin 
+-skip qtwebsockets 
+-skip qtwebview 
+-I/Volumes/Build/3rdparty/build/macosx/arm64.debug/include 
+-L/Volumes/Build/3rdparty/build/macosx/arm64.debug/lib && make install
+
+usd
+---------------------------------
+cmake/modules/FindTBB.cmake 
+* Line 200: changed tbb_stddef.h to version.h
+
+* Fixed build ussies converter.cc and materializer.cc
+  pbr_shader.GetPath().AppendProperty(kTokSurface)
+
+usd_from_gltf
+---------------------------------
+gltf/CMakeLists.txt
+* Line 15: Changed from find_library to find_path for single header json.hpp
+
+* build notes
+cmake ../ 
+-DUSD_DIR=/Volumes/Build/3rdparty/build/macosx/arm64.debug 
+-Djson_DIR=/Volumes/Build/3rdparty/build/macosx/arm64.debug/include/nlohmann 
+-DCMAKE_PREFIX_PATH=/Volumes/Build/3rdparty/build/macosx/arm64.debug 
+-DCMAKE_MODULE_PATH=/Users/mikaelsundell/Git/usd_from_gltf/cmake/modules 
+-DDRACO_ROOT=/Volumes/Build/3rdparty/build/macosx/arm64.debug 
+-Ddclap_DIR=/Volumes/Build/3rdparty/build/macosx/arm64.debug/include/tclap

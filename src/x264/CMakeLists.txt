@@ -1,5 +1,5 @@
 ##-*****************************************************************************
-##  Copyright 2012-2020 Mikael Sundell and the other authors and contributors.
+##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
 ##  x264 CMakeLists.txt for 3rdparty
@@ -20,7 +20,7 @@ build_info( " Adding x264 project" )
 set( project_name "x264" )
 
 # project pkg
-set( project_pkg ${project_name}-snapshot-20140115-2245-stable )
+set( project_pkg ${project_name}-master )
 
 # project archive
 set( project_arc ${project_pkg}.tar.bz2 )
@@ -50,7 +50,7 @@ set( inc_files
 
 # lib files
 set( lib_files
-    x264.138
+    x264.164
 )
 
 # pkgfiles

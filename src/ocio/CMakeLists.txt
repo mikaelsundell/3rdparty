@@ -1,5 +1,5 @@
 ##-*****************************************************************************
-##  Copyright 2012-2020 Mikael Sundell and the other authors and contributors.
+##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
 ##  OCIO CMakeLists.txt for 3rdparty
@@ -20,10 +20,10 @@ build_info( " Adding ocio project" )
 set( project_name "ocio" )
 
 # lib pkg
-set( project_pkg "OpenColorIO-201108" )
+set( project_pkg "OpenColorIO-master-220313" )
 
 # project archive
-set( project_arc ${project_pkg}.zip )
+set( project_arc ${project_pkg}.tar.gz )
 
 # project url
 set( project_url ${repo_url}/${project_arc} )
@@ -45,6 +45,7 @@ set( project_bin_dir
 set( bin_files
     ociobakelut
     ociocheck
+    ociodisplay
     ociowrite
     ociomakeclf
     ociochecklut
@@ -61,7 +62,7 @@ set( inc_dir
 
 # lib files
 set( lib_files
-    OpenColorIO.2.0.0
+    OpenColorIO.2.2.0
 )
 
 IF( UNIX )
@@ -102,6 +103,7 @@ IF( UNIX )
     # options
     set( build_options -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} )
     set( build_options ${build_options} -DCMAKE_VERBOSE_MAKEFILE=true )
+    set( build_options ${build_options} -DOCIO_USE_OIIO_CMAKE_CONFIG=true )
 
     if( project_cfg_cmake_prefix )
         set( build_make
@@ -119,7 +121,7 @@ IF( UNIX )
 
     set( build_make
         ${build_make}
-        cd OpenColorIO-master &&
+        cd OpenColorIO &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         export OIIO_PATH=${build_dir} &&

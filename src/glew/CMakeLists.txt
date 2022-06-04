@@ -1,5 +1,5 @@
 ##-*****************************************************************************
-##  Copyright 2012-2014 Mikael Sundell and the other authors and contributors.
+##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
 ##  glew CMakeLists.txt for 3rdparty

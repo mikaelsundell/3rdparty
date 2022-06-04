@@ -1,5 +1,5 @@
 ##-*****************************************************************************
-##  Copyright 2012-2020 Mikael Sundell and the other authors and contributors.
+##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
 ##  freetype CMakeLists.txt for 3rdparty

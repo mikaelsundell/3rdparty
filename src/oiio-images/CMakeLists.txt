@@ -1,5 +1,5 @@
 ##-*****************************************************************************
-##  Copyright 2010-2012 Mikael Sundell and the other authors and contributors.
+##  Copyright 2010-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
 ##  oiio-images CMakeLists.txt for thirdparty

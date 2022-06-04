@@ -1,5 +1,5 @@
 ##-*****************************************************************************
-##  Copyright 2012-2014 Mikael Sundell and the other authors and contributors.
+##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
 ##  oiio CMakeLists.txt for 3rdparty
@@ -10,7 +10,7 @@
 # Copyright 2008 Larry Gritz and the other authors and contributors.
 # All Rights Reserved.
 
-# oiio from github.com master 2020-08-04
+# oiio from github.com master 2022-03-14
 # https://github.com/OpenImageIO/oiio/tree/master
 
 build_info( " Adding oiio project" )
@@ -21,13 +21,13 @@ build_info( " Adding oiio project" )
 set( project_name "oiio" )
 
 # project pkg
-set( project_pkg "oiio-master-200805" )
+set( project_pkg "oiio-master-220313" )
 
 # project archive
-set( project_arc ${project_pkg}.zip )
+set( project_arc ${project_pkg}.tar.gz )
 
 # project url
-set( project_url ${repo_url}/${project_pkg}.zip )
+set( project_url ${repo_url}/${project_pkg}.tar.gz )
 
 # project config
 set( project_cfg_verbose TRUE )
@@ -47,8 +47,8 @@ set( bin_files
     idiff
     igrep
     iinfo
-    maketx
     iv
+    maketx
     oiiotool
 )
 
@@ -58,17 +58,10 @@ SET( inc_dir
 )
 
 # lib files
-if ( CMAKE_SHARED_LIBS )
-    set( lib_files
-        OpenImageIO.2.3.0
-        OpenImageIO_Util.2.3.0
-    )
-else()
-    set( lib_files
-        OpenImageIO
-        OpenImageIO_Util
-    )
-endif()
+set( lib_files
+    OpenImageIO
+    OpenImageIO_Util
+)
 
 if( UNIX )
 
@@ -83,10 +76,18 @@ if( UNIX )
     )
 
     # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
-    )
-    
+    if( CMAKE_BUILD_TYPE STREQUAL Debug )
+        set( lib_dtag "_d" )
+    endif()
+
+    set( lib_version "2.4.1" )
+
+    foreach( lib_file ${lib_files} )
+        list( APPEND lib_output 
+            ${build_lib_dir}/${lib_prefix}${lib_file}${lib_dtag}.${lib_version}${lib_suffix}
+        )
+    endforeach()
+
 ENDIF()
 
 # build configuration
@@ -105,11 +106,6 @@ if( UNIX )
         ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
     )
 
-    # patch
-    set( build_patch
-        patch ${project_bin_dir}/oiio-master/src/cmake/externalpackages.cmake ${project_src_dir}/externalpackages.cmake.patch
-    )
-
     # options
     if( CMAKE_BUILD_TYPE STREQUAL Debug )
         set( build_options debug )
@@ -126,17 +122,15 @@ if( UNIX )
     # dependencies
 
     # JPEGTurbo = Not used
-    # Freetype = Not used
-    # HDF5 = Not used
+    # OpenColorIO = Not used
+    # Rebuild after oiio build as OpenColorIO requires oiio
     # OpenCV = Not used
-    # TBB = Not used
-    # DCMTK = Not used
-    # Field3D = Not used
     # LibHeif = Not used
-    # LibRaw = Not used
     # OpenVDB = Not used
     # PTex = Not used
+    # R3DSDK = Not used
     # Nuke = Not used
+    # Qt = Not used
     # Libsquish = Not used
 
     # Boost
@@ -160,7 +154,7 @@ if( UNIX )
     # make and install
 
     set( build_make
-    	cd oiio-master &&
+    	cd oiio &&
     )
 
     set( build_make
@@ -208,7 +202,6 @@ if( UNIX )
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
-        COMMAND ${build_patch}
         COMMAND ${build_make}
         COMMAND ${build_script}
         COMMAND ${build_check}

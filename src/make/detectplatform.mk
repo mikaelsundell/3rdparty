@@ -25,7 +25,9 @@ ifneq (${hw},x86)
   ifneq (${hw},x86_64)
     ifneq (${hw},i386)
       ifneq (${hw},i686)
-        $(error "ERROR: Unknown hardware architecture")
+        ifneq (${hw},arm64)
+          $(error "ERROR: Unknown hardware architecture")
+        endif
       endif
     endif
   endif
@@ -60,10 +62,10 @@ ifeq (${platform},unknown)
   endif
 
   # If we haven't been able to determine the platform from uname, use
-  # whatever is in $ARCH, if it's set.
+  # whatever is in $ARkindCH, if it's set.
   ifeq (${platform},unknown)
-    ifneq (${ARCH},)
-      platform := ${ARCH}
+    ifneq (${kind},)
+      platform := ${kind}
     endif
   endif
 

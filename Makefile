@@ -22,7 +22,7 @@ include ${working_dir}/src/make/detectplatform.mk
 # Presence of make variables DEBUG and PROFILE cause us to make special
 # builds, which we put in their own areas.
 ifdef DEBUG
-    variant +=.debug
+    variant +=${hw}.debug
 endif
 
 MY_MAKE_FLAGS ?=
@@ -31,7 +31,7 @@ MY_CMAKE_FLAGS ?=
 # Set up variables holding the names of platform-dependent directories --
 # set these after evaluating site-specific instructions
 build_dir     := build
-platform_dir  := ${build_dir}/${platform}${variant}
+platform_dir  := ${build_dir}/${platform}/${variant}
 
 $(info -- base_dir = ${base_dir})
 $(info -- build_dir = ${build_dir})
@@ -47,6 +47,10 @@ endif
 
 ifneq (${build_libs},)
 	MY_CMAKE_FLAGS += -Dbuild_libs:BOOL=${build_libs}
+endif
+
+ifneq (${build_extras},)
+	MY_CMAKE_FLAGS += -Dbuild_extras:BOOL=${build_extras}
 endif
 
 ifneq (${build_autotools},)
@@ -78,7 +82,7 @@ cmakesetup:
 		cd ${platform_dir} ; \
 		cmake -DCMAKE_INSTALL_PREFIX=${base_dir}/${platform_dir} \
 			 ${MY_CMAKE_FLAGS} \
-			 ../../ ; \
+			 ../../../ ; \
 	 )
 
 # 'make cmakeinstall' builds everthing and installs it in 'dist'.
@@ -105,6 +109,7 @@ help:
 	@echo "  make verbose=1 ...          Show all compilation commands."
 	@echo "  make build_base=1 ...       Build base."
 	@echo "  make build_libs=1 ...       Build libraries."
+	@echo "  make build_extras=1 ...     Build extras."
 	@echo "  make build_autotools=1 ...  Build autotools."
 	@echo "  make build_media=1 ...      Build media."
 	@echo ""

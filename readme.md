@@ -1,10 +1,10 @@
 # 3rdparty #
 
-A portable 3rdparty library for development and distribution of film and computer graphics applications.
+A developer 3rdparty library for development and packaging of film and color applications.
 
 ## 3rdparty consists of ##
 
-  * A set of libraries, viewers and media provided on Linux and Mac based platforms.
+  * A set of libraries, viewers and media provided on Mac based platforms.
   
   * A set of configurations to simplify the process of building 3rdparty support without the
     knowledge of each individual build system. 
@@ -15,7 +15,7 @@ A portable 3rdparty library for development and distribution of film and compute
 
 ## 3rdparty can be used to ##
 
-  * Resolve the most common libraries used for computer graphics applications.
+  * Resolve the most common libraries used for film and color applications.
 
   * Only build a subset of libraries with a default or non-default configuration.
 

@@ -1,5 +1,5 @@
 ##-*****************************************************************************
-##  Copyright 2012-2020 Mikael Sundell and the other authors and contributors.
+##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
 ##  Boost CMakeLists.txt for 3rdparty
@@ -99,6 +99,16 @@ if( UNIX )
         SET( lib_dtag "-d" )
     endif()
 
+    if (lib_arch STREQUAL "x86_64" )
+        set( lib_atag "x64" )
+    elseif (lib_arch STREQUAL "arm64" )
+        set( lib_atag "a64" )
+    else()
+        set( lib_atag ${lib_arch} )
+    endif()
+
+    set( lib_version "1.73.0" )
+
     foreach( lib_file ${lib_files} )
     
         if ( APPLE )
@@ -107,7 +117,7 @@ if( UNIX )
                 NOT ${lib_file} STREQUAL "boost_test_exec_monitor" )
 
                 LIST( APPEND lib_output 
-                    ${build_lib_dir}/${lib_prefix}${lib_file}${lib_mttag}${lib_dtag}-x64${lib_suffix}
+                    ${build_lib_dir}/${lib_prefix}${lib_file}${lib_mttag}${lib_dtag}-${lib_atag}${lib_suffix}
                 )
             endif()
 
@@ -117,7 +127,7 @@ if( UNIX )
             if( NOT ${lib_file} STREQUAL "boost_thread" )
                 STRING( REGEX REPLACE 
                     "^([^.]+)([.]*)(.*)" 
-                    "${lib_prefix}\\1${lib_dtag}${lib_suffix}.1.73.0\\2\\3" 
+                    "${lib_prefix}\\1${lib_dtag}${lib_suffix}.${lib_version}\\2\\3" 
                     st_file "${lib_file}"
                 )
 
@@ -128,7 +138,7 @@ if( UNIX )
 
             string( REGEX REPLACE 
                 "^([^.]+)([.]*)(.*)" 
-                "${lib_prefix}\\1${lib_mttag}${lib_dtag}${lib_suffix}.1.73.0\\2\\3" 
+                "${lib_prefix}\\1${lib_mttag}${lib_dtag}${lib_suffix}.${lib_version}\\2\\3" 
                 mt_file "${lib_file}"
             )
 

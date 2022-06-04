@@ -1,5 +1,5 @@
 ##-*****************************************************************************
-##  Copyright 2012-2014 Mikael Sundell and the other authors and contributors.
+##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
 ##  openexr CMakeLists.txt for 3rdparty
@@ -9,8 +9,8 @@
 # openexr Copyright
 # Copyright (c) 2002, Industrial Light & Magic, a division of Lucas Digital Ltd. LLC
 
-# openexr from openexr.com 2.5.2 2020-08-04
-# http://www.openexr.com/downloads.html
+# openexr from github.com 3.1.4 2022-03-19
+# https://github.com/AcademySoftwareFoundation/openexr
 
 build_info( " Adding openexr project" )
 
@@ -20,7 +20,7 @@ build_info( " Adding openexr project" )
 set( project_name "openexr" )
 
 # project pkg
-set( project_pkg ${project_name}-2.5.2 )
+set( project_pkg ${project_name}-3.1.4 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -40,13 +40,14 @@ set( project_bin_dir
 
 # bin files
 set( bin_files
-    exrstdattr
-    exrmultiview
-    exrmultipart
-    exrmaketiled
-    exrmakepreview
-    exrenvmap
     exr2aces
+    exrenvmap
+    exrheader
+    exrinfo
+    exrmakepreview
+    exrmaketiled
+    exrmultipart
+    exrmultiview
 )
 
 # inc dir
@@ -56,13 +57,11 @@ set( inc_dir
 
 # lib files
 set( lib_files
-    Half-2_5
-    Iex-2_5
-    IexMath-2_5
-    IlmImf-2_5
-    IlmImfUtil-2_5
-    IlmThread-2_5
-    Imath-2_5
+    Iex-3_1
+    IlmThread-3_1
+    OpenEXR-3_1
+    OpenEXRCore-3_1
+    OpenEXRUtil-3_1   
 )
 
 # pkgfiles
@@ -90,7 +89,7 @@ IF( UNIX )
     
         if ( APPLE )
             list( APPEND lib_output 
-                ${build_lib_dir}/${lib_prefix}${lib_file}${lib_dtag}.25.0.1${lib_suffix}
+                ${build_lib_dir}/${lib_prefix}${lib_file}${lib_dtag}.30.4.1${lib_suffix}
             )
 
 	    else()
@@ -198,4 +197,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} boost zlib )
+add_dependencies( ${project_name} imath boost zlib )

@@ -1,5 +1,5 @@
 ##-*****************************************************************************
-##  Copyright 2012-2020 Mikael Sundell and the other authors and contributors.
+##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
 ##  libwebp CMakeLists.txt for 3rdparty
@@ -20,7 +20,7 @@ build_info( " Adding libwebp project" )
 set( project_name "libwebp" )
 
 # project pkg
-set( project_pkg ${project_name}-0.3.1 )
+set( project_pkg ${project_name}-1.2.2 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -52,12 +52,15 @@ set( inc_dir
 # lib files
 if ( CMAKE_SHARED_LIBS )
     set( lib_files
-        webp
-        webp.4
+        webp.7
+        webpdemux.2
+        webpmux.3
     )
 else()
     set( lib_files
         webp
+        webpdemux
+        webpmux
     )
 endif()
 

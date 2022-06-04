@@ -1,5 +1,5 @@
 ##-*****************************************************************************
-##  Copyright 2012-2020 Mikael Sundell and the other authors and contributors.
+##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
 ##  yasm CMakeLists.txt for 3rdparty
@@ -20,7 +20,7 @@ build_info( " Adding yasm project" )
 set( project_name "yasm" )
 
 # project pkg
-set( project_pkg ${project_name}-1.2.0 )
+set( project_pkg ${project_name}-1.3.0 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -43,11 +43,6 @@ set( bin_files
     vsyasm
     yasm
     ytasm
-)
-
-# inc files
-set( inc_files
-    libyasm
 )
 
 # inc dirs
@@ -75,11 +70,6 @@ IF( UNIX )
     # inc files
     build_add_files( 
         "${inc_files}" "${build_inc_dir}" inc_output
-    )
-
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
     )
 
     # lib files

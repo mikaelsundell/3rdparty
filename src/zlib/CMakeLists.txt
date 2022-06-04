@@ -1,5 +1,5 @@
 ##-*****************************************************************************
-##  Copyright 2012-2020 Mikael Sundell and the other authors and contributors.
+##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
 ##  zlib CMakeLists.txt for 3rdparty
@@ -70,7 +70,6 @@ ENDIF()
 IF( UNIX )
 
     # download
-
     set( build_download 
         ${download} ${project_url}
     )
@@ -82,18 +81,18 @@ IF( UNIX )
 
     # options
     if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=TRUE )
+        SET( build_options -DBUILD_SHARED_LIBS=true )
     else()
-        SET( build_options -DBUILD_SHARED_LIBS=FALSE )
+        SET( build_options -DBUILD_SHARED_LIBS=false )
     endif()
 
     # configure, make and install
     set( build_make
         ${build_env} &&
-    	cd ${project_pkg} &&
+        cd ${project_pkg} &&
         cmake -DCMAKE_INSTALL_PREFIX=${build_dir} 
-              -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-              ${build_options} &&
+            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            ${build_options} &&
         make ${build_flags} &&
         make install
     )

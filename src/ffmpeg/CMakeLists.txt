@@ -1,5 +1,5 @@
 ##-*****************************************************************************
-##  Copyright 2012-2014 Mikael Sundell and the other authors and contributors.
+##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
 ##  ffmpeg CMakeLists.txt for 3rdparty
@@ -42,7 +42,6 @@ set( project_bin_dir
 set( bin_files
     ffmpeg
     ffprobe
-    ffserver
 )
 
 # inc dirs

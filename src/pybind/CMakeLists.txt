@@ -1,5 +1,5 @@
 ##-*****************************************************************************
-##  Copyright 2012-2020 Mikael Sundell and the other authors and contributors.
+##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
 ##  Pybind CMakeLists.txt for 3rdparty
@@ -9,7 +9,7 @@
 # Pybind Copyright
 # Copyright (c) 2016 Wenzel Jakob <wenzel.jakob@epfl.ch>, All rights reserved.
 
-# pybind from github.com 2.6.0 2020-11-07
+# pybind from github.com 2.9.1 2022-03-19
 # https://github.com/pybind/pybind11
 
 build_info( " Adding pybind project" )
@@ -20,7 +20,7 @@ build_info( " Adding pybind project" )
 set( project_name "pybind" )
 
 # lib pkg
-set( project_pkg "pybind11-2.6.0" )
+set( project_pkg "pybind11-2.9.1" )
 
 # project archive
 set( project_arc ${project_pkg}.zip )
@@ -78,10 +78,10 @@ IF( UNIX )
 
     set( build_make
         ${build_make}
+        export LLVM_INSTALL_DIR=${build_dir} &&
         cd ${project_pkg} &&
         mkdir ${build_cmake} &&
         cd ${build_cmake} &&
-        export OIIO_PATH=${build_dir} &&
         cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
               -DCMAKE_INSTALL_PREFIX=${build_dir} ${build_options} &&
         make ${build_flags} &&
@@ -93,7 +93,7 @@ IF( UNIX )
         OUTPUT ${inc_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
-        COMMAND ${build_include}
+        COMMAND ${build_make}
     )   
 
 endif()

@@ -126,7 +126,7 @@ do
             LNAME=`basename ${l}`
             DNAME=
 
-            if [[ `echo ${LDIR} | grep "${ABSOLUTEPATH}"` ]] || [ $LDIR == "." ]; then
+            if [[ `echo ${LDIR} | grep "${ABSOLUTEPATH}"` ]] || [[ `echo ${LDIR} | grep "@rpath"` ]] || [ $LDIR == "." ]; then
             
                 # debug
             

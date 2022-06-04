@@ -1,5 +1,5 @@
 ##-*****************************************************************************
-##  Copyright 2012-2020 Mikael Sundell and the other authors and contributors.
+##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
 ##  Master CMakeLists.txt for 3rdparty
@@ -39,11 +39,11 @@ set( build_libs
     "Build libs"
 )
 
-set( build_viewers 
+set( build_extras  
     OFF
     CACHE
     BOOL
-    "Build viewers"
+    "Build extras"
 )
 
 set( build_autotools 
@@ -120,7 +120,7 @@ set( repo_url http://s3-eu-west-1.amazonaws.com/mikaelsundell/3rdparty )
 set( build_bin_dir ${build_dir}/bin )
 set( build_inc_dir ${build_dir}/include )
 set( build_lib_dir ${build_dir}/lib )
-set( build_framework_dir ${build_dir}/Frameworks )
+set( build_framework_dir ${build_dir}/lib )
 set( build_plugins_dir ${build_dir}/plugins )
 set( build_test_dir ${build_dir}/test )
 set( build_media_dir ${build_dir}/media )
@@ -172,6 +172,7 @@ list(
   APPEND CMAKE_MODULE_PATH
   "${PROJECT_SOURCE_DIR}/src/cmake"
 )
+
 include (buildutils)
 
 # define prefix
@@ -193,6 +194,12 @@ if( CMAKE_SHARED_LIBS )
 else()
     set( lib_suffix ${static_lib_suffix} ) 
 endif()
+
+# define site-package suffix
+set( sitepackage_suffix ".so" ) 
+
+# define arch
+set( lib_arch ${CMAKE_SYSTEM_PROCESSOR} )
 
 # define flags
 if( UNIX )
@@ -238,11 +245,11 @@ endif()
 
 # build configuration
 
-MESSAGE( STATUS "Build configuration" )
+message( STATUS "Build configuration" )
 
 if( build_base )
 
-    MESSAGE( STATUS "Adding base" )
+    message( STATUS "Adding base" )
     build_add_project( 
               bzip2
               DIR ${CMAKE_SOURCE_DIR}/src/bzip2
@@ -303,9 +310,9 @@ if( build_base )
               DESCRIPTION "Zlib"
               BUILD ON
     )
-ENDIF()
+endif()
 
-IF( build_libs )
+if( build_libs )
 
     MESSAGE( STATUS "Adding libs" )
 
@@ -334,6 +341,18 @@ IF( build_libs )
               BUILD ON
     )
     build_add_project(
+              harfbuzz
+              DIR ${CMAKE_SOURCE_DIR}/src/harfbuzz
+              DESCRIPTION "harfbuzz"
+              BUILD ON
+    )
+    build_add_project(
+              imath
+              DIR ${CMAKE_SOURCE_DIR}/src/imath
+              DESCRIPTION "Imath"
+              BUILD ON
+    )
+    build_add_project(
               lcms2
               DIR ${CMAKE_SOURCE_DIR}/src/lcms2
               DESCRIPTION "Lcms2"
@@ -358,6 +377,12 @@ IF( build_libs )
               BUILD ON
     )
     build_add_project(
+              pcre2
+              DIR ${CMAKE_SOURCE_DIR}/src/pcre2
+              DESCRIPTION "pcre2"
+              BUILD ON
+    )
+    build_add_project(
               pkg-config
               DIR ${CMAKE_SOURCE_DIR}/src/pkg-config
               DESCRIPTION "pkg-config"
@@ -369,7 +394,6 @@ IF( build_libs )
               DESCRIPTION "Pybind"
               BUILD ON
     )
-
     build_add_project(
               x264
               DIR ${CMAKE_SOURCE_DIR}/src/x264
@@ -382,7 +406,100 @@ IF( build_libs )
               DESCRIPTION "yasm"
               BUILD ON
     )
-ENDIF()
+endif()
+
+# build extras
+
+if( build_extras )
+
+    build_info( "Adding extras" )
+
+    build_add_project(
+        alembic
+        DIR ${CMAKE_SOURCE_DIR}/src/alembic
+        DESCRIPTION "alembic"
+        BUILD ON
+    )
+    build_add_project(
+        draco
+        DIR ${CMAKE_SOURCE_DIR}/src/draco
+        DESCRIPTION "draco"
+        BUILD ON
+    )
+    build_add_project(
+        json
+        DIR ${CMAKE_SOURCE_DIR}/src/json
+        DESCRIPTION "json"
+        BUILD ON
+    )
+    build_add_project(
+        libjpeg-turbo
+        DIR ${CMAKE_SOURCE_DIR}/src/libjpeg-turbo
+        DESCRIPTION "LibJpeg-turbo"
+        BUILD ON
+    )
+    build_add_project(
+        llvm
+        DIR ${CMAKE_SOURCE_DIR}/src/llvm
+        DESCRIPTION "LLVM"
+        BUILD ON
+    )
+    build_add_project(
+        materialx
+        DIR ${CMAKE_SOURCE_DIR}/src/materialx
+        DESCRIPTION "MaterialX"
+        BUILD ON
+    )
+    build_add_project(
+        nanogui
+        DIR ${CMAKE_SOURCE_DIR}/src/nanogui
+        DESCRIPTION "nanogui"
+        BUILD ON
+    )
+    build_add_project(
+        onetbb
+        DIR ${CMAKE_SOURCE_DIR}/src/onetbb
+        DESCRIPTION "onetbb"
+        BUILD ON
+    )
+    build_add_project(
+        opensubdiv
+        DIR ${CMAKE_SOURCE_DIR}/src/opensubdiv
+        DESCRIPTION "OpenSubDiv"
+        BUILD ON
+    )
+    build_add_project(
+        tclap
+        DIR ${CMAKE_SOURCE_DIR}/src/tclap
+        DESCRIPTION "tclap"
+        BUILD ON
+    )
+    build_add_project(
+        ptex
+        DIR ${CMAKE_SOURCE_DIR}/src/ptex
+        DESCRIPTION "PTex"
+        BUILD ON
+    )
+    build_add_project(
+        pyside
+        DIR ${CMAKE_SOURCE_DIR}/src/pyside
+        DESCRIPTION "Pyside"
+        BUILD ON
+    )
+    build_add_project(
+        pyside2-tools
+        DIR ${CMAKE_SOURCE_DIR}/src/pyside2-tools
+        DESCRIPTION "Pyside2 tools"
+        BUILD ON
+    )
+    build_add_project(
+              usd
+              DIR ${CMAKE_SOURCE_DIR}/src/usd
+              DESCRIPTION "usd"
+              BUILD ON
+    )
+
+endif()
 
 # build autotools
 
@@ -416,6 +533,7 @@ if( build_autotools )
 endif()
  
 # build media
+
 if( build_media )
 
     build_info( "Adding media" )
@@ -446,7 +564,7 @@ if( build_media )
 endif()
 
 # summary
-IF( build_summary )
+if( build_summary )
     build_info( "Summary" )
     build_info( "Host configuration" )
     build_info( " CMAKE_HOST_SYSTEM_NAME = ${CMAKE_HOST_SYSTEM_NAME}" )
@@ -462,8 +580,8 @@ IF( build_summary )
     build_info( " build_flags = ${build_flags}")
     build_info( " build_base = ${build_base}")
     build_info( " build_libs = ${build_libs}")
-    build_info( " build_viewers = ${build_viewers}")
+    build_info( " build_extras = ${build_extras}")
     build_info( " build_media = ${build_media}")
     build_info( "Usage" )
     build_info( " Change a configuration value with: cmake -D<variable>=<value>" )
-ENDIF()
+endif()

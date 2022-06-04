@@ -1,230 +1,155 @@
 3rdparty changes:
 
-Release 0.2.11 (as of December 30 2014)
-----------------------------------
+Update Mars 26 2022
+---------------------------------
+* Updated for arm64
+* Updated boost
+* Updated openexr to 3.1.4
+* Updated x264 from 138 to 164
+* Updated yasm to 1.3.0
+* Updated webp to 1.2.2
+* Added alembic 1.8.3
+* Added draco 1.5.2
+* Added json 3.10.5
+* Added libjpeg-turbo 2.1.3
+* Added llvm 13.0.1
+* Added materialx 1.38.1
+* Added nanogui
+* Added harfbuzz 4.0.1
+* Added imath 3.1.4
+* Added pcre2 10.39
+* Added oneTBB 2021.5.0
+* Added ptex from master
+* Added tclap 1.2.5
+* Removed aces_container
+* Changed copyright to 2022
+* Changed zlib to use Makefiles for pkg-config
+* Added install_sitepackage.sh
+* Clean up changes
 
-* Added aces container to license.
+Update Nov 8 2020
+---------------------------------
+* Rewrite and cleanup after 6 years
 
+Update December 30 2014
+---------------------------------
+* Added aces container to license
 * Added VFX Platform CY2015 compliant to readme
 
-Release 0.2.10 (as of December 30 2014)
-----------------------------------
-
+Update December 30 2014
+---------------------------------
 * Fixed incorrect QtTest repo url
 
-Release 0.2.9 (as of December 29 2014)
-----------------------------------
-
+Update December 29 2014
+---------------------------------
 * Changed to github repo, now owned by mikaelsundell
-
 * Fixed broken alembic media url
-
 * Replaced readme txt with md
 
-Release 0.2.8 (as of December 29 2014)
+Update December 29 2014
 ----------------------------------
-
 * Fixed incorrect tag version
 
-Release 0.2.7 (as of December 29 2014)
+Update December 29 2014
 ----------------------------------
-
 * Updated ctl, removed old patched and updated to 1.5.0
-
 * Removed openexr_ctl, no longer needed
-
 * Updated Alembic to support OpenEXR 2.2
-
 * Fixed fltk incorrect @executable path on mac
-
-* Updated to OpenEXR 2.2
-
+* Updated OpenEXR to 2.2
 * Updated OpenEXR Viewers from github
 
-Release 0.2.6 (as of October 19 2014)
+Update October 19 2014
 ----------------------------------
-
 * Final linux build
 
-Release 0.2.5 (as of October 19 2014)
+Update October 19 2014
 ----------------------------------
 
 * Various fixes for linux build
 
-Release 0.2.4 (as of October 12 2014)
+Update October 12 2014
 ----------------------------------
-
 * Fixed linux build
 
-Release 0.2.3 (as of July 25 2014)
+Update July 25 2014
 ----------------------------------
-
 * Updated OpenImageIO to 1.5.2
 
-Release 0.2.2 (as of April 1 2014)
+Update April 1 2014
 --------------------------------
-
 * Fixed Qt WebKit build issue, Assistant ignored if WebKit is enabled.
 
-Release 0.2.1 (as of March 29 2014)
+Update March 29 2014
 --------------------------------
-
 * Fixed x264 for ffmpeg
 
-Release 0.2.0 (as of Feb 11 2014)
+Update Feb 11 2014
 --------------------------------
-
 * Fresh commit to Github
-
 * Added autoconf, automake, gettext, pkg-config and x264
-
 * Moved all package blobs from repo to Amazon S3.
 
-
-Release 0.1.9 (as of Feb 3 2014)
+Update Feb 3 2014
 --------------------------------
-
 * Added ffmpeg, libquicktime and yasm
 
-
-Release 0.1.8 (as of Jan 1 2014)
+Update Jan 1 2014
 --------------------------------
-
 * Added plugins support to Qt
-
 * Fixed hdf5 incorrect lib names
-
 * Changed thirdparty typos to 3rdparty
-
 * Changed copyright to 2014
 
-
-Release 0.1.7 (as of Nov 24 2013)
+Update Nov 24 2013
 --------------------------------
-
 * Changed name from third party to 3rdparty
-
 * Added support for littleCMS
 
-Release 0.1.6 (as of Sep 7 2013)
+Update Sep 7 2013
 --------------------------------
-
 * Added support for ptex and libwebp
-
 * Fixed Qt patch issue
-
 * Updated openexr to 2.0.1
-
 * Fixed pkgconfig in libtiff
-
 * Fixed release configuration for openexr and zlib
-
 * Fixed jpeg for linux, jmorecfg.h
 
-
-Release 0.1.5 (as of Jul 18 2013)
+Update Jul 18 2013
 --------------------------------
-
 * Added support for yaml-cpp
 
-Release 0.1.4 (as of May 29 2013)
+Update May 29 2013
 --------------------------------
-
 * Updated to support MacOSX 10.8 (Mountain Lion)
-
   * Patched required projects to support clang toolchain.
-
   * Qt and Qt3D uses clang.
-
   * Updated fltk to 1.3.2
 
-Release 0.1.3 (as of Apr 14 2013)
+Update Apr 14 2013
 --------------------------------
-
 * Updated oiio to master branch
-
   * Merged https://github.com/OpenImageIO/oiio/pull/571
 
-Release 0.1.2 (as of Apr 9 2013)
+Update Apr 9 2013
 --------------------------------
-Thirdparty changes:
-
 * Updated jpeg to v9.
-
 * Updated tiff to 4.0.3
-
 * Updated ocio to 1.0.7
-
 * Updated oiio to 1.1
 
-Release 0.1.1 (as of Jan 25 2013)
+Update Jan 25 2013
 --------------------------------
-Major new features:
-
-3rdparty changes:
-
 * Qt qstylesheetstyle patch.
-
 * Fixed install_pkg.sh sed syntax on macosx. 
-
 * Renamed text files to lowercase.
 
-Release 0.1.0 (as of Dec 22 2012)
+Update Dec 22 2012
 --------------------------------
-Major new features:
-
-3rdparty changes:
-
 * First linux release.
-
 * Build fixes.
 
-Release 0.0.0 (as of Feb 8 2012)
+Update Feb 8 2012
 --------------------------------
-Major new features:
-
-3rdparty changes:
-
 * First package.
-
 * Removed tbb lib.
-
-In-progress (as of Jan 1 2014)
--------------------------------
-
-3rdparty todo:
-
-For developers:
-
-* Add log output to build process.
-
-* GLUT, for non Apple platforms.
-
-* HDF5, -fPIC CFLAGS and LDFLAGS as in Alembic doc/HDF5-howtobuild.txt.
-
-* Openexr_viewers, exrdisplay says incorrectly @executable… for cg framework.
-
-* OCIO, uses patch for static oiio dependencies, is there a better way?
-
-* OIIO, support field3d and lib raw.
-
-* QtTest ~/Frameworks/QtTest.framework/Versions/4/4 - cannot read symlink, skipped for now.
-  See: https://bugreports.qt-project.org/browse/QTBUG-24365
-  
-* Add content license for Alembic, OCIO and OpenEXR models/images.
-
-Future ideas (as of Jan 1 2014)
--------------------------------
-
-3rdparty ideas:
-
-* Win, use MSBuild + existing project vcproj files.
-  See: http://msdn.microsoft.com/en-us/library/ms164311(v=vs.85).aspx
-
-* Docs, add 3rdparty doc index.
-
-* Python binding, make sure all binding are built correct. Add build_python?
-
-* VFX platform compliant - add glibc to platforms.
-
-
