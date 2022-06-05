@@ -23,7 +23,7 @@ set( project_name "pybind" )
 set( project_pkg "pybind11-2.9.1" )
 
 # project archive
-set( project_arc ${project_pkg}.zip )
+set( project_arc ${project_pkg}.tar.gz )
 
 # project url
 set( project_url ${repo_url}/${project_arc} )

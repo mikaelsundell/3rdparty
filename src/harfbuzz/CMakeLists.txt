@@ -9,10 +9,10 @@
 # harfbuzz Copyright
 # Copyright © 2018  Google, Inc.
 
-# harfbuzz from github.com 4.0.1 2022-03-20
+# harfbuzz from github.com 4.3.0 2022-06-04
 # https://github.com/harfbuzz/harfbuzz
 
-build_info( " Adding pcre2 project" )
+build_info( " Adding harfbuzz project" )
 
 # project configuration
 
@@ -20,7 +20,7 @@ build_info( " Adding pcre2 project" )
 set( project_name "harfbuzz" )
 
 # project pkg
-set( project_pkg ${project_name}-4.0.1 )
+set( project_pkg ${project_name}-4.3.0 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )

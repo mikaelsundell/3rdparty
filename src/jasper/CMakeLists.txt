@@ -39,7 +39,6 @@ set( project_bin_dir
 
 # bin files
 set( bin_files
-    imginfo
     imgcmp
     jasper
     jiv

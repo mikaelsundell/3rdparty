@@ -113,3 +113,10 @@ cmake ../
 -DCMAKE_MODULE_PATH=/Users/mikaelsundell/Git/usd_from_gltf/cmake/modules 
 -DDRACO_ROOT=/Volumes/Build/3rdparty/build/macosx/arm64.debug 
 -Ddclap_DIR=/Volumes/Build/3rdparty/build/macosx/arm64.debug/include/tclap
+
+
+3rdparty buckets:
+
+Amazon S3 Buckets
+--------------------------------- 
+* https://s3.console.aws.amazon.com/s3/buckets/mikaelsundell

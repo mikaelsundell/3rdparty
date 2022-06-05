@@ -281,6 +281,12 @@ if( build_base )
               BUILD ON
     )
     build_add_project(
+              harfbuzz
+              DIR ${CMAKE_SOURCE_DIR}/src/harfbuzz
+              DESCRIPTION "Harfbuzz"
+              BUILD ON
+    )
+    build_add_project(
               libpng
               DIR ${CMAKE_SOURCE_DIR}/src/libpng
               DESCRIPTION "LibPNG"
@@ -296,6 +302,12 @@ if( build_base )
               openjpeg
               DIR ${CMAKE_SOURCE_DIR}/src/openjpeg
               DESCRIPTION "OpenJpeg"
+              BUILD ON
+    )
+    build_add_project(
+              pcre2
+              DIR ${CMAKE_SOURCE_DIR}/src/pcre2
+              DESCRIPTION "Pcre2"
               BUILD ON
     )
     build_add_project(
@@ -341,12 +353,6 @@ if( build_libs )
               BUILD ON
     )
     build_add_project(
-              harfbuzz
-              DIR ${CMAKE_SOURCE_DIR}/src/harfbuzz
-              DESCRIPTION "harfbuzz"
-              BUILD ON
-    )
-    build_add_project(
               imath
               DIR ${CMAKE_SOURCE_DIR}/src/imath
               DESCRIPTION "Imath"
@@ -374,12 +380,6 @@ if( build_libs )
               openexr
               DIR ${CMAKE_SOURCE_DIR}/src/openexr
               DESCRIPTION "OpenEXR"
-              BUILD ON
-    )
-    build_add_project(
-              pcre2
-              DIR ${CMAKE_SOURCE_DIR}/src/pcre2
-              DESCRIPTION "pcre2"
               BUILD ON
     )
     build_add_project(
@@ -459,7 +459,7 @@ if( build_extras )
     build_add_project(
         onetbb
         DIR ${CMAKE_SOURCE_DIR}/src/onetbb
-        DESCRIPTION "onetbb"
+        DESCRIPTION "Onetbb"
         BUILD ON
     )
     build_add_project(
@@ -471,7 +471,7 @@ if( build_extras )
     build_add_project(
         tclap
         DIR ${CMAKE_SOURCE_DIR}/src/tclap
-        DESCRIPTION "tclap"
+        DESCRIPTION "Tclap"
         BUILD ON
     )
     build_add_project(
@@ -493,10 +493,10 @@ if( build_extras )
         BUILD ON
     )
     build_add_project(
-              usd
-              DIR ${CMAKE_SOURCE_DIR}/src/usd
-              DESCRIPTION "usd"
-              BUILD ON
+        usd
+        DIR ${CMAKE_SOURCE_DIR}/src/usd
+        DESCRIPTION "usd"
+        BUILD ON
     )
 
 endif()

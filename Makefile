@@ -23,6 +23,8 @@ include ${working_dir}/src/make/detectplatform.mk
 # builds, which we put in their own areas.
 ifdef DEBUG
     variant +=${hw}.debug
+else
+    variant +=${hw}.release
 endif
 
 MY_MAKE_FLAGS ?=

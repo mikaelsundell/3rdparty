@@ -4,6 +4,9 @@
 The 3rdparty build system requires CMake.
 Get it from: http://www.cmake.org.
 
+    Make sure it's added to path
+    export PATH=$PATH:/Applications/CMake.app/Contents/bin 
+
 Some build configurations requires python for bootstrapping and setup.
 Get it from: http://www.python.org.
 
@@ -20,6 +23,11 @@ https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/qt-everywhere-src-5.15
     Make sure you download the .tar.xz unix formatted single archive
 
     To build for 3rdparty first build base libraries and configure Qt
+
+    3rdparty base libraries:
+    make verbose=1 build_base=1 (debug)
+
+    Qt:
     mkdir build &&
     cd build &&
     ../configure -prefix $(path)/3rdparty/build/macosx.debug 
@@ -56,8 +64,11 @@ https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/qt-everywhere-src-5.15
     Note: We leave out mobile and web components, remove skip if needed by project.
           If skipped the modules will not be included in 3rdpart Pyside2 when built.
 
-Building 3rdparty on Linux and OS X
------------------------------------
+    3rdparty tools:
+    make verbose=1 build_libs=1 (build_extras=1) (debug)
+
+3rdparty advanced
+------------------
 
 The 3rdparty library can be built from the top directory by typing 
 make. Advanced users can use CMake directly, see CMakeLists.txt.
@@ -75,8 +86,8 @@ macosx or win).
 See the MANIFEST file for the main projects and their dependencies.
 
 
-Running make
-------------
+3rdparty make
+------------------
 
 Make targets you should know about:
 

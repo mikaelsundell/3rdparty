@@ -1,5 +1,18 @@
 3rdparty changes:
 
+Update Jun 5 2022
+---------------------------------
+* Updated harfbuzz to 4.3.0
+* Fixed pybind tar.gz
+* Fixed Makefile debug and release variant
+* Updated install instructions
+* Fixed jasper check
+* Fixed openjpeg check
+* Fixed materialx package, removed cmake_build
+* Fixed opensubdiv package, removed cmake_build
+* Added harfbuzz and pcre2 to base for Qt dependencies
+* Added Amazon Buckets to platforms.txt
+
 Update Mars 26 2022
 ---------------------------------
 * Updated for arm64

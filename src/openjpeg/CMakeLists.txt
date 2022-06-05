@@ -42,7 +42,6 @@ set( project_bin_dir
 
 # bin files
 set( bin_files
-    opj_dump
     opj_compress
     opj_decompress
 )

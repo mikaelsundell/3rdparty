@@ -1,32 +1,31 @@
 3rdparty platforms
 ------------------
 
- 3rdparty
+The 3rdparty build system is mainly developed and maintained for MacOSX and arm64.
 
- Linux versions
+Current Mac platform:
 
-     - CentOS 6.3 (Final) - gcc version 4.4.6 
-       
-       Requirements:
-         Yum installer: yum install gcc-c++ python-devel libXi-devel libXmu-devel glut-devel mesa-libGLU-devel gstream* wget
-         
-         Cmake: cmake 2.8 (install from rpm)
-         http://www.cmake.org/cmake/resources/software.html
+    - MacOSX 12.1 SDK Monterey (arm64) - Apple clang version 13.0.0 (clang-1300.0.27.3)
+      Requirements:
+        Xcode 6
 
-         CG Toolkit: https://developer.nvidia.com/cg-toolkit-download
-         (Make sure the appropriate arch version is installed, 32/64-bit)
+      wget is optional, will fallback to curl if not found.
 
-         rpm -ivh Cg-3.1_April2012_x86_64.rpm
+Experimental platforms (no longer supported):
 
-         NVIDIA drivers
-         Never install 32-bit compatibility drivers on 64-bit systems, produces configure libdir issues.
+    - CentOS 6.3 (Final) - gcc version 4.4.6 
+      
+      Requirements:
+        Yum installer: yum install gcc-c++ python-devel libXi-devel libXmu-devel glut-devel mesa-libGLU-devel gstream* wget
+        
+        Cmake: cmake 2.8 (install from rpm)
+        http://www.cmake.org/cmake/resources/software.html
 
- Mac versions
+        CG Toolkit: https://developer.nvidia.com/cg-toolkit-download
+        (Make sure the appropriate arch version is installed, 32/64-bit)
 
-     - MacOSX 12.1 SDK Monterey - Apple clang version 13.0.0 (clang-1300.0.27.3)
+        rpm -ivh Cg-3.1_April2012_x86_64.rpm
 
-       Requirements:
-         Xcode 6
-
-       wget is optional, will fallback to curl if not found.
+        NVIDIA drivers
+        Never install 32-bit compatibility drivers on 64-bit systems, produces configure libdir issues.
 
