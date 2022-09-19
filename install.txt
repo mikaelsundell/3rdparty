@@ -30,8 +30,8 @@ https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/qt-everywhere-src-5.15
     Qt:
     mkdir build &&
     cd build &&
-    ../configure -prefix $(path)/3rdparty/build/macosx.debug 
-                -libdir $(path)/git/3rdparty/build/macosx.debug/lib 
+    ../configure -prefix $(path)/3rdparty/build/macosx.debug/$(arch)
+                -libdir $(path)/git/3rdparty/build/macosx.debug/$(arch)/lib 
                 QMAKE_APPLE_DEVICE_ARCHS=arm64
                 -opensource
                 -confirm-license
@@ -57,8 +57,8 @@ https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/qt-everywhere-src-5.15
                 -skip qtwebglplugin
                 -skip qtwebsockets
                 -skip qtwebview
-                -I$(path)/git/3rdparty/build/macosx.debug/include 
-                -L$(path)/git/3rdparty/build/macosx.debug/lib &&
+                -I$(path)/3rdparty/build/macosx.debug/$(arch)/include 
+                -L$(path)/3rdparty/build/macosx.debug/$(arch)/lib &&
     make install
 
     Note: We leave out mobile and web components, remove skip if needed by project.
