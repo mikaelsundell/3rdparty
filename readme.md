@@ -30,8 +30,11 @@ A developer 3rdparty library for development and packaging of film and color app
 The 3rdparty build system requires CMake.
 Get it from: http://www.cmake.org.
 
-    Make sure it's added to path
-    export PATH=$PATH:/Applications/CMake.app/Contents/bin 
+Make sure it's added to path
+
+```shell
+export PATH=$PATH:/Applications/CMake.app/Contents/bin
+```
 
 Some build configurations requires python for bootstrapping and setup.
 Get it from: http://www.python.org.
@@ -46,52 +49,58 @@ http://download.qt.io/official_releases/qt/5.15/5.15.1/single/qt-everywhere-src-
 .. use the patched version for Mac M1 arm64:
 https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/qt-everywhere-src-5.15.1.tar.gz
 
-    Make sure you download the .tar.xz unix formatted single archive
+Make sure you download the .tar.xz unix formatted single archive
 
-    To build for 3rdparty first build base libraries and configure Qt
+To build for 3rdparty first build base libraries and configure Qt
 
-    3rdparty base libraries:
-    make verbose=1 build_base=1 (debug)
+3rdparty base libraries:
+    
+```shell
+make verbose=1 build_base=1 (debug)
+```
+Qt:
 
-    Qt:
-    mkdir build &&
-    cd build &&
-    ../configure -prefix $(path)/3rdparty/build/macosx.debug/$(arch)
-                -libdir $(path)/git/3rdparty/build/macosx.debug/$(arch)/lib 
-                QMAKE_APPLE_DEVICE_ARCHS=arm64
-                -opensource
-                -confirm-license
-                -system-libpng
-                -system-libjpeg
-                -system-zlib
-                -system-pcre
-                -system-harfbuzz
-                -skip qtactiveqt
-                -skip qtandroidextras
-                -skip qtcharts
-                -skip qtconnectivity
-                -skip qtgamepad
-                -skip qtlocation
-                -skip qtlottie
-                -skip qtpurchasing
-                -skip qtsensors
-                -skip qtspeech
-                -skip qtvirtualkeyboard
-                -skip qtwayland
-                -skip qtwebchannel
-                -skip qtwebengine
-                -skip qtwebglplugin
-                -skip qtwebsockets
-                -skip qtwebview
-                -I$(path)/3rdparty/build/macosx.debug/$(arch)/include 
-                -L$(path)/3rdparty/build/macosx.debug/$(arch)/lib &&
-    make install
+```shell
+mkdir build &&
+cd build &&
+../configure -prefix $(path)/3rdparty/build/macosx.debug/$(arch)
+             -libdir $(path)/git/3rdparty/build/macosx.debug/$(arch)/lib 
+             QMAKE_APPLE_DEVICE_ARCHS=arm64
+             -opensource
+             -confirm-license
+             -system-libpng
+             -system-libjpeg
+             -system-zlib
+             -system-pcre
+             -system-harfbuzz
+             -skip qtactiveqt
+             -skip qtandroidextras
+             -skip qtcharts
+             -skip qtconnectivity
+             -skip qtgamepad
+             -skip qtlocation
+             -skip qtlottie
+             -skip qtpurchasing
+             -skip qtsensors
+             -skip qtspeech
+             -skip qtvirtualkeyboard
+             -skip qtwayland
+             -skip qtwebchannel
+             -skip qtwebengine
+             -skip qtwebglplugin
+             -skip qtwebsockets
+             -skip qtwebview
+             -I$(path)/3rdparty/build/macosx.debug/$(arch)/include 
+             -L$(path)/3rdparty/build/macosx.debug/$(arch)/lib &&
+	     
+make install
+```
 
-    Note: We leave out mobile and web components, remove skip if needed by project.
-          If skipped the modules will not be included in 3rdpart Pyside2 when built.
+Note: We leave out mobile and web components, remove skip if needed by project.
+If skipped the modules will not be included in 3rdpart Pyside2 when built.
 
-    3rdparty tools:
-    make verbose=1 build_libs=1 (build_extras=1) (debug)
+3rdparty tools:
+make verbose=1 build_libs=1 (build_extras=1) (debug)
 
 3rdparty advanced
 ------------------
