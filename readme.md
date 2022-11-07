@@ -44,10 +44,14 @@ Get Xcode from AppStore.
 Get Command Line Tools from "Preferences > Downloads > Command Line Tools", press Install.
 
 Qt is used to build apps.
+```shell
 http://download.qt.io/official_releases/qt/5.15/5.15.1/single/qt-everywhere-src-5.15.1.tar.xz
+```
 
 .. use the patched version for Mac M1 arm64:
+```shell
 https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/qt-everywhere-src-5.15.1.tar.gz
+```
 
 Make sure you download the .tar.xz unix formatted single archive
 
