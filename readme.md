@@ -100,10 +100,12 @@ Note: We leave out mobile and web components, remove skip if needed by project.
 If skipped the modules will not be included in 3rdpart Pyside2 when built.
 
 3rdparty tools:
-make verbose=1 build_libs=1 (build_extras=1) (debug)
 
-3rdparty advanced
-------------------
+```shell
+make verbose=1 build_libs=1 (build_extras=1) (debug)
+```
+
+## 3rdparty advanced ##
 
 The 3rdparty library can be built from the top directory by typing 
 make. Advanced users can use CMake directly, see CMakeLists.txt.
@@ -121,26 +123,29 @@ macosx or win).
 See the MANIFEST file for the main projects and their dependencies.
 
 
-3rdparty make
-------------------
+## 3rdparty make ##
+
 
 Make targets you should know about:
 
-    make                      Build all projects for development and test in 
-			                  'build/platform'
-    make debug                Build all projects with debugging symbols when
-			                  possible.
-    make clean                Get rid of all the temporary files in 'build/platform'.
-    make help                 Print all the make options
+```shell
+make                      Build all projects for development and test in 
+			  'build/platform'
+make debug                Build all projects with debugging symbols when
+			  possible.
+make clean                Get rid of all the temporary files in 'build/platform'.
+make help                 Print all the make options
+```
 
 Additionally, a few helpful modifiers alter some build-time options:
 
-    make verbose=0 ...        Show all compilation commands
-    make build_libs=1 ...     Build libraries
-    make build_viewers=1 ...  Build viewers
-    make build_autotools=1 ...Build autotools
-    make build_media=1 ...    Build media
-
+```shell
+make verbose=0 ...        Show all compilation commands
+make build_libs=1 ...     Build libraries
+make build_viewers=1 ...  Build viewers
+make build_autotools=1 ...Build autotools
+make build_media=1 ...    Build media
+```
 
 ## Github ##
 
