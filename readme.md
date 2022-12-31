@@ -28,7 +28,11 @@ A developer 3rdparty library for development and packaging of film and color app
 ## 3rdparty build ##
 
 The 3rdparty build system requires CMake.
-Get it from: http://www.cmake.org.
+Get it from: 
+
+```shell
+http://www.cmake.org.
+```
 
 Make sure it's added to path
 
@@ -36,8 +40,12 @@ Make sure it's added to path
 export PATH=$PATH:/Applications/CMake.app/Contents/bin
 ```
 
-Some build configurations requires python for bootstrapping and setup.
-Get it from: http://www.python.org.
+Some build configurations requires python2.7 for bootstrapping and setup.
+Get it from:
+
+```shell
+https://www.python.org/downloads/release/python-2718/
+```
 
 On macOS Cataline the Command Line Tools needs to be installed, not just Xcode.
 Get Xcode from AppStore.
