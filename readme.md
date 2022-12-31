@@ -31,7 +31,7 @@ The 3rdparty build system requires CMake.
 Get it from: 
 
 ```shell
-http://www.cmake.org.
+http://www.cmake.org
 ```
 
 Make sure it's added to path
@@ -44,7 +44,7 @@ Some build configurations requires python2.7 for bootstrapping and setup.
 Get it from:
 
 ```shell
-https://www.python.org/downloads/release/python-2718/
+https://www.python.org/downloads/release/python-2718
 ```
 
 On macOS Cataline the Command Line Tools needs to be installed, not just Xcode.
