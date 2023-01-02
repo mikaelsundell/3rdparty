@@ -77,7 +77,7 @@ mkdir build &&
 cd build &&
 ../configure -prefix $(path)/3rdparty/build/macosx.debug/$(arch)
              -libdir $(path)/git/3rdparty/build/macosx.debug/$(arch)/lib 
-             QMAKE_APPLE_DEVICE_ARCHS=arm64/x86_64
+             QMAKE_APPLE_DEVICE_ARCHS=${arm64}/${x86_64}
              -opensource
              -confirm-license
              -system-libpng
