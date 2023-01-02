@@ -154,7 +154,6 @@ Additionally, a few helpful modifiers alter some build-time options:
 make verbose=0 ...        Show all compilation commands
 make build_libs=1 ...     Build libraries
 make build_viewers=1 ...  Build viewers
-make build_autotools=1 ...Build autotools
 make build_media=1 ...    Build media
 ```
 
