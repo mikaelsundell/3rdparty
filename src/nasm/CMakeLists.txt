@@ -69,13 +69,6 @@ if( UNIX )
         ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
     )
 
-    # options
-    if( CMAKE_SHARED_LIBS )
-        set( build_options --enable-shared )
-    else()
-        set( build_options --enable-static )
-    endif()
-
     # configure, make and install
     set( build_make
         ${build_env} &&
@@ -91,10 +84,6 @@ if( UNIX )
     )
 
     # scripts
-    if ( CMAKE_SHARED_LIBS )
-        set( build_output ${build_output} ${lib_output} )
-    endif()
-
     build_add_script( 
         "${build_output}" 
         ${build_dir} 
