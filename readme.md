@@ -61,8 +61,6 @@ http://download.qt.io/official_releases/qt/5.15/5.15.1/single/qt-everywhere-src-
 https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/qt-everywhere-src-5.15.1.tar.gz
 ```
 
-Make sure you download the .tar.xz unix formatted single archive
-
 To build for 3rdparty first build base libraries and configure Qt
 
 3rdparty base libraries (debug):
