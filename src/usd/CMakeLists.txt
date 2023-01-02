@@ -152,7 +152,7 @@ IF( UNIX )
     # configure, make and install
     SET( build_make
         ${build_env} &&
-        cd ${project_pkg} &&
+        cd USD-22.03 &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}

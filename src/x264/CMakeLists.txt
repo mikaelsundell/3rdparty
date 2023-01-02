@@ -155,4 +155,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} yasm )
+add_dependencies( ${project_name} nasm yasm )

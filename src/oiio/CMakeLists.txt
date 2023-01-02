@@ -21,7 +21,7 @@ build_info( " Adding oiio project" )
 set( project_name "oiio" )
 
 # project pkg
-set( project_pkg "oiio-master-220313" )
+set( project_pkg "oiio-master-230101" )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -80,7 +80,7 @@ if( UNIX )
         set( lib_dtag "_d" )
     endif()
 
-    set( lib_version "2.4.1" )
+    set( lib_version "2.5.0" )
 
     foreach( lib_file ${lib_files} )
         list( APPEND lib_output 
@@ -134,7 +134,6 @@ if( UNIX )
     # Libsquish = Not used
 
     # Boost
-
     set( build_config ${build_config} Boost_ROOT=${build_dir} )
     set( build_config ${build_config} FFmpeg_ROOT=${build_dir} )
     set( build_config ${build_config} JPEG_ROOT=${build_dir} )
@@ -154,7 +153,7 @@ if( UNIX )
     # make and install
 
     set( build_make
-    	cd oiio &&
+    	cd oiio-master &&
     )
 
     set( build_make

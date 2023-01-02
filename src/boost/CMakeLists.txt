@@ -184,7 +184,7 @@ if( UNIX )
     # config    
     if( project_cfg_without_mpi )
         set( build_config --without-mpi )
-    endif()
+    endif()    
 
     # bootstrap, b2 install
     set( build_b2

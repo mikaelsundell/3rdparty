@@ -149,7 +149,9 @@ IF( UNIX )
     SET( build_make
         ${build_env} &&
         cd ${project_pkg} &&
-        cmake -DZLIB_ROOT=${build_dir}
+        mkdir -p ${build_cmake} &&
+        cd ${build_cmake} &&
+        cmake ../ -DZLIB_ROOT=${build_dir}
               -DCMAKE_INSTALL_PREFIX=${build_dir}
               -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
               ${build_options} &&

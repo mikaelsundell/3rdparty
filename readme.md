@@ -137,7 +137,6 @@ See the MANIFEST file for the main projects and their dependencies.
 
 ## 3rdparty make ##
 
-
 Make targets you should know about:
 
 ```shell
@@ -159,6 +158,22 @@ make build_autotools=1 ...Build autotools
 make build_media=1 ...    Build media
 ```
 
+## Platforms ##
+
+macOS Monterey x86_64
+```
+Darwin Kernel Version 21.6.0: Sun Nov  6 23:31:16 PST 2022; root:xnu-8020.240.14~1/RELEASE_X86_64 x86_64 i386
+Apple clang version 14.0.0 (clang-1400.0.29.202)
+Target: x86_64-apple-darwin21.6.0
+```
+
+macOS Monterey Apple M1
+```
+Darwin Mikaels-iMac-M1 21.6.0 Darwin Kernel Version 21.6.0: Mon Aug 22 20:20:05 PDT 2022; root:xnu-8020.140.49~2/RELEASE_ARM64_T8101 arm64 arm
+Apple clang version 13.1.6 (clang-1316.0.21.2.3)
+Target: arm64-apple-darwin21.6.0
+```
+
 ## Github ##
 
   * Project  https://github.com/mikaelsundell/3rdparty
@@ -173,95 +188,161 @@ Mikael Sundell - mikael.sundell@gmail.com
 
 3rdparty packages and their copyrights:
 
-Aces container Copyright
-Copyright © 2013 Academy of Motion Picture Arts and Sciences.
+Alembic
+Copyright (c) 2013,
+Sony Pictures Imageworks Inc. and
+Industrial Light & Magic, a division of Lucasfilm Entertainment Company Ltd
 
-Autoconf Copyright
-Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc.
+Autoconf
+Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc
 
-Automake Copyright
-Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc.
+Automake
+Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc
 
-Boost Copyright
-Copyright Beman Dawes, David Abrahams, 1998-2005.
-Copyright Rene Rivera 2004-2007.
+Boost
+Copyright Beman Dawes, David Abrahams, 1998-2005
+Copyright Rene Rivera 2004-2007
 
 bzip2 Copyright 
-Copyright © 1996-2007 Julian Seward.
+Copyright © 1996-2007 Julian Seward
 
-CMake Copyright
-Copyright 2006-2010 Kitware, Inc.
+CMake
+Copyright 2006-2010 Kitware, Inc
 Copyright 2006 Alexander Neundorf <neundorf@kde.org>
 
-CTL Copyright
-Copyright © 2006 Academy of Motion Picture Arts and Sciences
+Draco
+Copyright 2019 The Draco Authors
 
-FFmpeg Copyright
+FFmpeg
 Copyright (c) Fabrice Bellard
 
-FLTK Copyright
-Copyright 1998-2011 by Bill Spitzak and others.
+Freetype
+David Turner, Robert Wilhelm, and Werner Lemberg
 
-Gettext Copyright
-Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc.
+Gettext
+Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc
 
-GLEW Copyright
+Giflib
+Copyright (c) 1997 Eric S. Raymond
+
+GLEW
 Copyright (C) 2002-2007, Milan Ikits <milan ikits[]ieee org>
 Copyright (C) 2002-2007, Marcelo E. Magallon <mmagallo[]debian org>
 Copyright (C) 2002, Lev Povalahev
 
-GLM Copyright
+GLM
 Copyright (c) 2005 - 2013 G-Truc Creation
 
-GTest Copyright
-Copyright 2005, Google Inc.
+Harfbuzz
+Copyright © 2018  Google, Inc.
 
-HDF5 Copyright
-Copyright by The HDF Group.
-Copyright by the Board of Trustees of the University of Illinois.
-All rights reserved. 
-
-Ilmbase Copyright
+Imath
 Copyright (c) 2002, Industrial Light & Magic, a division of Lucas Digital Ltd. LLC
 
-Jasper Copyright
+Jasper
 Copyright (c) 2001-2006 Michael David Adams
-Copyright (c) 1999-2000 Image Power, Inc.
+Copyright (c) 1999-2000 Image Power, Inc
 Copyright (c) 1999-2000 The University of British Columbia
 
-Jpeg Copyright
-Copyright (C) 1991-1997, Thomas G. Lane.
+Jpeg
+Copyright (C) 1991-1997, Thomas G. Lane
 
-Lcms Copyright
+GTest
+Copyright 2005, Google Inc
+
+HDF5
+Copyright by The HDF Group.
+Copyright by the Board of Trustees of the University of Illinois
+All rights reserved. 
+
+Ilmbase
+Copyright (c) 2002, Industrial Light & Magic, a division of Lucas Digital Ltd. LLC
+
+Json
+Licensed under the MIT License <http://opensource.org/licenses/MIT>.
+SPDX-License-Identifier: MIT
+Copyright (c) 2013-2022 Niels Lohmann <http://nlohmann.me>.
+
+Lcms2
 Copyright (c) 1998-2012 Marti Maria Saguer
 
-Libpng Copyright
+Libjpeg-turbo
+Copyright (C) 1994-1997, Thomas G. Lane
+Modified 2019 by Guido Vollbeding
+
+Libpng
 Copyright (c) 1998-2009 Glenn Randers-Pehrson
 (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
 (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
 
-Libtool Copyright
-Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc.
+Libtool
+Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc
 
 LibWebp
-Copyright 2010 Google Inc. All Rights Reserved.
+Copyright 2010 Google Inc. All Rights Reserved
 
-OCIO Copyright
-Copyright (c) 2003-2010 Sony Pictures Imageworks Inc., et al.
+LLVM
+Copyright (C) 2022 The llvm project
 
-OIIO Copyright
+MaterialX
+TM & (c) 2017 Lucasfilm Entertainment Company Ltd. and Lucasfilm Ltd.
+
+NanoGUI
+NanoGUI was developed by Wenzel Jakob <wenzel.jakob@epfl.ch>.
+
+Nasm
+1996-2017 The NASM Authors
+
+OCIO
+Copyright (c) 2003-2010 Sony Pictures Imageworks Inc., et al
+
+OIIO
 Copyright 2008 Larry Gritz and the other authors and contributors.
 All Rights Reserved.
 
-OpenEXR Copyright
+OneTBB
+Copyright (c) 2005-2021 Intel Corporation
+
+OpenEXR
 Copyright (c) 2002, Industrial Light & Magic, a division of Lucas Digital Ltd. LLC
 
-pkg-config Copyright
-Copyright (C) 2001, 2002 Red Hat Inc.
+OpenJPEG
+Copyright (c) 2002-2014, Universite catholique de Louvain (UCL), Belgium
+Copyright (c) 2002-2014, Professor Benoit Macq
+Copyright (c) 2010-2011, Kaori Hagihara
 
-Tiff Copyright
+OpenSubDiv
+Copyright 2022 Pixar
+
+Pcre2
+Original API code Copyright (c) 1997-2012 University of Cambridge
+New API code Copyright (c) 2016-2020 University of Cambridge
+
+pkg-config
+Copyright (C) 2001, 2002 Red Hat Inc
+
+PTex
+Copyright 2014 Disney Enterprises, Inc.  All rights reserved
+
+Pybind
+Copyright (c) 2016 Wenzel Jakob <wenzel.jakob@epfl.ch>, All rights reserved
+
+Pyside2
+Copyright (C) 2020 The Qt Company Ltd
+
+Pyside2-tools
+Copyright (C) 2020 The Qt Company Ltd
+
+Tclap
+Copyright (c) 2018 Google LLC
+All rights reserved
+
+Tiff
 Copyright (c) 1988-1997 Sam Leffler
 Copyright (c) 1991-1997 Silicon Graphics, Inc.
+
+Usd
+Copyright 2022 Pixar
 
 x264 Copyright
 Copyright (C) 2003-2013 x264 project
@@ -271,5 +352,3 @@ Copyright (c) 2001-2007 Peter Johnson
 
 Zlib Copyright
 Copyright (C) 1995-2004 Jean-loup Gailly.
-
-See LICENSE.txt for details.

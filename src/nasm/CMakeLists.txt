@@ -2,25 +2,25 @@
 ##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
-##  autoconf CMakeLists.txt for 3rdparty
+##  nasm CMakeLists.txt for 3rdparty
 ##
 ##-*****************************************************************************
 
-# autoconf Copyright
-# Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc.
+# nasm Copyright
+# 1996-2017 The NASM Authors
 
-# autoconf from ftp.gnu.org 2021-01-28
-# http://ftp.gnu.org/gnu/autoconf/
+# nasm from github.com 2.16.01
+# https://github.com/netwide-assembler/nasm
 
-build_info( " Adding autoconf project" )
+build_info( " Adding nasm project" )
 
 # project configuration
 
 # project name
-set( project_name "autoconf" )
+set( project_name "nasm" )
 
 # project pkg
-set( project_pkg ${project_name}-2.71 )
+set( project_pkg ${project_name}-nasm-2.16.01 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -40,49 +40,18 @@ set( project_bin_dir
 
 # bin files
 set( bin_files
-    autoconf
-    autoheader
-    autom4te
-    autoreconf
-    autoscan
-    ifnames
+    nasm
+    ndisasm
 )
 
-# inc files
-set( inc_files
-)
-
-# lib files
-set( lib_files
-)
-
-# pkgfiles
-set( pkg_files
-)
-
-if( UNIX )
+IF( UNIX )
 
     # bin files
     build_add_files( 
         "${bin_files}" "${build_bin_dir}" bin_output
     )
-
-    # inc files
-    build_add_files( 
-        "${inc_files}" "${build_inc_dir}" inc_output
-    )
-
-    # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
-    )
-
-    # pkg files
-    build_add_files( 
-        "${pkg_files}" "${build_lib_dir}/pkgconfig" pkg_output
-    )
     
-endif()
+ENDIF()
 
 # build configuration
 
@@ -102,25 +71,25 @@ if( UNIX )
 
     # options
     if( CMAKE_SHARED_LIBS )
-        set( build_options --enable-shared --disable-static )
+        set( build_options --enable-shared )
     else()
-        set( build_options --enable-static --disable-shared )
+        set( build_options --enable-static )
     endif()
 
     # configure, make and install
-    SET( build_make
+    set( build_make
         ${build_env} &&
+        export PATH=${build_bin_dir}:$$PATH &&
         cd ${project_pkg} &&
+        ./autogen.sh &&
         ./configure 
             --prefix=${build_dir}
             ${build_options} &&
-        make ${build_flags} &&
+        make strip ${build_flags} &&
         make install
     )
 
     # scripts
-    set( build_output ${bin_output} )
-
     if ( CMAKE_SHARED_LIBS )
         set( build_output ${build_output} ${lib_output} )
     endif()
@@ -146,7 +115,7 @@ if( UNIX )
         COMMAND ${build_make}
         COMMAND ${build_script}
         COMMAND ${build_check}
-    )     
+    ) 
 
 endif()
 
@@ -155,3 +124,6 @@ add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}
 )
+
+# dependencies
+add_dependencies( ${project_name} automake )

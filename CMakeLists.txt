@@ -365,6 +365,12 @@ if( build_libs )
               BUILD ON
     )
     build_add_project(
+              nasm
+              DIR ${CMAKE_SOURCE_DIR}/src/nasm
+              DESCRIPTION "Nasm"
+              BUILD ON
+    )
+    build_add_project(
               oiio
               DIR ${CMAKE_SOURCE_DIR}/src/oiio
               DESCRIPTION "OpenImageIO"
@@ -404,6 +410,30 @@ if( build_libs )
               yasm
               DIR ${CMAKE_SOURCE_DIR}/src/yasm
               DESCRIPTION "yasm"
+              BUILD ON
+    )
+    build_add_project(
+              gettext
+              DIR ${CMAKE_SOURCE_DIR}/src/gettext
+              DESCRIPTION "Gettext"
+              BUILD ON
+    )
+    build_add_project(
+              autoconf
+              DIR ${CMAKE_SOURCE_DIR}/src/autoconf
+              DESCRIPTION "Autoconf"
+              BUILD ON
+    )
+    build_add_project(
+              automake
+              DIR ${CMAKE_SOURCE_DIR}/src/automake
+              DESCRIPTION "Automake"
+              BUILD ON
+    )
+    build_add_project(
+              libtool
+              DIR ${CMAKE_SOURCE_DIR}/src/libtool
+              DESCRIPTION "Libtool"
               BUILD ON
     )
 endif()
@@ -499,37 +529,6 @@ if( build_extras )
         BUILD ON
     )
 
-endif()
-
-# build autotools
-
-if( build_autotools )
-
-    build_info( "Adding autotools" )
-    build_add_project(
-              gettext
-              DIR ${CMAKE_SOURCE_DIR}/src/gettext
-              DESCRIPTION "Gettext"
-              BUILD ON
-    )
-    build_add_project(
-              autoconf
-              DIR ${CMAKE_SOURCE_DIR}/src/autoconf
-              DESCRIPTION "Autoconf"
-              BUILD ON
-    )
-    build_add_project(
-              automake
-              DIR ${CMAKE_SOURCE_DIR}/src/automake
-              DESCRIPTION "Automake"
-              BUILD ON
-    )
-    build_add_project(
-              libtool
-              DIR ${CMAKE_SOURCE_DIR}/src/libtool
-              DESCRIPTION "Libtool"
-              BUILD ON
-    )
 endif()
  
 # build media

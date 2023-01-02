@@ -136,8 +136,10 @@ IF( UNIX )
     # configure, make and install
     SET( build_make
         ${build_env} &&
-        cd ${project_pkg} &&
-        cmake -DCMAKE_INSTALL_PREFIX=${build_dir}
+        cd Imath-3.1.4 &&
+        mkdir -p ${build_cmake} &&
+        cd ${build_cmake} &&
+        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir}
               -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
               ${build_options} &&
         make ${build_flags} &&

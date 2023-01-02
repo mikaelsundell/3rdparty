@@ -1,5 +1,9 @@
 3rdparty packages:
 
+nasm
+---------------------------------
+* Build with make strip to skip pdf documentation dependencies
+
 materialx
 ---------------------------------
 CMakeLists.txt
@@ -16,7 +20,14 @@ nanogui
 * Added Eigen to copy include
 * TODO: Only copies openvg, gltw and Eigen - requires libraries for linking?
 * Create PR for project @ Github
-  
+
+oiio
+---------------------------------
+externalpackages.cmake
+* Line 64: Changed set (Boost_NO_BOOST_CMAKE OFF) to OFF to find boost libraries
+
+* Create PR for project @ Github
+
 ptex
 ---------------------------------
 CMakeLists.txt

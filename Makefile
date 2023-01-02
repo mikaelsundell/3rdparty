@@ -112,7 +112,6 @@ help:
 	@echo "  make build_base=1 ...       Build base."
 	@echo "  make build_libs=1 ...       Build libraries."
 	@echo "  make build_extras=1 ...     Build extras."
-	@echo "  make build_autotools=1 ...  Build autotools."
 	@echo "  make build_media=1 ...      Build media."
 	@echo ""
 

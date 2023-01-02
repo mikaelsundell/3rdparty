@@ -9,7 +9,7 @@
 # automake Copyright
 # Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc.
 
-# automake from ftp.gnu.org 2014-02-04
+# automake from ftp.gnu.org 2021-10-03
 # http://ftp.gnu.org/gnu/automake/
 
 build_info( " Adding automake library" )
@@ -20,7 +20,7 @@ build_info( " Adding automake library" )
 set( project_name "automake" )
 
 # project pkg
-set( project_pkg ${project_name}-1.14)
+set( project_pkg ${project_name}-1.16.5 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -41,9 +41,9 @@ SET( project_bin_dir
 # bin files
 SET( bin_files
     aclocal
-    aclocal-1.14
+    aclocal-1.16
     automake
-    automake-1.14
+    automake-1.16
 )
 
 # inc files

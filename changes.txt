@@ -1,5 +1,18 @@
 3rdparty changes:
 
+Update Jan 1 2023
+---------------------------------
+* Updated autoconf to 2.7.1
+* Updated automake to 1.16.5
+* Added Python2.7 to install instructions
+* Added nasm for x86_64 AVX-512 support in x264
+* Moved autotools to libs
+* Fixed Imath lettercase typo
+* Fixed USD lettercase typo
+* Added cmake build dir to Imath and OpenEXR
+* Updated oiio to master branch
+* Updated licenses
+
 Update Jun 5 2022
 ---------------------------------
 * Updated harfbuzz to 4.3.0
