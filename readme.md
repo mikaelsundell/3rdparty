@@ -47,7 +47,7 @@ Get it from:
 https://www.python.org/downloads/release/python-2718
 ```
 
-On macOS Cataline the Command Line Tools needs to be installed, not just Xcode.
+On macOS Catalina the Command Line Tools needs to be installed, not just Xcode.
 Get Xcode from AppStore.
 Get Command Line Tools from "Preferences > Downloads > Command Line Tools", press Install.
 
