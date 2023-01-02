@@ -81,11 +81,12 @@ if( UNIX )
         ${build_env} &&
         export PATH=${build_bin_dir}:$$PATH &&
         cd ${project_pkg} &&
+        touch nasm.1 ndisasm.1 &&
         ./autogen.sh &&
         ./configure 
             --prefix=${build_dir}
             ${build_options} &&
-        make strip ${build_flags} &&
+        make nasm ndisasm ${build_flags} &&
         make install
     )
 

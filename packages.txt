@@ -2,7 +2,7 @@
 
 nasm
 ---------------------------------
-* Build with make strip to skip pdf documentation dependencies
+* Build with empty nasm.1 and ndisasm.1 to skip pdf documentation dependencies
 
 materialx
 ---------------------------------
