@@ -68,7 +68,7 @@ To build for 3rdparty first build base libraries and configure Qt
 3rdparty base libraries (debug):
     
 ```shell
-make verbose=1 build_base=1 debug
+make verbose=1 build_base=1 (debug)
 ```
 Qt:
 
