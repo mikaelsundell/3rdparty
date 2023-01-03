@@ -120,18 +120,13 @@ make verbose=1 build_libs=1 (build_extras=1) (debug)
 The 3rdparty library can be built from the top directory by typing 
 make. Advanced users can use CMake directly, see CMakeLists.txt.
 
-The build will create both a build and a dist directory. The build directory
-contains both libraries and binary files suitable for development and test 
-while the dist directory contains the final library files for distribution.
-Only includes, libraries and pkgconfig files will be copied to the dist 
-directory.
+The build directory contains platform, architecture and debug or 
+release versions of libraries and viewers. After each successful
+build binaries, libraries and related files will be installed with
+proper names for linking. 
 
-For both the build and dist directory a platform directory will be
-created with the name of the platform you are building for (e.g. linux,
-macosx or win).
-
-See the MANIFEST file for the main projects and their dependencies.
-
+Each application using the 3rdparty project should have it's own
+deployment process to remap install names before distribution.
 
 ## 3rdparty make ##
 
