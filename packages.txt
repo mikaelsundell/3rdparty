@@ -71,39 +71,11 @@ qt3d/src/3rdparty/assimp/contrib/zip/src/miniz.h
 * Line 2931: Changed to stat from stat64, deprecated in OSX12.1
 * Line 2932: Changed to stat from stat64, deprecated in OSX12.1
 
-build notes
+build arm64
+../configure -prefix /Volumes/Build/github/3rdparty/build/macosx/arm64.debug -libdir /Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib QMAKE_APPLE_DEVICE_ARCHS=arm64 -opensource -confirm-license -system-libpng -system-libjpeg -system-zlib -system-pcre -system-harfbuzz -skip qtactiveqt -skip qtandroidextras -skip qtcharts -skip qtconnectivity -skip qtgamepad -skip qtlocation -skip qtlottie -skip qtpurchasing -skip qtsensors -skip qtspeech -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebglplugin -skip qtwebsockets -skip qtwebview -I/Volumes/Build/github/3rdparty/build/macosx/arm64.debug/include -L/Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib && make install
 
-mkdir build
-cd build
-../configure 
--prefix /Volumes/Build/3rdparty/build/macosx/arm64.debug 
--libdir /Volumes/Build/3rdparty/build/macosx/arm64.debug/lib 
-QMAKE_APPLE_DEVICE_ARCHS=arm64 
--opensource 
--confirm-license 
--system-libpng 
--system-libjpeg 
--system-zlib 
--system-pcre 
--system-harfbuzz 
--skip qtactiveqt 
--skip qtandroidextras 
--skip qtconnectivity -skip qtgamepad 
--skip qtlocation 
--skip qtlottie 
--skip qtpurchasing 
--skip qtsensors 
--skip qtspeech 
--skip qtvirtualkeyboard 
--skip qtwayland 
--skip qtwebengine 
--skip qtwebchannel 
--skip qtwebengine 
--skip qtwebglplugin 
--skip qtwebsockets 
--skip qtwebview 
--I/Volumes/Build/3rdparty/build/macosx/arm64.debug/include 
--L/Volumes/Build/3rdparty/build/macosx/arm64.debug/lib && make install
+build x86_64
+../configure -prefix /Volumes/Build/github/3rdparty/build/macosx/x86_64.debug -libdir /Volumes/Build/github/3rdparty/build/macosx/x86_64.debug/lib QMAKE_APPLE_DEVICE_ARCHS=x86_64 -opensource -confirm-license -system-libpng -system-libjpeg -system-zlib -system-pcre -system-harfbuzz -skip qtactiveqt -skip qtandroidextras -skip qtcharts -skip qtconnectivity -skip qtgamepad -skip qtlocation -skip qtlottie -skip qtpurchasing -skip qtsensors -skip qtspeech -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebglplugin -skip qtwebsockets -skip qtwebview -I/Volumes/Build/github/3rdparty/build/macosx/x86_64.debug/include -L/Volumes/Build/github/3rdparty/build/macosx/x86_64.debug/lib && make install
 
 usd
 ---------------------------------
