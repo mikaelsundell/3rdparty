@@ -26,6 +26,7 @@ oiio
 externalpackages.cmake
 * Line 64: Changed set (Boost_NO_BOOST_CMAKE OFF) to OFF to find boost libraries
 * Line 240: Changed PTex to not prefer config as it's not reliable
+* TODO: Fix broken ocio support
 * TODO: Create PR for project @ Github
 * TODO: Add LibRAW to build
 
