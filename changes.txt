@@ -1,5 +1,11 @@
 3rdparty changes:
 
+Update Jan 3 2023
+---------------------------------
+* Updated oiio with PR3735, arm64 fix
+* Updated .gitignore
+* Added additional notes to packages.txt
+
 Update Jan 1 2023
 ---------------------------------
 * Updated autoconf to 2.7.1

@@ -11,7 +11,7 @@ CMakeLists.txt
 * Line 49: Added OpenImageIO_Util library
 * TODO: Fix nanogui on Mac M1/ arm64 - cannot create opengl context?
   GLFW error 65544: Cocoa: Failed to retrieve display name
-* Create PR for project @ Github
+* TODO: Create PR for project @ Github
 
 nanogui
 ---------------------------------
@@ -19,14 +19,15 @@ nanogui
 * CPLUS_INCLUDE_PATH and LD_LIBRARY_PATH for pybind11
 * Added Eigen to copy include
 * TODO: Only copies openvg, gltw and Eigen - requires libraries for linking?
-* Create PR for project @ Github
+* TODO: Create PR for project @ Github
 
 oiio
 ---------------------------------
 externalpackages.cmake
 * Line 64: Changed set (Boost_NO_BOOST_CMAKE OFF) to OFF to find boost libraries
-
-* Create PR for project @ Github
+* TODO: Create PR for project @ Github
+* TODO: PTex is not found, check
+* TODO: Add LibRAW to build
 
 ptex
 ---------------------------------
@@ -107,9 +108,9 @@ usd
 ---------------------------------
 cmake/modules/FindTBB.cmake 
 * Line 200: changed tbb_stddef.h to version.h
-
 * Fixed build ussies converter.cc and materializer.cc
   pbr_shader.GetPath().AppendProperty(kTokSurface)
+* TODO: Create PR for project @ Github
 
 usd_from_gltf
 ---------------------------------
@@ -124,7 +125,6 @@ cmake ../
 -DCMAKE_MODULE_PATH=/Users/mikaelsundell/Git/usd_from_gltf/cmake/modules 
 -DDRACO_ROOT=/Volumes/Build/3rdparty/build/macosx/arm64.debug 
 -Ddclap_DIR=/Volumes/Build/3rdparty/build/macosx/arm64.debug/include/tclap
-
 
 3rdparty buckets:
 

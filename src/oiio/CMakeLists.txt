@@ -21,7 +21,7 @@ build_info( " Adding oiio project" )
 set( project_name "oiio" )
 
 # project pkg
-set( project_pkg "oiio-master-230101" )
+set( project_pkg "oiio-master-PR3735-230103" )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
