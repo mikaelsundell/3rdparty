@@ -9,9 +9,7 @@ A developer 3rdparty library for development and packaging of film and color app
   * A set of configurations to simplify the process of building 3rdparty support without the
     knowledge of each individual build system. 
         
-  * Up to date support for the latest platforms and versions.
-
-    See PLATFORMS.txt for details.
+  * Up to date support for the latest Mac platforms and versions.
 
 ## 3rdparty can be used to ##
 
