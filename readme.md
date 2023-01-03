@@ -164,7 +164,6 @@ Target: arm64-apple-darwin21.6.0
 
   * Project  https://github.com/mikaelsundell/3rdparty
   * Issues   https://github.com/mikaelsundell/3rdparty/issues
-  * Wiki     https://github.com/mikaelsundell/3rdparty/wiki
 
 ## Contact ##
 
