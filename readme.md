@@ -43,6 +43,10 @@ export PATH=$PATH:/Applications/CMake.app/Contents/bin
 
 macOS built-in python3 support with XCode include and libraries directories.
 
+```shell
+whereis python3
+```
+
 ### Install Qt ###
 
 Patched version compatible with arm64:
