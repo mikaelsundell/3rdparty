@@ -33,15 +33,15 @@ Get it from:
 http://www.cmake.org
 ```
 
-Make sure it's added to path
+Add to path:
 
 ```shell
 export PATH=$PATH:/Applications/CMake.app/Contents/bin
 ```
 
-### Python3 native Mac ###
+### Python3 ###
 
-Python3 version, include and library directories are preferred and shipped as a part of the AppStore XCode installation.
+macOS built-in python3 support with XCode include and libraries directories.
 
 ### Install Qt ###
 
@@ -50,13 +50,12 @@ Patched version compatible with arm64:
 https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/qt-everywhere-src-5.15.1.tar.gz
 ```
 
-To build for 3rdparty first build base libraries and configure Qt
-
-### Build 3rdparty base ###
+### Build 3rdparty base libraries ###
     
 ```shell
 make verbose=1 build_base=1 (debug)
 ```
+
 ### Build Qt with 3rdparty ###
 
 ```shell
