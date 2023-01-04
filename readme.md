@@ -25,7 +25,8 @@ A developer 3rdparty library for development and packaging of film and color app
 
 ## 3rdparty build ##
 
-The 3rdparty build system requires CMake.
+### Install CMake ###
+
 Get it from: 
 
 ```shell
@@ -38,29 +39,25 @@ Make sure it's added to path
 export PATH=$PATH:/Applications/CMake.app/Contents/bin
 ```
 
-Mac native python3 is used for configuration and setup.
-```
-which python3
-```
+### Python3 native Mac ###
 
-Qt is used to build apps.
-```shell
-http://download.qt.io/official_releases/qt/5.15/5.15.1/single/qt-everywhere-src-5.15.1.tar.xz
-```
+Python3 version, include and library directories are preferred and ship with Xcode.
 
-.. use the patched version for Mac M1 arm64:
+### Install Qt ###
+
+Patched version compatible with arm64:
 ```shell
 https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/qt-everywhere-src-5.15.1.tar.gz
 ```
 
 To build for 3rdparty first build base libraries and configure Qt
 
-3rdparty base libraries (debug):
+### Build 3rdparty base ###
     
 ```shell
 make verbose=1 build_base=1 (debug)
 ```
-Qt:
+### Build Qt with 3rdparty ###
 
 ```shell
 mkdir build &&
@@ -98,10 +95,11 @@ cd build &&
 make install
 ```
 
-Note: We leave out mobile and web components, remove skip if needed by project.
+We leave out mobile and web components, remove skip if needed by project.
 If skipped the modules will not be included in 3rdpart Pyside2 when built.
 
-3rdparty tools:
+
+### Build 3rdparty libraries and extras with Qt ###
 
 ```shell
 make verbose=1 build_libs=1 (build_extras=1) (debug)
