@@ -38,11 +38,9 @@ Make sure it's added to path
 export PATH=$PATH:/Applications/CMake.app/Contents/bin
 ```
 
-Some build configurations requires python2.7 for bootstrapping and setup.
-Get it from:
-
-```shell
-https://www.python.org/downloads/release/python-2718
+Mac native python3 is used for configuration and setup.
+```
+which python3
 ```
 
 Qt is used to build apps.
