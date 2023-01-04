@@ -68,7 +68,7 @@ set( lib_files
     boost_math_tr1l
     boost_prg_exec_monitor
     boost_program_options
-    boost_python27
+    boost_python${build_python3_versiontag}
     boost_random
     boost_regex
     boost_serialization
@@ -184,17 +184,29 @@ if( UNIX )
     # config    
     if( project_cfg_without_mpi )
         set( build_config --without-mpi )
-    endif()    
+    endif()  
+    
+    # userconfig
+    set( userconfig
+        ${build_scripts_dir}/install_userconfig.sh
+        --python3 ${build_python3} 
+        --version ${build_python3_version} 
+        --include-dir ${build_python3_include_dir} 
+        --library-dir ${build_python3_library_dir} 
+        ./tools/build/src/user-config.jam
+    )
 
     # bootstrap, b2 install
     set( build_b2
         ${build_env} &&
         cd ${project_pkg} &&
+        ${userconfig} &&
         ./bootstrap.sh &&
         ./b2 install 
             --prefix=${build_dir}
             --build-type=complete 
             --layout=tagged
+            --debug-configuration
             ${build_config}
             ${build_options}
     )
@@ -206,9 +218,8 @@ if( UNIX )
 
         if ( CMAKE_SHARED_LIBS )
             set( build_output ${build_output} ${lib_output} )
-            
-            # remove static boost_exception
-            
+
+            # remove static boost_exception            
             list( REMOVE_ITEM build_output
                 ${build_lib_dir}/${lib_prefix}boost_exception${static_lib_suffix}
             )
@@ -233,6 +244,7 @@ if( UNIX )
         OUTPUT ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
+        COMMAND ${build_userconfig}
         COMMAND ${build_b2}
         COMMAND ${build_script}
         COMMAND ${build_check}

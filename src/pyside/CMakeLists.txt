@@ -52,8 +52,8 @@ SET( inc_dir
 
 # lib files
 set( lib_files
-    pyside2-python2.7v.5.15.2.1
-    shiboken2-python2.7v.5.15.2.1
+    pyside2-cpython-${build_python3_versiontag}-darwin.5.15.2.1
+    shiboken2-cpython-${build_python3_versiontag}-darwin.5.15.2.1
 )
 
 # site-packages
@@ -145,9 +145,9 @@ IF( UNIX )
 
     # options
     if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=true )
+        set( build_options -DBUILD_SHARED_LIBS=true )
     else()
-        SET( build_options -DBUILD_SHARED_LIBS=false )
+        set( build_options -DBUILD_SHARED_LIBS=false )
     endif()
 
     # configure, make and install
@@ -159,13 +159,16 @@ IF( UNIX )
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            -DCMAKE_VERBOSE_MAKEFILE=1
+            -DPYTHON_EXECUTABLE=${build_python3}
+            -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
+            -DPYTHON_LIBRARY=${build_python3_library_dir}
             ${build_options} &&
         make ${build_flags} &&
         make install
     )
 
     # scripts
-
     if ( CMAKE_SHARED_LIBS )
         set( build_output ${build_output} ${lib_output} )
     endif()

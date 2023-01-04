@@ -32,7 +32,7 @@ endfunction()
 
 function( build_add_project NAME )
     cmake_parse_arguments (args "" "DIR;DESCRIPTION;BUILD" "" ${ARGN})
-    # Arguments: <prefix> <options> <one_value_keywords> <multi_value_keywords> args...
+    # arguments: <prefix> <options> <one_value_keywords> <multi_value_keywords> args...
     set( 
         "${NAME}" ${args_BUILD} CACHE BOOL ${args_DESCRIPTION}
     )
@@ -145,6 +145,34 @@ function( build_add_check files output_script )
           ${files}
       )
       set(${output_script} ${check_script} PARENT_SCOPE)
+endfunction()
+
+##-*****************************************************************************
+
+function( build_find_python3 output_python3 output_version output_versiontag output_include_dir output_library_dir )
+    execute_process( 
+        COMMAND "${PROJECT_SOURCE_DIR}/src/scripts/find_python3.sh" "--python3" OUTPUT_VARIABLE python3
+    )
+    string(REGEX REPLACE "(\n)+" "" python3 ${python3})
+    set(${output_python3} ${python3} PARENT_SCOPE)
+    execute_process( 
+        COMMAND "${PROJECT_SOURCE_DIR}/src/scripts/find_python3.sh" "--version" OUTPUT_VARIABLE version
+    )
+    string( REGEX REPLACE "^([0-9]+)\\.[0-9]+.*" "\\1" python_major "${version}" )
+    string( REGEX REPLACE "^[0-9]+\\.([0-9])+.*" "\\1" python_minor "${version}" )
+    set(${output_version} "${python_major}.${python_minor}" PARENT_SCOPE)
+    set(${output_versiontag} "${python_major}${python_minor}" PARENT_SCOPE)    
+    execute_process( 
+        COMMAND "${PROJECT_SOURCE_DIR}/src/scripts/find_python3.sh" "--include-dir" OUTPUT_VARIABLE include_dir
+    )
+    string(REGEX REPLACE "(\n)+" "" include_dir ${include_dir})
+    set(${output_include_dir} ${include_dir} PARENT_SCOPE)
+
+    execute_process( 
+        COMMAND "${PROJECT_SOURCE_DIR}/src/scripts/find_python3.sh" "--library-dir" OUTPUT_VARIABLE library_dir
+    )
+    string(REGEX REPLACE "(\n)+" "" library_dir ${library_dir})
+    set(${output_library_dir} ${library_dir} PARENT_SCOPE)
 endfunction()
 
 ##-*****************************************************************************
