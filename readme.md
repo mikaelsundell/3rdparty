@@ -9,9 +9,7 @@ A developer 3rdparty library for development and packaging of film and color app
   * A set of configurations to simplify the process of building 3rdparty support without the
     knowledge of each individual build system. 
         
-  * Up to date support for the latest platforms and versions.
-
-    See PLATFORMS.txt for details.
+  * Up to date support for the latest Mac platforms and versions.
 
 ## 3rdparty can be used to ##
 
@@ -27,7 +25,8 @@ A developer 3rdparty library for development and packaging of film and color app
 
 ## 3rdparty build ##
 
-The 3rdparty build system requires CMake.
+### Install CMake ###
+
 Get it from: 
 
 ```shell
@@ -40,35 +39,25 @@ Make sure it's added to path
 export PATH=$PATH:/Applications/CMake.app/Contents/bin
 ```
 
-Some build configurations requires python2.7 for bootstrapping and setup.
-Get it from:
+### Python3 native Mac ###
 
-```shell
-https://www.python.org/downloads/release/python-2718
-```
+Python3 version, include and library directories are preferred and shipped as a part of the AppStore XCode installation.
 
-On macOS Catalina the Command Line Tools needs to be installed, not just Xcode.
-Get Xcode from AppStore.
-Get Command Line Tools from "Preferences > Downloads > Command Line Tools", press Install.
+### Install Qt ###
 
-Qt is used to build apps.
-```shell
-http://download.qt.io/official_releases/qt/5.15/5.15.1/single/qt-everywhere-src-5.15.1.tar.xz
-```
-
-.. use the patched version for Mac M1 arm64:
+Patched version compatible with arm64:
 ```shell
 https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/qt-everywhere-src-5.15.1.tar.gz
 ```
 
 To build for 3rdparty first build base libraries and configure Qt
 
-3rdparty base libraries (debug):
+### Build 3rdparty base ###
     
 ```shell
 make verbose=1 build_base=1 (debug)
 ```
-Qt:
+### Build Qt with 3rdparty ###
 
 ```shell
 mkdir build &&
@@ -106,10 +95,11 @@ cd build &&
 make install
 ```
 
-Note: We leave out mobile and web components, remove skip if needed by project.
+We leave out mobile and web components, remove skip if needed by project.
 If skipped the modules will not be included in 3rdpart Pyside2 when built.
 
-3rdparty tools:
+
+### Build 3rdparty libraries and extras with Qt ###
 
 ```shell
 make verbose=1 build_libs=1 (build_extras=1) (debug)
@@ -120,18 +110,13 @@ make verbose=1 build_libs=1 (build_extras=1) (debug)
 The 3rdparty library can be built from the top directory by typing 
 make. Advanced users can use CMake directly, see CMakeLists.txt.
 
-The build will create both a build and a dist directory. The build directory
-contains both libraries and binary files suitable for development and test 
-while the dist directory contains the final library files for distribution.
-Only includes, libraries and pkgconfig files will be copied to the dist 
-directory.
+The build directory contains platform, architecture and debug or 
+release versions of libraries and viewers. After each successful
+build binaries, libraries and related files will be installed with
+proper names for linking. 
 
-For both the build and dist directory a platform directory will be
-created with the name of the platform you are building for (e.g. linux,
-macosx or win).
-
-See the MANIFEST file for the main projects and their dependencies.
-
+Each application using the 3rdparty project should have it's own
+deployment process to remap install names before distribution.
 
 ## 3rdparty make ##
 
@@ -175,7 +160,6 @@ Target: arm64-apple-darwin21.6.0
 
   * Project  https://github.com/mikaelsundell/3rdparty
   * Issues   https://github.com/mikaelsundell/3rdparty/issues
-  * Wiki     https://github.com/mikaelsundell/3rdparty/wiki
 
 ## Contact ##
 
