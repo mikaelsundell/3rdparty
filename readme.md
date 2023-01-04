@@ -41,7 +41,7 @@ export PATH=$PATH:/Applications/CMake.app/Contents/bin
 
 ### Python3 native Mac ###
 
-Python3 version, include and library directories are preferred and ship with Xcode.
+Python3 version, include and library directories are preferred and shipped as a part of the AppStore XCode installation.
 
 ### Install Qt ###
 
