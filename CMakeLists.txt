@@ -116,7 +116,7 @@ set_property( GLOBAL PROPERTY USE_FOLDERS ON )
 # define repo
 set( repo_url http://s3-eu-west-1.amazonaws.com/mikaelsundell/3rdparty )
 
-# define dirs
+# define build dirs
 set( build_bin_dir ${build_dir}/bin )
 set( build_inc_dir ${build_dir}/include )
 set( build_lib_dir ${build_dir}/lib )
@@ -126,17 +126,17 @@ set( build_test_dir ${build_dir}/test )
 set( build_media_dir ${build_dir}/media )
 set( build_cmake_dir ${build_dir}/cmake )
 
-set( dist_bin_dir ${dist_dir}/bin )
-set( dist_lib_dir ${dist_dir}/lib )
-set( dist_framework_dir ${dist_dir}/Frameworks )
-set( dist_plugins_dir ${dist_dir}/plugins )
-
 IF( APPLE )
     set( build_prefix_lib ${build_lib_dir} )
     set( build_prefix_framework ${build_framework_dir} )
     set( build_prefix_plugins ${build_plugins_dir} )
 ENDIF()
 
+# define other dirs
+set( build_modules_dir ${PROJECT_SOURCE_DIR}/src/cmake)
+set( build_scripts_dir ${PROJECT_SOURCE_DIR}/src/scripts)
+
+# define cmake
 set( build_cmake "build_cmake" )
 
 # define commands
@@ -170,9 +170,8 @@ set( make_dir ${CMAKE_COMMAND} -E make_directory )
 # define modules
 list(
   APPEND CMAKE_MODULE_PATH
-  "${PROJECT_SOURCE_DIR}/src/cmake"
+  ${build_modules_dir}
 )
-
 include (buildutils)
 
 # define prefix
@@ -201,26 +200,42 @@ set( sitepackage_suffix ".so" )
 # define arch
 set( lib_arch ${CMAKE_SYSTEM_PROCESSOR} )
 
-# define flags
+# define cpus
 if( UNIX )
     if( APPLE )
         find_program( cmd_sysctl "sysctl")
         if( cmd_sysctl )
-            EXECUTE_PROCESS( COMMAND ${cmd_sysctl} -n hw.physicalcpu OUTPUT_VARIABLE cpus )
-            STRING( REGEX REPLACE "^.*([0-9]+).*$" "\\1" num_cpus "${cpus}" ) 
+            execute_process( COMMAND ${cmd_sysctl} -n hw.physicalcpu OUTPUT_VARIABLE cpus )
+            string( REGEX REPLACE "^.*([0-9]+).*$" "\\1" num_cpus "${cpus}" ) 
         endif()
     else()
         set( cpuinfo_file "/proc/cpuinfo" )
-        if( EXISTS "${cpuinfo_file}" )
-            FILE( STRINGS "${cpuinfo_file}" procs REGEX "^processor.: [0-9]+$" )
-            LIST( LENGTH procs num_cpus )
+        if( exists "${cpuinfo_file}" )
+            file( STRINGS "${cpuinfo_file}" procs REGEX "^processor.: [0-9]+$" )
+            list( LENGTH procs num_cpus )
         endif()
     endif()
 endif()
 
-SET( build_flags ${build_flags} -j${num_cpus} --load-average=${num_cpus} )
+set( build_flags ${build_flags} -j${num_cpus} --load-average=${num_cpus} )
 
-# define env
+# define python3
+if ( UNIX )
+    if ( APPLE )
+        # build relies on python3 version for both
+        # naming of files and project configuration
+        build_find_python3( 
+            build_python3 
+            build_python3_version
+            build_python3_versiontag
+            build_python3_include_dir
+            build_python3_library_dir 
+        )
+
+    endif()
+endif()
+
+# define environment
 if( UNIX )
     if( APPLE )
         # dynamic linker (tests during build)
@@ -229,11 +244,10 @@ if( UNIX )
             export DYLD_FALLBACK_LIBRARY_PATH=${build_lib_dir}
         )
     else()
-        # important - only use build_env with non cmake projects as it
-        # will conflict with CMAKE_PREFIX_PATH, cmake will think libraries
-        # were found in native search paths and not use absolute paths
-        # for shared libraries and skip defining rpaths for the build_dir 
-        # dependencies.
+        # use build_env as non cmake projects will conflict with 
+        # CMAKE_PREFIX_PATH, cmake find libraries uses native search paths 
+        # and not absolute paths for shared libraries, skip rpaths
+        # for dependencies.
         set( build_env
             export C_INCLUDE_PATH=${build_inc_dir} &&
             export CPLUS_INCLUDE_PATH=${build_inc_dir} &&
@@ -244,11 +258,9 @@ if( UNIX )
 endif()
 
 # build configuration
-
 message( STATUS "Build configuration" )
 
 if( build_base )
-
     message( STATUS "Adding base" )
     build_add_project( 
               bzip2
@@ -325,8 +337,7 @@ if( build_base )
 endif()
 
 if( build_libs )
-
-    MESSAGE( STATUS "Adding libs" )
+    build_info( "Adding libs" )
 
     build_add_project(
               ffmpeg
@@ -439,9 +450,7 @@ if( build_libs )
 endif()
 
 # build extras
-
 if( build_extras )
-
     build_info( "Adding extras" )
 
     build_add_project(
@@ -531,8 +540,6 @@ if( build_extras )
 
 endif()
  
-# build media
-
 if( build_media )
 
     build_info( "Adding media" )
