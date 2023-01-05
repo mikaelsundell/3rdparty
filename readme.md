@@ -98,9 +98,7 @@ cd build &&
 make install
 ```
 
-We leave out mobile and web components, remove skip if needed by project.
-If skipped the modules will not be included in 3rdpart Pyside2 when built.
-
+We leave out mobile and web components not currenctly needed by 3rdparty.
 
 ### Build 3rdparty libraries and extras with Qt ###
 
@@ -114,9 +112,9 @@ The 3rdparty library can be built from the top directory by typing
 make. Advanced users can use CMake directly, see CMakeLists.txt.
 
 The build directory contains platform, architecture and debug or 
-release versions of libraries and viewers. After each successful
+release versions of projects. After each successful
 build binaries, libraries and related files will be installed with
-proper names for linking. 
+absolute install names.
 
 Each application using the 3rdparty project should have it's own
 deployment process to remap install names before distribution.
