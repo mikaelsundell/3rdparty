@@ -63,6 +63,11 @@ set( lib_files
     OpenImageIO_Util
 )
 
+# site-packages
+set( sitepackages_files
+    OpenImageIO
+)
+
 if( UNIX )
 
     # bin files
@@ -88,7 +93,17 @@ if( UNIX )
         )
     endforeach()
 
-ENDIF()
+    # site packages files
+    foreach( lib_file ${sitepackages_files} )
+        if ( APPLE )
+            list( APPEND lib_output 
+                ${build_lib_dir}/python${build_python3_version}/site-packages/OpenImageIO/${lib_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
+            )
+
+        endif()    
+    endforeach()
+
+endif()
 
 # build configuration
 

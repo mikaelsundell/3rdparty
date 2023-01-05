@@ -11,6 +11,7 @@ CMakeLists.txt
 * Line 49: Added OpenImageIO_Util library
 * TODO: Fix nanogui on Mac M1/ arm64 - cannot create opengl context?
   GLFW error 65544: Cocoa: Failed to retrieve display name
+* TODO: Where is sitepackages?
 * TODO: Create PR for project @ Github
 
 nanogui
@@ -83,6 +84,7 @@ cmake/modules/FindTBB.cmake
 * Line 200: changed tbb_stddef.h to version.h
 * Fixed build ussies converter.cc and materializer.cc
   pbr_shader.GetPath().AppendProperty(kTokSurface)
+* TODO: Where is sitepackages?
 * TODO: Create PR for project @ Github
 
 usd_from_gltf

@@ -1,5 +1,9 @@
 3rdparty changes:
 
+Update Jan 5 2023
+---------------------------------
+* Python3 improvements
+
 Update Jan 3 2023
 ---------------------------------
 * Updated oiio with PR3735, arm64 fix

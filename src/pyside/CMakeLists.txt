@@ -52,8 +52,8 @@ SET( inc_dir
 
 # lib files
 set( lib_files
-    pyside2.cpython-${build_python3_versiontag}-darwin.5.15.2.1
-    shiboken2.cpython-${build_python3_versiontag}-darwin.5.15.2.1
+    pyside2
+    shiboken2
 )
 
 # site-packages
@@ -64,7 +64,6 @@ set( pyside2_files
     Qt3DInput
     Qt3DLogic
     Qt3DRender
-    QtCharts
     QtConcurrent
     QtCore
     QtDataVisualization
@@ -95,7 +94,7 @@ set( pyside2_files
     QtXmlPatterns
 )
 
-set( shiboken2_files
+set( shiboken_files
     shiboken2
 )
 
@@ -112,20 +111,36 @@ if( UNIX )
     )
 
     # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
-    )
+    foreach( lib_file ${lib_files} )
+    
+        if ( APPLE )
+            list( APPEND lib_output 
+                ${build_lib_dir}/${lib_prefix}${lib_file}.cpython-${build_python3_versiontag}-darwin.5.15.2.1${lib_suffix}
+            )
+        endif()    
+    endforeach()
 
     # site packages files
-    build_add_libs( 
-        "${pyside2_files}" "${build_lib_dir}/python2.7/site-packages/PySide2" "" ${sitepackage_suffix} pyside2_output
-    )
-
-    build_add_libs( 
-        "${shiboken2_files}" "${build_lib_dir}/python2.7/site-packages/shiboken2" "" ${sitepackage_suffix} shiboken2_output
-    )
+    foreach( lib_file ${pyside2_files} )
     
-ENDIF()
+        if ( APPLE )
+            list( APPEND lib_output 
+                ${build_lib_dir}/python${build_python3_version}/site-packages/PySide2/${lib_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
+            )
+
+        endif()    
+    endforeach()
+
+    foreach( lib_file ${shiboken_files} )
+    
+        if ( APPLE )
+            list( APPEND lib_output 
+                ${build_lib_dir}/python${build_python3_version}/site-packages/shiboken2/${lib_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
+            )
+        endif()      
+    endforeach()
+    
+endif()
 
 # build configuration
 

@@ -65,6 +65,11 @@ set( lib_files
     OpenColorIO.2.2.0
 )
 
+# site-packages
+set( sitepackages_files
+    PyOpenColorIO
+)
+
 IF( UNIX )
 
     # bin files
@@ -81,6 +86,16 @@ IF( UNIX )
     build_add_libs( 
         "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
     )
+
+    # site packages files
+    foreach( lib_file ${sitepackages_files} )
+        if ( APPLE )
+            list( APPEND lib_output 
+                ${build_lib_dir}/python${build_python3_version}/site-packages/${lib_file}${sitepackage_suffix}
+            )
+
+        endif()    
+    endforeach()
     
 ENDIF()
 

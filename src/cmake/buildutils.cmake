@@ -8,10 +8,6 @@
 ##
 ##-*****************************************************************************
 
-function( build_infoXXX message )
-    message( STATUS ${message} )
-endfunction()
-
 function( build_info message )
     message( STATUS ${message} )
 endfunction()
@@ -121,8 +117,6 @@ function( build_add_sitepackage files dir prefix prefix_framework output_sitepac
         set(${output_sitepackage} ${install_sitepackage} PARENT_SCOPE)
     endif()
 endfunction()
-
-
 
 function( build_add_site-package files dir prefix prefix_framework output_site-package )
     if ( APPLE )
