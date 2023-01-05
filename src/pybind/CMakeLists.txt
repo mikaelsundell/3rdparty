@@ -80,10 +80,13 @@ IF( UNIX )
         ${build_make}
         export LLVM_INSTALL_DIR=${build_dir} &&
         cd ${project_pkg} &&
-        mkdir ${build_cmake} &&
+        mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
-              -DCMAKE_INSTALL_PREFIX=${build_dir} ${build_options} &&
+            -DCMAKE_INSTALL_PREFIX=${build_dir} ${build_options} 
+            -DPYTHON_EXECUTABLE=${build_python3}
+            -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
+            -DPYTHON_LIBRARY=${build_python3_library_dir} &&
         make ${build_flags} &&
         make install
     )
