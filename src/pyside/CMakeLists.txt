@@ -52,8 +52,8 @@ SET( inc_dir
 
 # lib files
 set( lib_files
-    pyside2-cpython-${build_python3_versiontag}-darwin.5.15.2.1
-    shiboken2-cpython-${build_python3_versiontag}-darwin.5.15.2.1
+    pyside2.cpython-${build_python3_versiontag}-darwin.5.15.2.1
+    shiboken2.cpython-${build_python3_versiontag}-darwin.5.15.2.1
 )
 
 # site-packages
