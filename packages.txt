@@ -31,6 +31,11 @@ externalpackages.cmake
 * TODO: Create PR for project @ Github
 * TODO: Add LibRAW to build
 
+ocio
+---------------------------------
+* TODO: Fix libyaml dependency
+* TODO: Fix pystring dependency
+
 ptex
 ---------------------------------
 CMakeLists.txt
