@@ -135,6 +135,9 @@ IF( UNIX )
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            -DPYTHON_EXECUTABLE=${build_python3}
+            -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
+            -DPYTHON_LIBRARY=${build_python3_library_dir}
             ${build_options} &&
         make ${build_flags} &&
         make install
