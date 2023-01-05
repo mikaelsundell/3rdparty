@@ -98,7 +98,7 @@ cd build &&
 make install
 ```
 
-We leave out mobile and web components not currenctly needed by 3rdparty.
+Mobile and web components are skipped as they have no dependency in 3rdparty project.
 
 ### Build 3rdparty libraries and extras with Qt ###
 
@@ -108,7 +108,7 @@ make verbose=1 build_libs=1 (build_extras=1) (debug)
 
 ## 3rdparty advanced ##
 
-The 3rdparty library can be built from the top directory by typing 
+The 3rdparty project can be built from the top directory by typing 
 make. Advanced users can use CMake directly, see CMakeLists.txt.
 
 The build directory contains platform, architecture and debug or 
