@@ -33,15 +33,19 @@ Get it from:
 http://www.cmake.org
 ```
 
-Make sure it's added to path
+Add to path:
 
 ```shell
 export PATH=$PATH:/Applications/CMake.app/Contents/bin
 ```
 
-### Python3 native Mac ###
+### Python3 ###
 
-Python3 version, include and library directories are preferred and shipped as a part of the AppStore XCode installation.
+macOS built-in python3 support with XCode include and libraries directories.
+
+```shell
+whereis python3
+```
 
 ### Install Qt ###
 
@@ -50,13 +54,12 @@ Patched version compatible with arm64:
 https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/qt-everywhere-src-5.15.1.tar.gz
 ```
 
-To build for 3rdparty first build base libraries and configure Qt
-
-### Build 3rdparty base ###
+### Build 3rdparty base libraries ###
     
 ```shell
 make verbose=1 build_base=1 (debug)
 ```
+
 ### Build Qt with 3rdparty ###
 
 ```shell
@@ -95,9 +98,7 @@ cd build &&
 make install
 ```
 
-We leave out mobile and web components, remove skip if needed by project.
-If skipped the modules will not be included in 3rdpart Pyside2 when built.
-
+We leave out mobile and web components not currenctly needed by 3rdparty.
 
 ### Build 3rdparty libraries and extras with Qt ###
 
@@ -111,9 +112,9 @@ The 3rdparty library can be built from the top directory by typing
 make. Advanced users can use CMake directly, see CMakeLists.txt.
 
 The build directory contains platform, architecture and debug or 
-release versions of libraries and viewers. After each successful
+release versions of projects. After each successful
 build binaries, libraries and related files will be installed with
-proper names for linking. 
+absolute install names.
 
 Each application using the 3rdparty project should have it's own
 deployment process to remap install names before distribution.
