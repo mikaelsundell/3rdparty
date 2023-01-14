@@ -102,7 +102,7 @@ Mobile and web components are skipped as they have no dependency in 3rdparty pro
 
 ### Debug Qt with 3rdparty ###
 
-Debugging in Qt with 3rdparty with frameworks uses the DYLD_IMAGE_SUFFIX environment variable. If you set it you get the debug version of the framework.
+Debugging in Qt with hybrid frameworks make uses of the DYLD_IMAGE_SUFFIX environment variable. Set it to _debug to force the linker to use the debug version when the framework.
 
 ```
 DYLD_IMAGE_SUFFIX=_debug
