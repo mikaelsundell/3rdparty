@@ -100,6 +100,20 @@ make install
 
 Mobile and web components are skipped as they have no dependency in 3rdparty project.
 
+### Debug Qt with 3rdparty ###
+
+Debugging in Qt with 3rdparty with frameworks uses the DYLD_IMAGE_SUFFIX environment variable. If you set it you get the debug version of the framework.
+
+```
+DYLD_IMAGE_SUFFIX=_debug
+```
+
+More information about Qt5 and debugging techniques.
+
+```
+https://doc.qt.io/qt-5/debug.html
+```
+
 ### Build 3rdparty libraries and extras with Qt ###
 
 ```shell
