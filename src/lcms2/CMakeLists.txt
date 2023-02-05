@@ -20,7 +20,7 @@ build_info( " Adding lcms2 project" )
 set( project_name "lcms2" )
 
 # project pkg
-set( project_pkg ${project_name}-2.11 )
+set( project_pkg ${project_name}-master )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )

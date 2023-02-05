@@ -1,5 +1,9 @@
 3rdparty changes:
 
+Update Jan 16 2023
+---------------------------------
+* Updated lcms2 to 2.14
+
 Update Jan 5 2023
 ---------------------------------
 * Python3 improvements
