@@ -2,6 +2,11 @@
 
 Update Jan 16 2023
 ---------------------------------
+* Added lilbraw 0.21.1
+* Fixed zlib pkgconfig
+
+Update Jan 16 2023
+---------------------------------
 * Updated lcms2 to 2.14
 
 Update Jan 5 2023

@@ -376,6 +376,12 @@ if( build_libs )
               BUILD ON
     )
     build_add_project(
+              libraw
+              DIR ${CMAKE_SOURCE_DIR}/src/libraw
+              DESCRIPTION "LibRaw"
+              BUILD ON
+    )
+    build_add_project(
               nasm
               DIR ${CMAKE_SOURCE_DIR}/src/nasm
               DESCRIPTION "Nasm"

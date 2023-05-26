@@ -90,7 +90,9 @@ IF( UNIX )
     set( build_make
         ${build_env} &&
         cd ${project_pkg} &&
-        cmake -DCMAKE_INSTALL_PREFIX=${build_dir} 
+        mkdir -p ${build_cmake} &&
+        cd ${build_cmake} &&
+        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
             ${build_options} &&
         make ${build_flags} &&
