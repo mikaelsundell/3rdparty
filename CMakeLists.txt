@@ -460,17 +460,41 @@ if( build_extras )
     build_info( "Adding extras" )
 
     build_add_project(
+        aces_container
+        DIR ${CMAKE_SOURCE_DIR}/src/aces_container
+        DESCRIPTION "aces_container"
+        BUILD ON
+    )
+    build_add_project(
         alembic
         DIR ${CMAKE_SOURCE_DIR}/src/alembic
         DESCRIPTION "alembic"
         BUILD ON
     )
     build_add_project(
+        ceres-solver
+        DIR ${CMAKE_SOURCE_DIR}/src/ceres-solver
+        DESCRIPTION "ceres-solver"
+        BUILD ON
+    )    
+    build_add_project(
         draco
         DIR ${CMAKE_SOURCE_DIR}/src/draco
         DESCRIPTION "draco"
         BUILD ON
     )
+    build_add_project(
+        eigen3
+        DIR ${CMAKE_SOURCE_DIR}/src/eigen
+        DESCRIPTION "eigen"
+        BUILD ON
+    )
+    build_add_project(
+        glog
+        DIR ${CMAKE_SOURCE_DIR}/src/glog
+        DESCRIPTION "glog"
+        BUILD ON
+    )  
     build_add_project(
         json
         DIR ${CMAKE_SOURCE_DIR}/src/json
@@ -480,7 +504,7 @@ if( build_extras )
     build_add_project(
         libjpeg-turbo
         DIR ${CMAKE_SOURCE_DIR}/src/libjpeg-turbo
-        DESCRIPTION "LibJpeg-turbo"
+        DESCRIPTION "libJpeg-turbo"
         BUILD ON
     )
     build_add_project(
@@ -510,31 +534,37 @@ if( build_extras )
     build_add_project(
         opensubdiv
         DIR ${CMAKE_SOURCE_DIR}/src/opensubdiv
-        DESCRIPTION "OpenSubDiv"
+        DESCRIPTION "opensubdiv"
         BUILD ON
     )
     build_add_project(
         tclap
         DIR ${CMAKE_SOURCE_DIR}/src/tclap
-        DESCRIPTION "Tclap"
+        DESCRIPTION "tclap"
         BUILD ON
     )
     build_add_project(
         ptex
         DIR ${CMAKE_SOURCE_DIR}/src/ptex
-        DESCRIPTION "PTex"
+        DESCRIPTION "ptex"
         BUILD ON
     )
     build_add_project(
         pyside
         DIR ${CMAKE_SOURCE_DIR}/src/pyside
-        DESCRIPTION "Pyside"
+        DESCRIPTION "pyside"
+        BUILD ON
+    )
+    build_add_project(
+        rawtoaces
+        DIR ${CMAKE_SOURCE_DIR}/src/rawtoaces
+        DESCRIPTION "rawtoaces"
         BUILD ON
     )
     build_add_project(
         pyside2-tools
         DIR ${CMAKE_SOURCE_DIR}/src/pyside2-tools
-        DESCRIPTION "Pyside2 tools"
+        DESCRIPTION "pyside2 tools"
         BUILD ON
     )
     build_add_project(
