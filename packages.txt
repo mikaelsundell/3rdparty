@@ -87,6 +87,7 @@ Rawtoaces
 ---------------------------------
 CMakeLists.txt
 * Fixed build issues on Mac M1
+  https://github.com/mikaelsundell/rawtoaces/tree/ms-fixes
 
 usd
 ---------------------------------
