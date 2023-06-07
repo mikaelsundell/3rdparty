@@ -20,7 +20,7 @@ build_info( " Adding rawtoaces project" )
 set( project_name "rawtoaces" )
 
 # project pkg
-set( project_pkg ${project_name}-master )
+set( project_pkg ${project_name} )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -50,7 +50,7 @@ set( inc_dir
 
 # lib files
 set( lib_files
-    xrawtoaces_idt
+    rawtoaces_idt
     rawtoaces_util
 )
 
