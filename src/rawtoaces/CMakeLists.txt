@@ -50,7 +50,7 @@ set( inc_dir
 
 # lib files
 set( lib_files
-    rawtoaces_idt
+    xrawtoaces_idt
     rawtoaces_util
 )
 
@@ -113,14 +113,6 @@ IF( UNIX )
     SET( build_uncompress
         ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
     )
-
-    # patch
-    if( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
-        set( build_patch              
-                patch ${lib_bin_dir}/${lib_pkg}/exrenvmap/blurImage.cpp
-                      ${lib_src_dir}/blurImage.cpp.patch
-        )
-    endif()
 
     # options
     set( build_options ${build_options} -DCMAKE_CXX_STANDARD=17 )
