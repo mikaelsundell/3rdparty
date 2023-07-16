@@ -1,6 +1,10 @@
 3rdparty changes:
 
-<<<<<<< HEAD
+Update July 17 2023
+---------------------------------
+* Updated build configurations
+* Fixed incorrect use of eigen
+
 Update June 6 2023
 ---------------------------------
 * Added aces_container
@@ -10,9 +14,6 @@ Update June 6 2023
 * Added rawtoaces
 
 Update May 26 2023
-=======
-Update May 27 2023
->>>>>>> 38b918253da501fa2fa2f34bf0eb018ecde19db7
 ---------------------------------
 * Added lilbraw 0.21.1
 * Fixed zlib pkgconfig

@@ -90,7 +90,8 @@ IF( UNIX )
         SET( build_options -DBUILD_SHARED_LIBS=FALSE )
     ENDIF()
 
-    set( build_options ${build_options} -DBoost_NO_BOOST_CMAKE=false )
+    # config
+    set( build_config ${build_config} -DBoost_NO_BOOST_CMAKE=false )
 
     # configure, make and install
     SET( build_make
@@ -101,7 +102,8 @@ IF( UNIX )
         cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
               -DCMAKE_INSTALL_PREFIX=${build_dir}
               -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-              ${build_options} &&
+              ${build_options}
+              ${build_config} &&
         make ${build_flags} &&
         make install
     )

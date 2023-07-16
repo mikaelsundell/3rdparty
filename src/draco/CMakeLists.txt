@@ -96,7 +96,8 @@ IF( UNIX )
         SET( build_options -DBUILD_SHARED_LIBS=false )
     endif()
 
-    set( build_options ${build_options} -DCMAKE_MODULE_PATH=${build_dir}/share/cmake/pybind11 )
+     # config
+    set( build_config ${build_config} -DCMAKE_MODULE_PATH=${build_dir}/share/cmake/pybind11 )
 
     # configure, make and install
     set( build_make
@@ -108,7 +109,8 @@ IF( UNIX )
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            ${build_options} &&
+            ${build_options}
+            ${build_config} &&
         make ${build_flags} &&
         make install
     )

@@ -127,7 +127,6 @@ if( UNIX )
     endif()
     
     # config
-
     if( CMAKE_VERBOSE_MAKEFILE )
         set( build_config ${build_config} VERBOSE=1 )
     else()

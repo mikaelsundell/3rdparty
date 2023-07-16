@@ -118,7 +118,9 @@ IF( UNIX )
     # options
     set( build_options -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} )
     set( build_options ${build_options} -DCMAKE_VERBOSE_MAKEFILE=true )
-    set( build_options ${build_options} -DOCIO_USE_OIIO_CMAKE_CONFIG=true )
+
+    # config
+    set( build_config ${build_config} -DOCIO_USE_OIIO_CMAKE_CONFIG=true )
 
     if( project_cfg_cmake_prefix )
         set( build_make
@@ -141,7 +143,9 @@ IF( UNIX )
         cd ${build_cmake} &&
         export OIIO_PATH=${build_dir} &&
         cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
-              -DCMAKE_INSTALL_PREFIX=${build_dir} ${build_options} &&
+              -DCMAKE_INSTALL_PREFIX=${build_dir} 
+              ${build_options}
+              ${build_config} &&
         make ${build_flags} &&
         make install
     )

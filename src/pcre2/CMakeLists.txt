@@ -100,7 +100,8 @@ IF( UNIX )
         SET( build_options -DBUILD_SHARED_LIBS=false )
     endif()
 
-    set( build_options ${build_options} -DPCRE2_BUILD_PCRE2_16=true )
+    # config
+    set( build_config ${build_config} -DPCRE2_BUILD_PCRE2_16=true )
     
     # configure, make and install
     set( build_make
@@ -108,7 +109,8 @@ IF( UNIX )
         cd ${project_pkg} &&
         cmake -DCMAKE_INSTALL_PREFIX=${build_dir} 
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            ${build_options} &&
+            ${build_options}
+            ${build_config} &&
         make ${build_flags} &&
         make install
     )

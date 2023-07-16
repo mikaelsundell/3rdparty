@@ -84,7 +84,9 @@ IF( UNIX )
         SET( build_options -DBUILD_SHARED_LIBS=false )
     endif()
 
-    set( build_options ${build_options} -DCMAKE_MODULE_PATH=${build_dir}/share/cmake/pybind11 )
+    # config
+    set( build_config ${build_config} -DCMAKE_MODULE_PATH=${build_dir}/share/cmake/pybind11 )
+    set( build_config ${build_config} -DNANOGUI_EIGEN_INCLUDE_DIR=${build_inc_dir}/eigen3 )
 
     # configure, make and install
     set( build_make
@@ -96,7 +98,8 @@ IF( UNIX )
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            ${build_options} &&
+            ${build_options}
+            ${build_config} &&
         make ${build_flags} &&
         make install
     )
@@ -104,7 +107,6 @@ IF( UNIX )
     # copy include
     set( build_include
         cd ${project_pkg} &&
-        ${copy_dir} ./ext/eigen/Eigen ${build_dir}/include/Eigen &&
         ${copy_dir} ./ext/glfw/include/GLFW ${build_dir}/include/GLFW &&
         ${copy} ./ext/nanovg/src/fontstash.h ${build_dir}/include/fontstash.h &&
         ${copy} ./ext/nanovg/src/nanovg_gl_utils.h ${build_dir}/include/nanovg_gl_utils.h &&

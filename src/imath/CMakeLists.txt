@@ -118,14 +118,6 @@ IF( UNIX )
         ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
     )
 
-    # patch
-    if( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
-        set( build_patch              
-                patch ${lib_bin_dir}/${lib_pkg}/exrenvmap/blurImage.cpp
-                      ${lib_src_dir}/blurImage.cpp.patch
-        )
-    endif()
-
     # options
     if( CMAKE_SHARED_LIBS )
         SET( build_options -DBUILD_SHARED_LIBS=TRUE )

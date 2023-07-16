@@ -114,18 +114,20 @@ IF( UNIX )
         SET( build_options -DBUILD_SHARED_LIBS=false )
     endif()
 
-    set( build_options ${build_options} -DMATERIALX_BUILD_SHARED_LIBS=true )
-    set( build_options ${build_options} -DMATERIALX_BUILD_OIIO=true )
-    set( build_options ${build_options} -DMATERIALX_BUILD_PYTHON=true )
-    set( build_options ${build_options} -DMATERIALX_BUILD_VIEWER=true )
-    set( build_options ${build_options} -DOPENIMAGEIO_ROOT_DIR=${build_dir} )
-    set( build_options ${build_options} -DMATERIALX_NANOGUI_EXTERNAL=true )
-    set( build_options ${build_options} -DNANOGUI_ROOT=${build_dir} )
-    set( build_options ${build_options} -DCMAKE_CXX_STANDARD=14 )
-
     if( CMAKE_BUILD_TYPE STREQUAL Debug )
         set( build_options ${build_options} -DOIIO_LIBNAME_SUFFIX=_d )
     endif()
+
+    # config
+    set( build_config ${build_config} -DMATERIALX_BUILD_SHARED_LIBS=true )
+    set( build_config ${build_config} -DMATERIALX_BUILD_OIIO=true )
+    set( build_config ${build_config} -DMATERIALX_BUILD_PYTHON=true )
+    set( build_config ${build_config} -DMATERIALX_BUILD_VIEWER=true )
+    set( build_config ${build_config} -DOPENIMAGEIO_ROOT_DIR=${build_dir} )
+    set( build_config ${build_config} -DMATERIALX_NANOGUI_EXTERNAL=true )
+    set( build_config ${build_config} -DNANOGUI_ROOT=${build_dir} )
+    set( build_config ${build_config} -DCMAKE_CXX_STANDARD=14 )
+    set( build_config ${build_config} -DCMAKE_CXX_FLAGS="-I${build_inc_dir}/eigen3" )
 
     # configure, make and install
     set( build_make
@@ -138,7 +140,8 @@ IF( UNIX )
             -DPYTHON_EXECUTABLE=${build_python3}
             -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
             -DPYTHON_LIBRARY=${build_python3_library_dir}
-            ${build_options} &&
+            ${build_options}
+            ${build_config} &&
         make ${build_flags} &&
         make install
     )

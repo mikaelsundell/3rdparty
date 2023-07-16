@@ -145,9 +145,10 @@ IF( UNIX )
         SET( build_options -DBUILD_SHARED_LIBS=FALSE )
     ENDIF()
 
-    set( build_options ${build_options} -DBoost_NO_BOOST_CMAKE=false )
-    set( build_options ${build_options} -DPXR_BUILD_USDVIEW=false )
-    set( build_options ${build_options} -DPXR_ENABLE_PYTHON_SUPPORT=false )
+    # config
+    set( build_config ${build_config} -DBoost_NO_BOOST_CMAKE=false )
+    set( build_config ${build_config} -DPXR_BUILD_USDVIEW=false )
+    set( build_config ${build_config} -DPXR_ENABLE_PYTHON_SUPPORT=false )
 
     # configure, make and install
     SET( build_make
@@ -161,7 +162,8 @@ IF( UNIX )
               -DPYTHON_EXECUTABLE=${build_python3}
               -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
               -DPYTHON_LIBRARY=${build_python3_library_dir}
-              ${build_options} &&
+              ${build_options}
+              ${build_config} &&
         make ${build_flags} &&
         make install
     )

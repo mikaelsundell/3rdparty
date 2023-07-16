@@ -115,14 +115,14 @@ IF( UNIX )
     )
 
     # options
-    set( build_options ${build_options} -DCMAKE_CXX_STANDARD=17 )
-
-    # options
     if( CMAKE_SHARED_LIBS )
         SET( build_options ${build_options} -DBUILD_SHARED_LIBS=TRUE )
     ELSE()
         SET( build_options ${build_options} -DBUILD_SHARED_LIBS=FALSE )
     ENDIF()
+
+    # config
+    set( build_config ${build_options} -DCMAKE_CXX_STANDARD=17 )
 
     # configure, make and install
     SET( build_make
@@ -132,7 +132,8 @@ IF( UNIX )
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir}
               -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-              ${build_options} &&
+              ${build_options}
+              ${build_config} &&
         make ${build_flags} &&
         make install
     )

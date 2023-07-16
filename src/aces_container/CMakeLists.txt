@@ -20,7 +20,7 @@ build_info( " Adding aces_container project" )
 set( project_name "aces_container" )
 
 # project pkg
-set( project_pkg ${project_name}-master )
+set( project_pkg ${project_name} )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -118,14 +118,6 @@ IF( UNIX )
     SET( build_uncompress
         ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
     )
-
-    # patch
-    if( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
-        set( build_patch              
-                patch ${lib_bin_dir}/${lib_pkg}/exrenvmap/blurImage.cpp
-                      ${lib_src_dir}/blurImage.cpp.patch
-        )
-    endif()
 
     # options
     if( CMAKE_SHARED_LIBS )
