@@ -5,7 +5,7 @@ The 3rdparty build system is mainly developed and maintained for MacOSX and arm6
 
 Current Mac platform:
 
-    - MacOSX 12.1 SDK Monterey (arm64) - Apple clang version 13.0.0 (clang-1300.0.27.3)
+    - MacOSX 12.6 SDK Monterey (arm64) - Apple clang version 13.0.0 (clang-1300.0.27.3)
       Requirements:
         Xcode 6
 

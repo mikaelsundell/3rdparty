@@ -122,7 +122,8 @@ IF( UNIX )
     ENDIF()
 
     # config
-    set( build_config ${build_options} -DCMAKE_CXX_STANDARD=17 )
+    set( build_config ${build_config} -DCMAKE_CXX_STANDARD=17 )
+    set( build_config ${build_config} -DCMAKE_CXX_FLAGS="-I${build_inc_dir}/eigen3" )
 
     # configure, make and install
     SET( build_make
@@ -130,7 +131,8 @@ IF( UNIX )
         cd ${project_pkg} &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
-        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir}
+        cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
+              -DCMAKE_INSTALL_PREFIX=${build_dir}
               -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
               ${build_options}
               ${build_config} &&
