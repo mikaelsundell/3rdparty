@@ -2,6 +2,8 @@
 
 A developer 3rdparty library for development and packaging of film and color applications.
 
+![3rdparty.](images/image.png '3rdparty')
+
 ## 3rdparty consists of ##
 
   * A set of libraries, viewers and media provided on Mac based platforms.
