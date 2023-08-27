@@ -49,6 +49,7 @@ set( inc_dir
 
 # lib files
 set( lib_files
+    boost_atomic
     boost_chrono
     boost_container
     boost_context
@@ -61,7 +62,6 @@ set( lib_files
     boost_iostreams
     boost_log_setup
     boost_log
-    boost_numpy${build_python3_versiontag}
     boost_prg_exec_monitor
     boost_program_options
     boost_python${build_python3_versiontag}
