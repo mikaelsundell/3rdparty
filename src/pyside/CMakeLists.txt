@@ -9,7 +9,7 @@
 # Qt Copyright
 # Copyright (C) 2020 The Qt Company Ltd.
 
-# pyside from github 2022-03-24
+# pyside from github 2023-08-26
 # https://github.com/pyside/pyside-setup
 
 build_info( " Adding pyside project" )
@@ -20,7 +20,7 @@ build_info( " Adding pyside project" )
 set( project_name "pyside" )
 
 # project pkg
-set( project_pkg ${project_name}-setup-opensource-src-5.15.2.1 )
+set( project_pkg ${project_name}-setup-opensource-src-5.15.10 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -115,7 +115,7 @@ if( UNIX )
     
         if ( APPLE )
             list( APPEND lib_output 
-                ${build_lib_dir}/${lib_prefix}${lib_file}.cpython-${build_python3_versiontag}-darwin.5.15.2.1${lib_suffix}
+                ${build_lib_dir}/${lib_prefix}${lib_file}.cpython-${build_python3_versiontag}-darwin.5.15.10${lib_suffix}
             )
         endif()    
     endforeach()
@@ -169,7 +169,7 @@ IF( UNIX )
     set( build_make
         ${build_env} &&
         export LLVM_INSTALL_DIR=${build_dir} &&
-        cd pyside-setup-opensource-src-5.15.2 &&
+        cd pyside-setup-opensource-src-5.15.10 &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
@@ -178,6 +178,7 @@ IF( UNIX )
             -DPYTHON_EXECUTABLE=${build_python3}
             -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
             -DPYTHON_LIBRARY=${build_python3_library_dir}
+            -DCMAKE_CXX_FLAGS=-stdlib=libc++
             ${build_options} &&
         make ${build_flags} &&
         make install

@@ -11,8 +11,8 @@
 # Sony Pictures Imageworks Inc. and
 # Industrial Light & Magic, a division of Lucasfilm Entertainment Company Ltd.
 
-# alembic from github 2022-03-26
-# https://github.com/alembic/alembic/releases/tag/1.8.3
+# alembic from github 2023-08-24
+# https://github.com/alembic/alembic
 
 build_info( " Adding alembic project" )
 
@@ -22,7 +22,7 @@ build_info( " Adding alembic project" )
 set( project_name "alembic" )
 
 # project pkg
-set( project_pkg ${project_name}-1.8.3 )
+set( project_pkg ${project_name}-master )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -105,7 +105,7 @@ IF( UNIX )
     # configure, make and install
     set( build_make
         ${build_env} &&
-        cd ${project_pkg} &&
+        cd alembic &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 

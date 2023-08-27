@@ -10,7 +10,7 @@
 # Copyright 2008 Larry Gritz and the other authors and contributors.
 # All Rights Reserved.
 
-# oiio from github.com master 2022-03-14
+# oiio from github.com master 2023-08-24
 # https://github.com/OpenImageIO/oiio/tree/master
 
 build_info( " Adding oiio project" )
@@ -21,7 +21,7 @@ build_info( " Adding oiio project" )
 set( project_name "oiio" )
 
 # project pkg
-set( project_pkg "oiio-master-PR3735-230103" )
+set( project_pkg "oiio-master-230824" )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -85,7 +85,7 @@ if( UNIX )
         set( lib_dtag "_d" )
     endif()
 
-    set( lib_version "2.5.0" )
+    set( lib_version "2.5.2" )
 
     foreach( lib_file ${lib_files} )
         list( APPEND lib_output 
@@ -147,7 +147,6 @@ if( UNIX )
     # Qt = Not used
     # Libsquish = Not used
 
-    # Boost
     set( build_config ${build_config} Boost_ROOT=${build_dir} )
     set( build_config ${build_config} FFmpeg_ROOT=${build_dir} )
     set( build_config ${build_config} JPEG_ROOT=${build_dir} )
@@ -158,8 +157,10 @@ if( UNIX )
     set( build_config ${build_config} Qt5_ROOT=${build_dir} )
 
     # TBB - Use internal.
-
     set( build_config ${build_config} USE_TBB=0 )
+
+    # Boost - use non cmake.
+    set( build_config ${build_config} MY_CMAKE_FLAGS=-DBoost_NO_BOOST_CMAKE:BOOL=OFF )
     
     # THIRD_PARTY_TOOLS_HOME -> Finds OpenEXR
     # CMAKE_PREFIX_PATH -> Finds Png, JPEG and other dependencies
@@ -167,7 +168,7 @@ if( UNIX )
     # make and install
 
     set( build_make
-    	cd oiio-master &&
+    	cd oiio &&
     )
 
     set( build_make

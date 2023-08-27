@@ -5,7 +5,7 @@ aces_container
 * Removed export PACKAGE to prevent conflict with install
 * Fixed cmake config files
 
-See ms-fixes:
+In-use ms-fixes:
 https://github.com/mikaelsundell/aces_container/tree/ms-fixes
 
 eigen
@@ -19,13 +19,20 @@ nasm
 
 materialx
 ---------------------------------
-CMakeLists.txt
-* Line 8: Changed compiler to 14 for oiio compatibility
-* Line 49: Added OpenImageIO_Util library
+
+In-use ms-230824
+https://github.com/mikaelsundell/MaterialX/tree/ms-230824
+
 * TODO: Fix nanogui on Mac M1/ arm64 - cannot create opengl context?
   GLFW error 65544: Cocoa: Failed to retrieve display name
 * TODO: Where is sitepackages?
 * TODO: Create PR for project @ Github
+
+Pending PR1492:
+https://github.com/AcademySoftwareFoundation/MaterialX/pull/1492 
+
+* Obsolete fixes in oiio
+* Use of config based find_package for oiio
 
 nanogui
 ---------------------------------
@@ -37,9 +44,10 @@ nanogui
 
 oiio
 ---------------------------------
-externalpackages.cmake
-* Line 64: Changed set (Boost_NO_BOOST_CMAKE OFF) to OFF to find boost libraries
-* Line 240: Changed PTex to not prefer config as it's not reliable
+
+In-use PR3961:
+https://github.com/OpenImageIO/oiio/pull/3961
+
 * TODO: Fix broken ocio support
 * TODO: Create PR for project @ Github
 * TODO: Add LibRAW to build
@@ -83,6 +91,12 @@ examples/common/glPtexMipmapTexture.cpp
 
 * Create PR for project @ Github
 
+pyside
+--------------------------------- 
+
+sources/shiboken2/libshiboken/sbknumpyarrayconverter.cpp
+* Line 119: Change to check for NOY_1_23_API version and use of obsolete NPY_ARRAY_UPDATEIFCOPY
+
 qt
 --------------------------------- 
 OSX12.1 SDK fixes
@@ -105,15 +119,6 @@ rawtoaces
 
 See ms-fixes:
 https://github.com/mikaelsundell/rawtoaces/tree/ms-fixes
-
-usd
----------------------------------
-cmake/modules/FindTBB.cmake 
-* Line 200: changed tbb_stddef.h to version.h
-* Fixed build ussies converter.cc and materializer.cc
-  pbr_shader.GetPath().AppendProperty(kTokSurface)
-* TODO: Where is sitepackages?
-* TODO: Create PR for project @ Github
 
 usd_from_gltf
 ---------------------------------

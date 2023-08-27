@@ -1,5 +1,9 @@
 3rdparty changes:
 
+Update August 27 2023
+---------------------------------
+* Updated build configurations
+
 Update July 17 2023
 ---------------------------------
 * Updated build configurations

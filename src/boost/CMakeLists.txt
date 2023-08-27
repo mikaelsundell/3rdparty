@@ -10,7 +10,7 @@
 # Copyright Beman Dawes, David Abrahams, 1998-2005.
 # Copyright Rene Rivera 2004-2007.
 
-# boost from sourceforge.net 1.73.0 2020-08-04
+# boost from sourceforge.net 1.83.0 2023-08-24
 # https://www.boost.org/users/download/
 
 build_info( " Adding boost project" )
@@ -21,7 +21,7 @@ build_info( " Adding boost project" )
 set( project_name "boost" )
 
 # project pkg
-set( project_pkg ${project_name}_1_73_0 )
+set( project_pkg ${project_name}_1_83_0 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -49,7 +49,6 @@ set( inc_dir
 
 # lib files
 set( lib_files
-    boost_atomic
     boost_chrono
     boost_container
     boost_context
@@ -60,12 +59,9 @@ set( lib_files
     boost_filesystem
     boost_graph
     boost_iostreams
-    boost_math_c99
-    boost_math_c99f
-    boost_math_c99l
-    boost_math_tr1
-    boost_math_tr1f
-    boost_math_tr1l
+    boost_log_setup
+    boost_log
+    boost_numpy${build_python3_versiontag}
     boost_prg_exec_monitor
     boost_program_options
     boost_python${build_python3_versiontag}
@@ -81,7 +77,6 @@ set( lib_files
     boost_timer
     boost_type_erasure
     boost_unit_test_framework
-    boost_wave
     boost_wserialization
 )
 
