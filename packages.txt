@@ -8,6 +8,10 @@ aces_container
 In-use ms-fixes:
 https://github.com/mikaelsundell/aces_container/tree/ms-fixes
 
+boost
+---------------------------------
+* TODO: Fix numpy python dependency on Mac M1/ arm64, see pyside note
+
 eigen
 -----
 CMakeLists.txt
