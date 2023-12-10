@@ -1,11 +1,7 @@
 #!/bin/bash
-##-*****************************************************************************
-##  Copyright 2010-2013 Mikael Sundell and the other authors and contributors.
-##  All Rights Reserved.
-##
-##  install_pc.sh - install pkgconfig file
-##
-##-*****************************************************************************
+##  Copyright 2022-present Contributors to the 3rdparty project.
+##  SPDX-License-Identifier: BSD-3-Clause
+##  https://github.com/mikaelsundell/3rdparty
 
 # usage
 

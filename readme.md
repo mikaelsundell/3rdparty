@@ -53,7 +53,7 @@ whereis python3
 
 Patched version compatible with arm64:
 ```shell
-https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/qt-everywhere-src-5.15.1.tar.gz
+https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/qt-everywhere-src-6.6.0.tar.gz
 ```
 
 ### Build 3rdparty base libraries ###
@@ -69,7 +69,7 @@ mkdir build &&
 cd build &&
 ../configure -prefix $(path)/3rdparty/build/macosx.debug/$(arch)
              -libdir $(path)/git/3rdparty/build/macosx.debug/$(arch)/lib 
-             QMAKE_APPLE_DEVICE_ARCHS=$(arm64)/$(x86_64)
+             QMAKE_APPLE_DEVICE_ARCHS=arm64/x86_64
              -opensource
              -confirm-license
              -system-libpng
@@ -78,21 +78,15 @@ cd build &&
              -system-pcre
              -system-harfbuzz
              -skip qtactiveqt
-             -skip qtandroidextras
              -skip qtcharts
              -skip qtconnectivity
-             -skip qtgamepad
              -skip qtlocation
-             -skip qtlottie
-             -skip qtpurchasing
              -skip qtsensors
              -skip qtspeech
              -skip qtvirtualkeyboard
              -skip qtwayland
              -skip qtwebchannel
              -skip qtwebengine
-             -skip qtwebglplugin
-             -skip qtwebsockets
              -skip qtwebview
              -I$(path)/3rdparty/build/macosx.debug/$(arch)/include 
              -L$(path)/3rdparty/build/macosx.debug/$(arch)/lib &&
@@ -140,10 +134,8 @@ deployment process to remap install names before distribution.
 Make targets you should know about:
 
 ```shell
-make                      Build all projects for development and test in 
-			  'build/platform'
-make debug                Build all projects with debugging symbols when
-			  possible.
+make                      Build all projects for development and test in 'build/platform'
+make debug                Build all projects with debugging symbols when possible.
 make clean                Get rid of all the temporary files in 'build/platform'.
 make help                 Print all the make options
 ```
@@ -168,9 +160,15 @@ Target: x86_64-apple-darwin21.6.0
 
 macOS Monterey Apple M1
 ```
-Darwin Mikaels-iMac-M1 21.6.0 Darwin Kernel Version 21.6.0: Mon Aug 22 20:20:05 PDT 2022; root:xnu-8020.140.49~2/RELEASE_ARM64_T8101 arm64 arm
+Darwin Mikaels-iMac-M1 21.6.0 Darwin Kernel Version 21.6.0: Mon Aug 22 20:20:05 PDT 2022; root:xnu-8020.140.49~2/RELEASE_ARM64_T8101 arm64
 Apple clang version 13.1.6 (clang-1316.0.21.2.3)
 Target: arm64-apple-darwin21.6.0
+```
+
+macOS Configuration
+```shell
+uname -a
+clang --version
 ```
 
 ## Github ##

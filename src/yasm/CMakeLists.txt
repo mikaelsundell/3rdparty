@@ -118,7 +118,7 @@ IF( UNIX )
     # scripts
     set( build_output ${bin_output} ${lib_output} )
 
-    build_add_check( 
+    build_install_check( 
         "${build_output}" 
         build_check
     )

@@ -78,6 +78,9 @@ all: cmakeinstall
 debug: 
 	@( ${MAKE} DEBUG=1 --no-print-directory )
 
+release: 
+	@( ${MAKE} --no-print-directory )
+
 # 'make cmakesetup' constructs the build directory and runs 'cmake' there
 cmakesetup:  
 	@( cmake -E make_directory ${platform_dir} ; \

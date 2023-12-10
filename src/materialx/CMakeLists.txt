@@ -50,11 +50,13 @@ SET( inc_dir
     MaterialXFormat
     MaterialXGenGlsl
     MaterialXGenMdl
+    MaterialXGenMsl
     MaterialXGenOsl
     MaterialXGenShader
     MaterialXRender
     MaterialXRenderGlsl
     MaterialXRenderHw
+    MaterialXRenderMsl
     MaterialXRenderOsl
 )
 
@@ -64,11 +66,13 @@ set( lib_files
     MaterialXFormat
     MaterialXGenGlsl
     MaterialXGenMdl
+    MaterialXGenMsl
     MaterialXGenOsl
     MaterialXGenShader
     MaterialXRender
     MaterialXRenderGlsl
     MaterialXRenderHw
+    MaterialXRenderMsl
     MaterialXRenderOsl
 )
 
@@ -138,6 +142,8 @@ IF( UNIX )
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
+            -DMATERIALX_PYTHON_FOLDER_NAME=${build_python_dir}
+            -DMATERIALX_BUILD_PYTHON=ON 
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
             -DPYTHON_EXECUTABLE=${build_python3}
             -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
@@ -154,7 +160,7 @@ IF( UNIX )
         set( build_output ${build_output} ${lib_output} )
     endif()
     
-    build_add_script( 
+    build_install_script( 
         "${build_output}" 
         ${build_dir} 
         ${build_prefix_lib} 
@@ -162,7 +168,7 @@ IF( UNIX )
         build_script
     )
 
-    build_add_check( 
+    build_install_check( 
         "${build_output}" 
         build_check
     )

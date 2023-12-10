@@ -9,7 +9,7 @@
 # Qt Copyright
 # Copyright (C) 2020 The Qt Company Ltd.
 
-# pyside from github 2023-08-26
+# pyside from github 2023-11-29 (branch 6.6)
 # https://github.com/pyside/pyside-setup
 
 build_info( " Adding pyside project" )
@@ -20,7 +20,7 @@ build_info( " Adding pyside project" )
 set( project_name "pyside" )
 
 # project pkg
-set( project_pkg ${project_name}-setup-opensource-src-5.15.10 )
+set( project_pkg ${project_name}-6.6 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -40,24 +40,24 @@ set( project_bin_dir
 
 # bin files
 set( bin_files
-    pyside2-lupdate
-    shiboken2
+    shiboken6
 )
 
 # inc dir
 SET( inc_dir
-    PySide2
-    shiboken2
+    PySide6
+    shiboken6
 )
 
 # lib files
 set( lib_files
-    pyside2
-    shiboken2
+    pyside6
+    pyside6qml
+    shiboken6
 )
 
 # site-packages
-set( pyside2_files
+set( pyside6_files
     Qt3DAnimation
     Qt3DCore
     Qt3DExtras
@@ -66,36 +66,44 @@ set( pyside2_files
     Qt3DRender
     QtConcurrent
     QtCore
+    QtDBus
     QtDataVisualization
+    QtExampleIcons
+    QtGraphs
     QtGui
     QtHelp
-    QtMacExtras
+    QtHttpServer
     QtMultimedia
     QtMultimediaWidgets
     QtNetwork
+    QtNetworkAuth
     QtOpenGL
-    QtOpenGLFunctions
+    QtOpenGLWidgets
+    QtPositioning
     QtPrintSupport
     QtQml
     QtQuick
+    QtQuick3D
     QtQuickControls2
     QtQuickWidgets
     QtRemoteObjects
-    QtScript
-    QtScriptTools
     QtScxml
+    QtSerialBus
     QtSerialPort
+    QtSpatialAudio
     QtSql
+    QtStateMachine
     QtSvg
+    QtSvgWidgets
     QtTest
     QtUiTools
+    QtWebSockets
     QtWidgets
     QtXml
-    QtXmlPatterns
 )
 
-set( shiboken_files
-    shiboken2
+set( shiboken6_files
+    Shiboken
 )
 
 if( UNIX )
@@ -111,34 +119,35 @@ if( UNIX )
     )
 
     # lib files
+    set( lib_version "3.6.6.0" )
+    
     foreach( lib_file ${lib_files} )
     
         if ( APPLE )
             list( APPEND lib_output 
-                ${build_lib_dir}/${lib_prefix}${lib_file}.cpython-${build_python3_versiontag}-darwin.5.15.10${lib_suffix}
+                ${build_lib_dir}/${lib_prefix}${lib_file}.abi${lib_version}${lib_suffix}
             )
         endif()    
     endforeach()
 
     # site packages files
-    foreach( lib_file ${pyside2_files} )
+    foreach( lib_file ${pyside6_files} )
     
         if ( APPLE )
             list( APPEND lib_output 
-                ${build_lib_dir}/python${build_python3_version}/site-packages/PySide2/${lib_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
+                ${build_dir}/site-packages/PySide6/${lib_file}.abi3${sitepackage_suffix}
             )
-
         endif()    
     endforeach()
 
-    foreach( lib_file ${shiboken_files} )
+    foreach( lib_file ${shiboken6_files} )
     
-        if ( APPLE )
-            list( APPEND lib_output 
-                ${build_lib_dir}/python${build_python3_version}/site-packages/shiboken2/${lib_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
-            )
-        endif()      
-    endforeach()
+    if ( APPLE )
+        list( APPEND lib_output 
+            ${build_dir}/site-packages/Shiboken6/${lib_file}.abi3${sitepackage_suffix}
+        )
+    endif()    
+endforeach()
     
 endif()
 
@@ -169,16 +178,20 @@ IF( UNIX )
     set( build_make
         ${build_env} &&
         export LLVM_INSTALL_DIR=${build_dir} &&
-        cd pyside-setup-opensource-src-5.15.10 &&
+        cd pyside-6.6/pyside-pyside-setup &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
-        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
+        cmake ../ -DCMAKE_PREFIX_PATH=${build_dir} 
+            -DCMAKE_INSTALL_PREFIX=${build_dir} 
+            -DCMAKE_BUILD_RPATH=${build_lib_dir} 
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            -DCMAKE_VERBOSE_MAKEFILE=1
             -DPYTHON_EXECUTABLE=${build_python3}
             -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
             -DPYTHON_LIBRARY=${build_python3_library_dir}
             -DCMAKE_CXX_FLAGS=-stdlib=libc++
+            -DBUILD_TESTS=OFF 
+            -DNO_QT_TOOLS=yes 
+            -DFORCE_LIMITED_API=yes
             ${build_options} &&
         make ${build_flags} &&
         make install
@@ -189,7 +202,7 @@ IF( UNIX )
         set( build_output ${build_output} ${lib_output} )
     endif()
 
-    build_add_script( 
+    build_install_script( 
         "${build_output}" 
         ${build_dir} 
         ${build_prefix_lib} 
@@ -197,23 +210,11 @@ IF( UNIX )
         build_script
     )
 
-    build_add_check( 
+    build_install_check( 
         "${build_output}" 
         build_check
     )
-
-    # site-package
-
-    set( sitepackage_output ${pyside2_output} ${shiboken2_output} )
-
-    build_add_sitepackage( 
-        "${sitepackage_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
-        sitepackage_script
-    )
-
+    
     # run
     add_custom_command( 
         OUTPUT ${bin_output} ${lib_output}
@@ -235,3 +236,5 @@ add_custom_target(
 
 # dependencies
 add_dependencies( ${project_name} llvm )
+
+#message(FATAL_ERROR "Exit PySide for now")

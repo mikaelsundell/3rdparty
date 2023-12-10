@@ -121,7 +121,7 @@ IF( UNIX )
         set( build_output ${build_output} ${lib_output} )
     endif()
     
-    build_add_script( 
+    build_install_script( 
         "${build_output}" 
         ${build_dir} 
         ${build_prefix_lib} 
@@ -129,7 +129,7 @@ IF( UNIX )
         build_script
     )
 
-    build_add_check( 
+    build_install_check( 
         "${build_output}" 
         build_check
     )

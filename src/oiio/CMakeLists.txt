@@ -99,7 +99,6 @@ if( UNIX )
             list( APPEND lib_output 
                 ${build_lib_dir}/python${build_python3_version}/site-packages/OpenImageIO/${lib_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
             )
-
         endif()    
     endforeach()
 
@@ -174,6 +173,8 @@ if( UNIX )
     set( build_make
         ${build_make}
         export THIRD_PARTY_TOOLS_HOME=${build_dir} &&
+        export PYTHON_SITE_DIR=${build_sitepackages_dir}/OpenImageIO &&
+    endif ()
     )
 
     # enable in build Qt support using cmake
@@ -198,7 +199,7 @@ if( UNIX )
         set( build_output ${build_output} ${lib_output} )
     endif()
 
-    build_add_script( 
+    build_install_script( 
         "${build_output}" 
         ${build_dir} 
         ${build_prefix_lib} 
@@ -206,7 +207,7 @@ if( UNIX )
         build_script 
     )
 
-    build_add_check( 
+    build_install_check( 
         "${build_output}" 
         build_check
     )
@@ -230,4 +231,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} boost freetype glew jasper giflib jpeg libpng libwebp openjpeg openexr pybind tiff ffmpeg )
+add_dependencies( ${project_name} boost freetype glew jasper giflib jpeg libpng libraw libwebp openjpeg openexr pybind tiff ffmpeg )

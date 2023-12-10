@@ -5,7 +5,7 @@ aces_container
 * Removed export PACKAGE to prevent conflict with install
 * Fixed cmake config files
 
-In-use ms-fixes:
+in-progress ms-fixes:
 https://github.com/mikaelsundell/aces_container/tree/ms-fixes
 
 boost
@@ -23,8 +23,7 @@ nasm
 
 materialx
 ---------------------------------
-
-In-use ms-230824
+in-progress ms-230824
 https://github.com/mikaelsundell/MaterialX/tree/ms-230824
 
 * TODO: Fix nanogui on Mac M1/ arm64 - cannot create opengl context?
@@ -48,13 +47,10 @@ nanogui
 
 oiio
 ---------------------------------
-
-In-use PR3961:
+in-progress PR3961:
 https://github.com/OpenImageIO/oiio/pull/3961
 
 * TODO: Fix broken ocio support
-* TODO: Create PR for project @ Github
-* TODO: Add LibRAW to build
 
 ocio
 ---------------------------------
@@ -73,17 +69,20 @@ pcre2
 
 pyside
 ---------------------------------
-* Build all Qt libraries as a part of Qt build instructions - right now we skip:
-  Qt5Positioning
-  Qt5Location
-  Qt5Sensors
-  Qt5TextToSpeech
-  Qt5WebChannel
-  Qt5WebEngineCore
-  Qt5WebEngine
-  Qt5WebSockets
-* Build process is sensitive for numpy pip3 installs, run pip3 uninstall numpy before build
-* TODO: Change name to pyside2?
+QtDesigner issue with Qt6.6 QtUiPlugin includes
+https://bugreports.qt.io/browse/PYSIDE-1684
+
+sources/pyside6/PySide6/QtDesigner/CMakeLists.txt
+* Line 1-73: Commented out QtDesigner, not compatible with Qt6.6 and QtUiPlugin/customerwidget.h, only forward declaration of QWidget
+
+sources/pyside6/qtexampleicons/CMakeLists.txt
+* Line 35: Added shiboken_python_include_dirs for target_include_directories
+
+sources/pyside6/Macros/PySideModules.cmake
+* Line 286: Added double /../.. to end of path
+
+build_scripts/utils.py
+* Line 23: Commented out setuptools, not needed and breaks macOS
 
 opensubdiv
 --------------------------------- 
@@ -95,33 +94,34 @@ examples/common/glPtexMipmapTexture.cpp
 
 * Create PR for project @ Github
 
-pyside
---------------------------------- 
-
-sources/shiboken2/libshiboken/sbknumpyarrayconverter.cpp
-* Line 119: Change to check for NOY_1_23_API version and use of obsolete NPY_ARRAY_UPDATEIFCOPY
-
 qt
 --------------------------------- 
-OSX12.1 SDK fixes
-* https://github.com/microsoft/vcpkg/issues/21055
 
-qt3d/src/3rdparty/assimp/contrib/zip/src/miniz.h 
-* Line 2931: Changed to stat from stat64, deprecated in OSX12.1
-* Line 2932: Changed to stat from stat64, deprecated in OSX12.1
+ld: warning: dylib (/Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib/libz.dylib) was built for newer macOS version (12.0) than being linked (11.0)
+ld: warning: linking against a dylib which is not safe for use in application extensions: /Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib/libz.dylib
+
+
+QRhi static constants causing missing symbols
+* https://bugreports.qt.io/browse/QTBUG-118170
+
+qtbase/src/gui/rhi/qrhi.h
+* Line 498, 538, 1216, 1946: Changed to constexpr, fixed in Qt 6.6.1
+
+qtbase/mkspecs/common/macx.conf 
+* Line 8, 10: Changed to target 12 and minimum 11
 
 build arm64
-../configure -prefix /Volumes/Build/github/3rdparty/build/macosx/arm64.debug -libdir /Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib QMAKE_APPLE_DEVICE_ARCHS=arm64 -opensource -confirm-license -system-libpng -system-libjpeg -system-zlib -system-pcre -system-harfbuzz -skip qtactiveqt -skip qtandroidextras -skip qtcharts -skip qtconnectivity -skip qtgamepad -skip qtlocation -skip qtlottie -skip qtpurchasing -skip qtsensors -skip qtspeech -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebglplugin -skip qtwebsockets -skip qtwebview -I/Volumes/Build/github/3rdparty/build/macosx/arm64.debug/include -L/Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib && make install
+../configure -prefix /Volumes/Build/github/3rdparty/build/macosx/arm64.debug -libdir /Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib QMAKE_APPLE_DEVICE_ARCHS=arm64 QMAKE_MACOSX_DEPLOYMENT_TARGET=12.0 -opensource -confirm-license -system-libpng -system-libjpeg -system-zlib -system-pcre -system-harfbuzz -skip qtactiveqt  -skip qtcharts -skip qtconnectivity -skip qtlocation -skip qtsensors -skip qtspeech -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebview -I/Volumes/Build/github/3rdparty/build/macosx/arm64.debug/include -L/Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib && make install
 
 build x86_64
-../configure -prefix /Volumes/Build/github/3rdparty/build/macosx/x86_64.debug -libdir /Volumes/Build/github/3rdparty/build/macosx/x86_64.debug/lib QMAKE_APPLE_DEVICE_ARCHS=x86_64 -opensource -confirm-license -system-libpng -system-libjpeg -system-zlib -system-pcre -system-harfbuzz -skip qtactiveqt -skip qtandroidextras -skip qtcharts -skip qtconnectivity -skip qtgamepad -skip qtlocation -skip qtlottie -skip qtpurchasing -skip qtsensors -skip qtspeech -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebglplugin -skip qtwebsockets -skip qtwebview -I/Volumes/Build/github/3rdparty/build/macosx/x86_64.debug/include -L/Volumes/Build/github/3rdparty/build/macosx/x86_64.debug/lib && make install
+../configure -prefix /Volumes/Build/github/3rdparty/build/macosx/arm64.debug -libdir /Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib QMAKE_APPLE_DEVICE_ARCHS=x86_64 QMAKE_MACOSX_DEPLOYMENT_TARGET=12.0 -opensource -confirm-license -system-libpng -system-libjpeg -system-zlib -system-pcre -system-harfbuzz -skip qtactiveqt  -skip qtcharts -skip qtconnectivity -skip qtlocation -skip qtsensors -skip qtspeech -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebview -I/Volumes/Build/github/3rdparty/build/macosx/arm64.debug/include -L/Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib && make install
 
 rawtoaces
 ---------------------------------
 * Fixed CMAKE_CXX_FLAGS and CMAKE_C_FLAGS to not overwrite cmake flags
 * Removed export PACKAGE to prevent conflict with install
 
-See ms-fixes:
+see ms-fixes:
 https://github.com/mikaelsundell/rawtoaces/tree/ms-fixes
 
 usd_from_gltf

@@ -1,12 +1,6 @@
-##-*****************************************************************************
-##  Copyright 2012-2020 Mikael Sundell and the other authors and contributors.
-##  All Rights Reserved.
-##
-##  buildutils.cmake for 3rdparty
-##  
-##  Macros and helpful tools.
-##
-##-*****************************************************************************
+##  Copyright 2022-present Contributors to the 3rdparty project.
+##  SPDX-License-Identifier: BSD-3-Clause
+##  https://github.com/mikaelsundell/3rdparty
 
 function( build_info message )
     message( STATUS ${message} )
@@ -89,7 +83,7 @@ endfunction()
 
 ##-*****************************************************************************
 
-function( build_add_script files dir prefix prefix_framework output_script )
+function( build_install_script files dir prefix prefix_framework output_script )
     if ( APPLE )
         set( install_script
             ${PROJECT_SOURCE_DIR}/src/scripts/install_name.sh 
@@ -104,36 +98,7 @@ endfunction()
 
 ##-*****************************************************************************
 
-
-function( build_add_sitepackage files dir prefix prefix_framework output_sitepackage )
-    if ( APPLE )
-        set( install_sitepackage
-            ${PROJECT_SOURCE_DIR}/src/scripts/install_sitepackage.sh 
-            --prefix-lib ${prefix}
-            --prefix-framework ${prefix_framework}
-            --absolute-path ${dir}
-            ${files}
-        )
-        set(${output_sitepackage} ${install_sitepackage} PARENT_SCOPE)
-    endif()
-endfunction()
-
-function( build_add_site-package files dir prefix prefix_framework output_site-package )
-    if ( APPLE )
-        set( install_site-package
-            ${PROJECT_SOURCE_DIR}/src/scripts/install_site-package.sh 
-            --prefix-lib ${prefix}
-            --prefix-framework ${prefix_framework}
-            --absolute-path ${dir}
-            ${files}
-        )
-        set(${output_site-package} ${install_site-package} PARENT_SCOPE)
-    endif()
-endfunction()
-
-##-*****************************************************************************
-
-function( build_add_check files output_script )
+function( build_install_check files output_script )
       set( check_script 
           ${PROJECT_SOURCE_DIR}/src/scripts/install_check.sh 
           ${files}

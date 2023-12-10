@@ -121,6 +121,8 @@ set( build_bin_dir ${build_dir}/bin )
 set( build_inc_dir ${build_dir}/include )
 set( build_lib_dir ${build_dir}/lib )
 set( build_framework_dir ${build_dir}/lib )
+set( build_python_dir ${build_dir}/python )
+set( build_sitepackages_dir ${build_dir}/site-packages )
 set( build_plugins_dir ${build_dir}/plugins )
 set( build_test_dir ${build_dir}/test )
 set( build_media_dir ${build_dir}/media )
@@ -219,6 +221,8 @@ endif()
 
 set( build_flags ${build_flags} -j${num_cpus} --load-average=${num_cpus} )
 
+
+
 # define python3
 if ( UNIX )
     if ( APPLE )
@@ -231,7 +235,6 @@ if ( UNIX )
             build_python3_include_dir
             build_python3_library_dir 
         )
-
     endif()
 endif()
 
@@ -561,18 +564,18 @@ if( build_extras )
         DESCRIPTION "rawtoaces"
         BUILD ON
     )
-    build_add_project(
-        pyside2-tools
-        DIR ${CMAKE_SOURCE_DIR}/src/pyside2-tools
-        DESCRIPTION "pyside2 tools"
-        BUILD ON
-    )
-    build_add_project(
-        usd
-        DIR ${CMAKE_SOURCE_DIR}/src/usd
-        DESCRIPTION "usd"
-        BUILD ON
-    )
+    #build_add_project(
+    #    pyside2-tools
+    #    DIR ${CMAKE_SOURCE_DIR}/src/pyside2-tools
+    #    DESCRIPTION "pyside2 tools"
+    #    BUILD ON
+    #)
+    #build_add_project(
+    #    usd
+    #    DIR ${CMAKE_SOURCE_DIR}/src/usd
+    #    DESCRIPTION "usd"
+    #    BUILD ON
+    #)
 
 endif()
  

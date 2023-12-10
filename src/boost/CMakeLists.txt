@@ -229,7 +229,7 @@ if( UNIX )
         )
     endif()
 
-    build_add_check( 
+    build_install_check( 
         "${build_output}" 
         build_check
     )
