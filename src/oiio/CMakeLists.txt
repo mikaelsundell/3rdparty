@@ -97,7 +97,7 @@ if( UNIX )
     foreach( lib_file ${sitepackages_files} )
         if ( APPLE )
             list( APPEND lib_output 
-                ${build_lib_dir}/python${build_python3_version}/site-packages/OpenImageIO/${lib_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
+                ${build_sitepackages_dir}/OpenImageIO/${lib_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
             )
         endif()    
     endforeach()
@@ -132,8 +132,18 @@ if( UNIX )
         set( build_config ${build_config} VERBOSE=0 )
     endif()
 
-    # dependencies
+    # cmake flags
 
+    # Boost - use non cmake
+    set( build_cmakeflags ${build_cmakeflags} -DBoost_NO_BOOST_CMAKE:BOOL=OFF )
+
+    # python site dir
+    set( build_cmakeflags ${build_cmakeflags} -DPYTHON_SITE_DIR=${build_sitepackages_dir}/OpenImageIO )
+
+    # cmake prefix path
+    set( build_cmakeflags ${build_cmakeflags} -DCMAKE_PREFIX_PATH=${build_dir} )
+
+    # dependencies
     # JPEGTurbo = Not used
     # OpenColorIO = Not used
     # Rebuild after oiio build as OpenColorIO requires oiio
@@ -155,26 +165,12 @@ if( UNIX )
     set( build_config ${build_config} TIFF_ROOT=${build_dir} )
     set( build_config ${build_config} Qt5_ROOT=${build_dir} )
 
-    # TBB - Use internal.
+    # TBB - Use internal
     set( build_config ${build_config} USE_TBB=0 )
 
-    # Boost - use non cmake.
-    set( build_config ${build_config} MY_CMAKE_FLAGS=-DBoost_NO_BOOST_CMAKE:BOOL=OFF )
-    
-    # THIRD_PARTY_TOOLS_HOME -> Finds OpenEXR
-    # CMAKE_PREFIX_PATH -> Finds Png, JPEG and other dependencies
-    
     # make and install
-
     set( build_make
     	cd oiio &&
-    )
-
-    set( build_make
-        ${build_make}
-        export THIRD_PARTY_TOOLS_HOME=${build_dir} &&
-        export PYTHON_SITE_DIR=${build_sitepackages_dir}/OpenImageIO &&
-    endif ()
     )
 
     # enable in build Qt support using cmake
@@ -186,8 +182,10 @@ if( UNIX )
     set( build_make
         ${build_make}
         export PATH=${build_bin_dir}:$$PATH &&
+        make clean &&
         make
             INSTALL_PREFIX=${build_dir}
+            MY_CMAKE_FLAGS="${build_cmakeflags}"
             ${build_options}
             ${build_config}
     )
@@ -231,4 +229,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} boost freetype glew jasper giflib jpeg libpng libraw libwebp openjpeg openexr pybind tiff ffmpeg )
+add_dependencies( ${project_name} boost freetype glew jasper giflib jpeg libpng libraw libwebp openjpeg openexr pybind tiff ffmpeg zlib )

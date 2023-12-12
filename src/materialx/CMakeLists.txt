@@ -142,7 +142,7 @@ IF( UNIX )
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
-            -DMATERIALX_PYTHON_FOLDER_NAME=${build_python_dir}
+            -DMATERIALX_PYTHON_FOLDER_NAME=${build_sitepackages_dir}
             -DMATERIALX_BUILD_PYTHON=ON 
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
             -DPYTHON_EXECUTABLE=${build_python3}

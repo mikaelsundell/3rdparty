@@ -1,5 +1,21 @@
 3rdparty changes:
 
+Update December 12 2023
+---------------------------------
+* build.sh improvements
+* Moved freetype to build_base
+* Updated OpenColorIO
+* Updated MaterialX python path
+* Updated OpenImageIO python path
+* Fixed USD
+
+Update December 10 2023
+---------------------------------
+* Changed build_install_script build_install_check
+* Updated Pyside2 to Pyside6
+* Removed Pytools2
+* Updated Python for OIIO, OCIO, USD and MaterialX
+
 Update August 27 2023
 ---------------------------------
 * Updated build configurations

@@ -215,4 +215,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} alembic draco materialx onetbb opensubdiv ptex pybind pyside pyside2-tools )
+add_dependencies( ${project_name} alembic draco materialx onetbb opensubdiv ptex pybind pyside )

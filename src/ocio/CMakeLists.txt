@@ -9,7 +9,7 @@
 # OCIO Copyright
 # Copyright (c) 2003-2010 Sony Pictures Imageworks Inc., et al.
 
-# ocio from github.com master 2020-08-04
+# ocio from github.com master 2023-12-11
 # https://github.com/AcademySoftwareFoundation/OpenColorIO
 
 build_info( " Adding ocio project" )
@@ -20,7 +20,7 @@ build_info( " Adding ocio project" )
 set( project_name "ocio" )
 
 # lib pkg
-set( project_pkg "OpenColorIO-master-220313" )
+set( project_pkg "OpenColorIO-2.3.1" )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -62,7 +62,7 @@ set( inc_dir
 
 # lib files
 set( lib_files
-    OpenColorIO.2.2.0
+    OpenColorIO.2.3.1
 )
 
 # site-packages
@@ -91,9 +91,8 @@ IF( UNIX )
     foreach( lib_file ${sitepackages_files} )
         if ( APPLE )
             list( APPEND lib_output 
-                ${build_lib_dir}/python${build_python3_version}/site-packages/${lib_file}${sitepackage_suffix}
+                ${build_sitepackages_dir}/PyOpenColorIO/${lib_file}${sitepackage_suffix}
             )
-
         endif()    
     endforeach()
     
@@ -138,12 +137,13 @@ IF( UNIX )
 
     set( build_make
         ${build_make}
-        cd OpenColorIO &&
+        cd ${project_pkg} &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         export OIIO_PATH=${build_dir} &&
         cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
               -DCMAKE_INSTALL_PREFIX=${build_dir} 
+              -DPYTHON_SITE_DIR=${build_sitepackages_dir}
               ${build_options}
               ${build_config} &&
         make ${build_flags} &&

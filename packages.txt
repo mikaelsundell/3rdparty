@@ -45,6 +45,11 @@ nanogui
 * TODO: Create PR for project @ Github
 * TODO: GLFW and nanovg copied to include dir but requires nangogl for linking
 
+ocio
+---------------------------------
+src/bindings/python/CMakeLists.txt
+* Line 241-249: Added PYTHON_SITE_DIR for site-packages
+
 oiio
 ---------------------------------
 in-progress PR3961:

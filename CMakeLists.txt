@@ -296,6 +296,12 @@ if( build_base )
               BUILD ON
     )
     build_add_project(
+              freetype
+              DIR ${CMAKE_SOURCE_DIR}/src/freetype
+              DESCRIPTION "Freetype"
+              BUILD ON
+    )
+    build_add_project(
               harfbuzz
               DIR ${CMAKE_SOURCE_DIR}/src/harfbuzz
               DESCRIPTION "Harfbuzz"
@@ -346,12 +352,6 @@ if( build_libs )
               ffmpeg
               DIR ${CMAKE_SOURCE_DIR}/src/ffmpeg
               DESCRIPTION "FFmpeg"
-              BUILD ON
-    )
-    build_add_project(
-              freetype
-              DIR ${CMAKE_SOURCE_DIR}/src/freetype
-              DESCRIPTION "Freetype"
               BUILD ON
     )
     build_add_project(
@@ -564,18 +564,12 @@ if( build_extras )
         DESCRIPTION "rawtoaces"
         BUILD ON
     )
-    #build_add_project(
-    #    pyside2-tools
-    #    DIR ${CMAKE_SOURCE_DIR}/src/pyside2-tools
-    #    DESCRIPTION "pyside2 tools"
-    #    BUILD ON
-    #)
-    #build_add_project(
-    #    usd
-    #    DIR ${CMAKE_SOURCE_DIR}/src/usd
-    #    DESCRIPTION "usd"
-    #    BUILD ON
-    #)
+    build_add_project(
+        usd
+        DIR ${CMAKE_SOURCE_DIR}/src/usd
+        DESCRIPTION "usd"
+        BUILD ON
+    )
 
 endif()
  
