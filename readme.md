@@ -49,52 +49,16 @@ macOS built-in python3 support with XCode include and libraries directories.
 whereis python3
 ```
 
-### Install Qt ###
-
-Patched version compatible with arm64:
-```shell
-https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/qt-everywhere-src-6.6.0.tar.gz
-```
-
 ### Build 3rdparty base libraries ###
-    
+  
+3rdparty is built using the ```build.sh``` script.
+
+Build all - Qt, debug and release:
 ```shell
-make verbose=1 build_base=1 (debug)
+./build.sh all
 ```
 
-### Build Qt with 3rdparty ###
-
-```shell
-mkdir build &&
-cd build &&
-../configure -prefix $(path)/3rdparty/build/macosx.debug/$(arch)
-             -libdir $(path)/git/3rdparty/build/macosx.debug/$(arch)/lib 
-             QMAKE_APPLE_DEVICE_ARCHS=arm64/x86_64
-             -opensource
-             -confirm-license
-             -system-libpng
-             -system-libjpeg
-             -system-zlib
-             -system-pcre
-             -system-harfbuzz
-             -skip qtactiveqt
-             -skip qtcharts
-             -skip qtconnectivity
-             -skip qtlocation
-             -skip qtsensors
-             -skip qtspeech
-             -skip qtvirtualkeyboard
-             -skip qtwayland
-             -skip qtwebchannel
-             -skip qtwebengine
-             -skip qtwebview
-             -I$(path)/3rdparty/build/macosx.debug/$(arch)/include 
-             -L$(path)/3rdparty/build/macosx.debug/$(arch)/lib &&
-	     
-make install
-```
-
-Mobile and web components are skipped as they have no dependency in 3rdparty project.
+Qt will be downloaded and built in ```qt``` and 3rdparty in ```build```.
 
 ### Debug Qt with 3rdparty ###
 
@@ -102,18 +66,6 @@ Debugging in Qt with hybrid frameworks make uses of the DYLD_IMAGE_SUFFIX enviro
 
 ```
 DYLD_IMAGE_SUFFIX=_debug
-```
-
-More information about Qt5 and debugging techniques.
-
-```
-https://doc.qt.io/qt-5/debug.html
-```
-
-### Build 3rdparty libraries and extras with Qt ###
-
-```shell
-make verbose=1 build_libs=1 (build_extras=1) (debug)
 ```
 
 ## 3rdparty advanced ##

@@ -188,6 +188,7 @@ IF( UNIX )
             -DPYTHON_EXECUTABLE=${build_python3}
             -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
             -DPYTHON_LIBRARY=${build_python3_library_dir}
+            -DCMAKE_VERBOSE_MAKEFILE=ON
             -DCMAKE_CXX_FLAGS=-stdlib=libc++
             -DBUILD_TESTS=OFF 
             -DNO_QT_TOOLS=yes 
