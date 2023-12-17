@@ -120,7 +120,6 @@ QRhi static constants causing missing symbols
 qtbase/src/gui/rhi/qrhi.h
 * Line 498, 538, 1216, 1946: Changed to constexpr, fixed in Qt 6.6.1
 
-
 Update timestamp file for `multi-Config` builds
 https://codereview.qt-project.org/c/qt/qtbase/+/511730
 

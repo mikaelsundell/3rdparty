@@ -126,7 +126,6 @@ build_3rdparty() {
             -DBUILD_qtwebengine=OFF
             -DBUILD_qtwebview=OFF
             -DQT_FEATURE_system_freetype=ON
-            -DQT_FEATURE_system_harfbuzz=ON
             -DQT_FEATURE_system_zlib=ON
             -DCMAKE_OSX_DEPLOYMENT_TARGET=$major_version
             -DCMAKE_OSX_SYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk

@@ -35,7 +35,7 @@ Use CMake < 3.28.0 for Qt builds, get it from:
 http://www.cmake.org
 ```
 
-### Build 3rdparty base libraries ###
+### Build 3rdparty ###
   
 3rdparty is built using the ```build.sh``` script.
 
@@ -44,7 +44,7 @@ Build all - Qt, debug and release:
 ./build.sh all
 ```
 
-Qt will be downloaded and built in ```qt``` and 3rdparty in ```build```.
+Qt will be downloaded and built in ```qt``` and 3rdparty in ```build```. Targets will use the product version as ```CMAKE_OSX_DEPLOYMENT_TARGET``` obtained using ```sw_vers -productVersion``` for compatibility.
 
 ### Debug Qt with 3rdparty ###
 
