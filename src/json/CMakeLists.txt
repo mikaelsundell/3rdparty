@@ -22,7 +22,7 @@ build_info( " Adding json project" )
 set( project_name "json" )
 
 # project pkg
-set( project_pkg ${project_name}-3.10.5 )
+set( project_pkg ${project_name}-master-231214 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -80,7 +80,7 @@ IF( UNIX )
     # configure, make and install
     set( build_make
         ${build_env} &&
-        cd ${project_pkg} &&
+        cd ${project_name} &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 

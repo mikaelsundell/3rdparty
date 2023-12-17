@@ -1,5 +1,13 @@
 3rdparty changes:
 
+Update December 17 2023
+---------------------------------
+* build.sh improvements
+* Added ninja for Qt build
+* Added ld classic for Xcode 15+
+* Updated json
+* Fixed nasm incorrect lib output
+
 Update December 12 2023
 ---------------------------------
 * build.sh improvements

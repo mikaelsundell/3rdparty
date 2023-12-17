@@ -241,6 +241,9 @@ NanoGUI was developed by Wenzel Jakob <wenzel.jakob@epfl.ch>.
 Nasm
 1996-2017 The NASM Authors
 
+Ninja
+Copyright 2011 Google Inc. All Rights Reserved.
+
 OCIO
 Copyright (c) 2003-2010 Sony Pictures Imageworks Inc., et al
 

@@ -1,5 +1,15 @@
 3rdparty packages:
 
+In progress improvements
+---------------------------------
+* Test if Ninja can replace Makefile (PySide6 and others)
+* MaterialX python support
+* USD python support
+* Experimental linux build
+* Experimental docker image (CI on Github)
+
+Packages:
+
 aces_container
 ---------------------------------
 * Removed export PACKAGE to prevent conflict with install
@@ -102,10 +112,6 @@ examples/common/glPtexMipmapTexture.cpp
 qt
 --------------------------------- 
 
-ld: warning: dylib (/Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib/libz.dylib) was built for newer macOS version (12.0) than being linked (11.0)
-ld: warning: linking against a dylib which is not safe for use in application extensions: /Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib/libz.dylib
-
-
 QRhi static constants causing missing symbols
 * https://bugreports.qt.io/browse/QTBUG-118170
 
@@ -114,12 +120,6 @@ qtbase/src/gui/rhi/qrhi.h
 
 qtbase/mkspecs/common/macx.conf 
 * Line 8, 10: Changed to target 12 and minimum 11
-
-build arm64
-../configure -prefix /Volumes/Build/github/3rdparty/build/macosx/arm64.debug -libdir /Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib QMAKE_APPLE_DEVICE_ARCHS=arm64 QMAKE_MACOSX_DEPLOYMENT_TARGET=12.0 -opensource -confirm-license -system-libpng -system-libjpeg -system-zlib -system-pcre -system-harfbuzz -skip qtactiveqt  -skip qtcharts -skip qtconnectivity -skip qtlocation -skip qtsensors -skip qtspeech -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebview -I/Volumes/Build/github/3rdparty/build/macosx/arm64.debug/include -L/Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib && make install
-
-build x86_64
-../configure -prefix /Volumes/Build/github/3rdparty/build/macosx/arm64.debug -libdir /Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib QMAKE_APPLE_DEVICE_ARCHS=x86_64 QMAKE_MACOSX_DEPLOYMENT_TARGET=12.0 -opensource -confirm-license -system-libpng -system-libjpeg -system-zlib -system-pcre -system-harfbuzz -skip qtactiveqt  -skip qtcharts -skip qtconnectivity -skip qtlocation -skip qtsensors -skip qtspeech -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebview -I/Volumes/Build/github/3rdparty/build/macosx/arm64.debug/include -L/Volumes/Build/github/3rdparty/build/macosx/arm64.debug/lib && make install
 
 rawtoaces
 ---------------------------------
@@ -150,6 +150,6 @@ CMakeLists.txt
 
 3rdparty buckets:
 
-Amazon S3 Buckets
+Amazon S3:
 --------------------------------- 
 * https://s3.console.aws.amazon.com/s3/buckets/mikaelsundell

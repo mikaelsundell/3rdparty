@@ -221,8 +221,6 @@ endif()
 
 set( build_flags ${build_flags} -j${num_cpus} --load-average=${num_cpus} )
 
-
-
 # define python3
 if ( UNIX )
     if ( APPLE )
@@ -241,21 +239,32 @@ endif()
 # define environment
 if( UNIX )
     if( APPLE )
-        # dynamic linker (tests during build)
         set( build_env 
             unset DYLD_LIBRARY_PATH &&
-            export DYLD_FALLBACK_LIBRARY_PATH=${build_lib_dir}
+            export DYLD_FALLBACK_LIBRARY_PATH=${build_lib_dir} &&
+            export CXXFLAGS=-stdlib=libc++
         )
+        execute_process(
+            COMMAND xcodebuild -version
+            OUTPUT_VARIABLE XCODE_VERSION_OUTPUT
+            ERROR_VARIABLE XCODE_VERSION_ERROR
+            RESULT_VARIABLE XCODE_VERSION_RESULT
+        )
+        if(XCODE_VERSION_RESULT EQUAL 0)
+            string(REGEX MATCH "[0-9]+\\.[0-9]+" XCODE_VERSION ${XCODE_VERSION_OUTPUT})
+            if(XCODE_VERSION VERSION_GREATER_EQUAL "15.0")
+                set( build_env 
+                    ${build_env} && 
+                    export LDFLAGS=-Wl,-ld_classic
+                )
+            endif()
+        endif()
     else()
-        # use build_env as non cmake projects will conflict with 
-        # CMAKE_PREFIX_PATH, cmake find libraries uses native search paths 
-        # and not absolute paths for shared libraries, skip rpaths
-        # for dependencies.
         set( build_env
             export C_INCLUDE_PATH=${build_inc_dir} &&
             export CPLUS_INCLUDE_PATH=${build_inc_dir} &&
             export LIBRARY_PATH=${build_lib_dir} &&
-            export LD_LIBRARY_PATH=${build_lib_dir} # for test programs.
+            export LD_LIBRARY_PATH=${build_lib_dir}
         )
     endif()
 endif()
@@ -317,6 +326,12 @@ if( build_base )
               libwebp
               DIR ${CMAKE_SOURCE_DIR}/src/libwebp
               DESCRIPTION "LibWebp"
+              BUILD ON
+    )
+    build_add_project(
+              ninja
+              DIR ${CMAKE_SOURCE_DIR}/src/ninja
+              DESCRIPTION "Ninja"
               BUILD ON
     )
     build_add_project(

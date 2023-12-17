@@ -2,25 +2,24 @@
 ##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
-##  nasm CMakeLists.txt for 3rdparty
+##  ninja CMakeLists.txt for 3rdparty
 ##
 ##-*****************************************************************************
 
-# nasm Copyright
-# 1996-2017 The NASM Authors
+# Copyright 2011 Google Inc. All Rights Reserved.
 
-# nasm from github.com 2.16.01
-# https://github.com/netwide-assembler/nasm
+# ninja from gitlab.com 1.11.1 2023-12-17
+# https://github.com/ninja-build/ninja
 
-build_info( " Adding nasm project" )
+build_info( " Adding eigen project" )
 
 # project configuration
 
 # project name
-set( project_name "nasm" )
+set( project_name "ninja" )
 
 # project pkg
-set( project_pkg ${project_name}-nasm-2.16.01 )
+set( project_pkg ${project_name}-1.11.1 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -40,8 +39,7 @@ set( project_bin_dir
 
 # bin files
 set( bin_files
-    nasm
-    ndisasm
+    ninja
 )
 
 IF( UNIX )
@@ -51,39 +49,50 @@ IF( UNIX )
         "${bin_files}" "${build_bin_dir}" bin_output
     )
     
-ENDIF()
+endif()
 
 # build configuration
 
 # unix
 
-if( UNIX )
+IF( UNIX )
 
     # download
-    set( build_download 
+    SET( build_download 
         ${download} ${project_url}
     )
 
     # tar uncompress
-    set( build_uncompress
+    SET( build_uncompress
         ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
     )
 
+    # options
+    set( build_options ${build_options} -DCMAKE_CXX_STANDARD=14 )
+
+    # options
+    if( CMAKE_SHARED_LIBS )
+        SET( build_options -DBUILD_SHARED_LIBS=TRUE )
+    ELSE()
+        SET( build_options -DBUILD_SHARED_LIBS=FALSE )
+    ENDIF()
+
     # configure, make and install
-    set( build_make
+    SET( build_make
         ${build_env} &&
-        export PATH=${build_bin_dir}:$$PATH &&
         cd ${project_pkg} &&
-        touch nasm.1 ndisasm.1 &&
-        ./autogen.sh &&
-        ./configure 
-            --prefix=${build_dir}
-            ${build_options} &&
-        make nasm ndisasm ${build_flags} &&
+        mkdir -p ${build_cmake} &&
+        cd ${build_cmake} &&
+        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir}
+              -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+              ${build_options} &&
+        make ${build_flags} &&
         make install
     )
 
     # scripts
+    set( build_output ${bin_output} )
+
     build_install_script( 
         "${build_output}" 
         ${build_dir} 
@@ -105,7 +114,7 @@ if( UNIX )
         COMMAND ${build_make}
         COMMAND ${build_script}
         COMMAND ${build_check}
-    ) 
+    )    
 
 endif()
 
@@ -114,6 +123,3 @@ add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output}
 )
-
-# dependencies
-add_dependencies( ${project_name} automake )
