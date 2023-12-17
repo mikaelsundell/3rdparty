@@ -2,7 +2,7 @@
 ##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
-##  pyside2 CMakeLists.txt for 3rdparty
+##  pyside CMakeLists.txt for 3rdparty
 ##
 ##-*****************************************************************************
 
@@ -178,6 +178,7 @@ IF( UNIX )
     set( build_make
         ${build_env} &&
         export LLVM_INSTALL_DIR=${build_dir} &&
+        export PATH=$PATH:${build_bin_dir} &&
         cd pyside-6.6/pyside-pyside-setup &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
@@ -193,9 +194,10 @@ IF( UNIX )
             -DBUILD_TESTS=OFF 
             -DNO_QT_TOOLS=yes 
             -DFORCE_LIMITED_API=yes
-            ${build_options} &&
-        make ${build_flags} &&
-        make install
+            ${build_options}
+            -G Ninja &&
+        cmake --build . --parallel &&
+        ninja install
     )
 
     # scripts
@@ -236,6 +238,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} llvm )
-
-#message(FATAL_ERROR "Exit PySide for now")
+add_dependencies( ${project_name} llvm ninja )

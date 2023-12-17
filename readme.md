@@ -35,20 +35,6 @@ Get it from:
 http://www.cmake.org
 ```
 
-Add to path:
-
-```shell
-export PATH=$PATH:/Applications/CMake.app/Contents/bin
-```
-
-### Python3 ###
-
-macOS built-in python3 support with XCode include and libraries directories.
-
-```shell
-whereis python3
-```
-
 ### Build 3rdparty base libraries ###
   
 3rdparty is built using the ```build.sh``` script.
@@ -81,9 +67,17 @@ absolute install names.
 Each application using the 3rdparty project should have it's own
 deployment process to remap install names before distribution.
 
-## 3rdparty make ##
+## CMake configuration ##
 
-Make targets you should know about:
+Add cmake to path:
+
+```shell
+export PATH=$PATH:/Applications/CMake.app/Contents/bin
+```
+
+## Build configuration ##
+
+Useful make commands:
 
 ```shell
 make                      Build all projects for development and test in 'build/platform'
@@ -92,7 +86,7 @@ make clean                Get rid of all the temporary files in 'build/platform'
 make help                 Print all the make options
 ```
 
-Additionally, a few helpful modifiers alter some build-time options:
+Additionally, a few helpful modifiers:
 
 ```shell
 make verbose=0 ...        Show all compilation commands

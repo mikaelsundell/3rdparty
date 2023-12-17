@@ -46,10 +46,6 @@ build_qt() {
     if [ ! -f "$qt_name" ]; then
         echo "Path Qt: $qt_name"
         echo "Set Qt deployment target to: $major_version"
-        # deployment target
-        #sed -i '' "s/QMAKE_MACOSX_DEPLOYMENT_TARGET = 12/QMAKE_MACOSX_DEPLOYMENT_TARGET = $major_version/g" $qt_name/qtbase/mkspecs/common/macx.conf
-        # minimum version
-        #sed -i '' "s/QT_MAC_SDK_VERSION_MIN = 11/QT_MAC_SDK_VERSION_MIN = $major_version/g" $qt_name/qtbase/mkspecs/common/macx.conf
     fi
 }
 
@@ -129,7 +125,8 @@ build_3rdparty() {
         )
 
         echo "Build Qt for type: $build_type"
-        cmake .. -DCMAKE_INSTALL_PREFIX="$script_dir/build/macosx/$machine_arch.$build_type" -DCMAKE_PREFIX_PATH="$script_dir/build/macosx/$machine_arch.$build_type" "${qt_params[@]}" -G"Ninja Multi-Config" && cmake --build . --parallel
+        cmake .. -DCMAKE_INSTALL_PREFIX="$script_dir/build/macosx/$machine_arch.$build_type" -DCMAKE_PREFIX_PATH="$script_dir/build/macosx/$machine_arch.$build_type" "${qt_params[@]}" -G"Ninja Multi-Config" && 
+        cmake --build . --parallel
     fi
 
     # ninja install Qt

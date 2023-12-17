@@ -2,6 +2,11 @@
 
 Update December 17 2023
 ---------------------------------
+* Fixed CMake 3.28 issue in Qt 6.6.0
+* Fixed pyside ninja build
+
+Update December 17 2023
+---------------------------------
 * build.sh improvements
 * Added ninja for Qt build
 * Added ld classic for Xcode 15+

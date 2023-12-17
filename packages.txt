@@ -118,8 +118,12 @@ QRhi static constants causing missing symbols
 qtbase/src/gui/rhi/qrhi.h
 * Line 498, 538, 1216, 1946: Changed to constexpr, fixed in Qt 6.6.1
 
-qtbase/mkspecs/common/macx.conf 
-* Line 8, 10: Changed to target 12 and minimum 11
+
+Update timestamp file for `multi-Config` builds
+https://codereview.qt-project.org/c/qt/qtbase/+/511730
+
+qtbase/src/corelib/Qt6CoreMacros.cmake 
+* Line 1065: CMAKE_CROSS_CONFIGS to is_multi_config
 
 rawtoaces
 ---------------------------------
