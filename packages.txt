@@ -5,6 +5,7 @@ In progress improvements
 * Test if Ninja can replace Makefile (PySide6 and others)
 * MaterialX python support
 * USD python support
+* Break for Qt builds in build.sh if not successful
 * Experimental linux build
 * Experimental docker image (CI on Github)
 

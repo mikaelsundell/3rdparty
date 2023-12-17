@@ -124,13 +124,6 @@ if( UNIX )
     if( CMAKE_BUILD_TYPE STREQUAL Debug )
         set( build_options debug )
     endif()
-    
-    # config
-    if( CMAKE_VERBOSE_MAKEFILE )
-        set( build_config ${build_config} VERBOSE=1 )
-    else()
-        set( build_config ${build_config} VERBOSE=0 )
-    endif()
 
     # cmake flags
 
