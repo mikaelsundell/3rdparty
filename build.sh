@@ -96,6 +96,8 @@ build_3rdparty() {
         mkdir build.$build_type &&
         cd build.$build_type &&
 
+        # build minimum Qt
+        # changing these will also change the output of PySide
         qt_params=(
             -DBUILD_qtactiveqt=OFF
             -DBUILD_qtcharts=OFF

@@ -52,7 +52,6 @@ SET( inc_dir
 # lib files
 set( lib_files
     pyside6
-    pyside6qml
     shiboken6
 )
 
@@ -67,30 +66,18 @@ set( pyside6_files
     QtConcurrent
     QtCore
     QtDBus
-    QtDataVisualization
     QtExampleIcons
-    QtGraphs
     QtGui
     QtHelp
     QtHttpServer
-    QtMultimedia
-    QtMultimediaWidgets
     QtNetwork
     QtNetworkAuth
     QtOpenGL
     QtOpenGLWidgets
     QtPositioning
     QtPrintSupport
-    QtQml
-    QtQuick
-    QtQuick3D
-    QtQuickControls2
-    QtQuickWidgets
-    QtRemoteObjects
     QtScxml
-    QtSerialBus
     QtSerialPort
-    QtSpatialAudio
     QtSql
     QtStateMachine
     QtSvg
