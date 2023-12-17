@@ -31,6 +31,12 @@ if ! command -v cmake &> /dev/null; then
     fi
 fi
 
+# check if cmake version is compatible
+if ! [[ $(cmake --version | grep -o '[0-9]\+\(\.[0-9]\+\)*' | head -n1) < "3.28.0" ]]; then
+    echo "cmake version is not compatible with Qt, must be before 3.28.0 for multi configuration"
+    exit 1;
+fi
+
 # build qt
 qt_name="qt-everywhere-src-6.6.0"
 qt_url="https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/$qt_name.tar.gz"

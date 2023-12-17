@@ -178,7 +178,7 @@ IF( UNIX )
     set( build_make
         ${build_env} &&
         export LLVM_INSTALL_DIR=${build_dir} &&
-        export PATH=$PATH:${build_bin_dir} &&
+        export PATH="$PATH:${build_bin_dir}" &&
         cd pyside-6.6/pyside-pyside-setup &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
@@ -198,6 +198,8 @@ IF( UNIX )
         cmake --build . --parallel &&
         ninja install
     )
+
+    message("build_make:${build_make}")
 
     # scripts
     if ( CMAKE_SHARED_LIBS )
