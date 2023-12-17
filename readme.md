@@ -29,7 +29,7 @@
 
 ### Install CMake ###
 
-Get it from: 
+Use CMake < 3.28.0 for Qt builds, get it from: 
 
 ```shell
 http://www.cmake.org
