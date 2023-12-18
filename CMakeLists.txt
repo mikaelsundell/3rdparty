@@ -288,10 +288,10 @@ if( build_base )
               BUILD ON
     )
     build_add_project(
-               jasper
-               DIR ${CMAKE_SOURCE_DIR}/src/jasper
-               DESCRIPTION "Jasper"
-               BUILD ON
+              jasper
+              DIR ${CMAKE_SOURCE_DIR}/src/jasper
+              DESCRIPTION "Jasper"
+              BUILD ON
     )
     build_add_project(
               giflib
