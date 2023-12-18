@@ -1,5 +1,9 @@
 3rdparty changes:
 
+Update December 18 2023
+---------------------------------
+* Fixed clang issue with pyside
+
 Update December 17 2023
 ---------------------------------
 * Fixed CMake 3.28 issue in Qt 6.6.0
