@@ -157,6 +157,5 @@ if [ "$build_type" == "all" ]; then
     build_3rdparty "debug"
     build_3rdparty "release"
 else
-    build_clean
     build_3rdparty "$build_type"
 fi
