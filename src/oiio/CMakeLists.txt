@@ -155,6 +155,7 @@ if( UNIX )
     set( build_config ${build_config} OpenEXR_ROOT=${build_dir} )
     set( build_config ${build_config} OpenJpeg_ROOT=${build_dir} )
     set( build_config ${build_config} PNG_ROOT=${build_dir} )
+    set( build_config ${build_config} PTex_ROOT=${build_dir} )
     set( build_config ${build_config} TIFF_ROOT=${build_dir} )
     set( build_config ${build_config} Qt5_ROOT=${build_dir} )
 
@@ -175,6 +176,7 @@ if( UNIX )
     set( build_make
         ${build_make}
         export PATH=${build_bin_dir}:$$PATH &&
+        export PKG_CONFIG_PATH=${build_pkgconfig_dir}:$$PKG_CONFIG_PATH &&
         make clean &&
         make
             INSTALL_PREFIX=${build_dir}
@@ -222,4 +224,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} boost freetype glew jasper giflib jpeg libpng libraw libwebp openjpeg openexr pybind tiff ffmpeg zlib )
+add_dependencies( ${project_name} boost freetype glew jasper giflib jpeg libpng libraw libwebp openjpeg openexr pkg-config ptex pybind tiff ffmpeg zlib )

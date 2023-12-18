@@ -121,7 +121,7 @@ IF( UNIX )
     SET( build_make
         ${build_env} &&
         export PATH=${build_bin_dir}:$$PATH &&
-        export PKG_CONFIG_PATH=${build_lib_dir}/pkgconfig &&
+        export PKG_CONFIG_PATH=${build_pkgconfig_dir}:$$PKG_CONFIG_PATH &&
         cd ${project_pkg} &&
         ./configure 
             --prefix=${build_dir}

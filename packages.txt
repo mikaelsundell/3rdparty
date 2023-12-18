@@ -6,6 +6,7 @@ In progress improvements
 * USD python support
 * Break for Qt builds in build.sh if not successful
 * Fix verbose consistency across projects
+* Zlib pkg-config path is in root instead of lib
 * Experimental switch to Ninja
 * Experimental linux build
 * Experimental docker image (CI on Github)

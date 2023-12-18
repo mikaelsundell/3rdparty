@@ -121,9 +121,10 @@ set( build_bin_dir ${build_dir}/bin )
 set( build_inc_dir ${build_dir}/include )
 set( build_lib_dir ${build_dir}/lib )
 set( build_framework_dir ${build_dir}/lib )
-set( build_python_dir ${build_dir}/python )
 set( build_sitepackages_dir ${build_dir}/site-packages )
+set( build_pkgconfig_dir ${build_dir}/pkgconfig )
 set( build_plugins_dir ${build_dir}/plugins )
+set( build_python_dir ${build_dir}/python )
 set( build_test_dir ${build_dir}/test )
 set( build_media_dir ${build_dir}/media )
 set( build_cmake_dir ${build_dir}/cmake )
@@ -430,6 +431,12 @@ if( build_libs )
               BUILD ON
     )
     build_add_project(
+              ptex
+              DIR ${CMAKE_SOURCE_DIR}/src/ptex
+              DESCRIPTION "ptex"
+              BUILD ON
+    )
+    build_add_project(
               pybind
               DIR ${CMAKE_SOURCE_DIR}/src/pybind
               DESCRIPTION "Pybind"
@@ -559,12 +566,6 @@ if( build_extras )
         tclap
         DIR ${CMAKE_SOURCE_DIR}/src/tclap
         DESCRIPTION "tclap"
-        BUILD ON
-    )
-    build_add_project(
-        ptex
-        DIR ${CMAKE_SOURCE_DIR}/src/ptex
-        DESCRIPTION "ptex"
         BUILD ON
     )
     build_add_project(
