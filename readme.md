@@ -130,6 +130,9 @@ Mikael Sundell - mikael.sundell@gmail.com
 
 3rdparty packages and their copyrights:
 
+Icon designed using images from Flaticon.com
+https://www.flaticon.com/authors/vectaicon
+
 Alembic
 Copyright (c) 2013,
 Sony Pictures Imageworks Inc. and
