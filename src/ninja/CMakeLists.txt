@@ -42,7 +42,7 @@ IF( UNIX )
 
     # bin files
     build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
+        "${bin_files}" "${build_ninja_dir}" bin_output
     )
     
 endif()
@@ -79,7 +79,8 @@ IF( UNIX )
         cd ${project_pkg} &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
-        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir}
+        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir}/ninja
+              -DCMAKE_INSTALL_BINDIR=${build_dir}/ninja
               -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
               ${build_options} &&
         make ${build_flags} &&

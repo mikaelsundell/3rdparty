@@ -161,7 +161,7 @@ IF( UNIX )
     set( build_make
         ${build_env} &&
         export LLVM_INSTALL_DIR=${build_dir} &&
-        export PATH=${build_bin_dir}:$$PATH &&
+        export PATH=${build_ninja_dir}:$$PATH &&
         cd pyside-6.6/pyside-pyside-setup &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&

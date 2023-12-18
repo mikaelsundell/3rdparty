@@ -12,6 +12,12 @@ In progress improvements
 * Experimental linux build
 * Experimental docker image (CI on Github)
 
+In progress notes
+---------------------------------
+* ninja moved to build_dir/ninja to not conflict in projects with clang, pyside.
+  Clang system includes will not be generated properly when 3rdparty 
+  clang binaries are exposed prior to system clang.
+
 Packages:
 
 aces_container
