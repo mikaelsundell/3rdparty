@@ -485,106 +485,106 @@ if( build_extras )
     build_info( "Adding extras" )
 
     build_add_project(
-        aces_container
-        DIR ${CMAKE_SOURCE_DIR}/src/aces_container
-        DESCRIPTION "aces_container"
-        BUILD ON
+              aces_container
+              DIR ${CMAKE_SOURCE_DIR}/src/aces_container
+              DESCRIPTION "aces_container"
+              BUILD ON
     )
     build_add_project(
-        alembic
-        DIR ${CMAKE_SOURCE_DIR}/src/alembic
-        DESCRIPTION "alembic"
-        BUILD ON
+              alembic
+              DIR ${CMAKE_SOURCE_DIR}/src/alembic
+              DESCRIPTION "alembic"
+              BUILD ON
     )
     build_add_project(
-        ceres-solver
-        DIR ${CMAKE_SOURCE_DIR}/src/ceres-solver
-        DESCRIPTION "ceres-solver"
-        BUILD ON
+              ceres-solver
+              DIR ${CMAKE_SOURCE_DIR}/src/ceres-solver
+              DESCRIPTION "ceres-solver"
+              BUILD ON
     )    
     build_add_project(
-        draco
-        DIR ${CMAKE_SOURCE_DIR}/src/draco
-        DESCRIPTION "draco"
-        BUILD ON
+              draco
+              DIR ${CMAKE_SOURCE_DIR}/src/draco
+              DESCRIPTION "draco"
+              BUILD ON
     )
     build_add_project(
-        eigen3
-        DIR ${CMAKE_SOURCE_DIR}/src/eigen
-        DESCRIPTION "eigen"
-        BUILD ON
+              eigen3
+              DIR ${CMAKE_SOURCE_DIR}/src/eigen
+              DESCRIPTION "eigen"
+              BUILD ON
     )
     build_add_project(
-        glog
-        DIR ${CMAKE_SOURCE_DIR}/src/glog
-        DESCRIPTION "glog"
-        BUILD ON
+              glog
+              DIR ${CMAKE_SOURCE_DIR}/src/glog
+              DESCRIPTION "glog"
+              BUILD ON
     )  
     build_add_project(
-        json
-        DIR ${CMAKE_SOURCE_DIR}/src/json
-        DESCRIPTION "json"
-        BUILD ON
+              json
+              DIR ${CMAKE_SOURCE_DIR}/src/json
+              DESCRIPTION "json"
+              BUILD ON
     )
     build_add_project(
-        libjpeg-turbo
-        DIR ${CMAKE_SOURCE_DIR}/src/libjpeg-turbo
-        DESCRIPTION "libJpeg-turbo"
-        BUILD ON
+              libjpeg-turbo
+              DIR ${CMAKE_SOURCE_DIR}/src/libjpeg-turbo
+              DESCRIPTION "libJpeg-turbo"
+              BUILD ON
     )
     build_add_project(
-        llvm
-        DIR ${CMAKE_SOURCE_DIR}/src/llvm
-        DESCRIPTION "LLVM"
-        BUILD ON
+              llvm
+              DIR ${CMAKE_SOURCE_DIR}/src/llvm
+              DESCRIPTION "LLVM"
+              BUILD ON
     )
     build_add_project(
-        materialx
-        DIR ${CMAKE_SOURCE_DIR}/src/materialx
-        DESCRIPTION "MaterialX"
-        BUILD ON
+              materialx
+              DIR ${CMAKE_SOURCE_DIR}/src/materialx
+              DESCRIPTION "MaterialX"
+              BUILD ON
     )
     build_add_project(
-        nanogui
-        DIR ${CMAKE_SOURCE_DIR}/src/nanogui
-        DESCRIPTION "nanogui"
-        BUILD ON
+              nanogui
+              DIR ${CMAKE_SOURCE_DIR}/src/nanogui
+              DESCRIPTION "nanogui"
+              BUILD ON
     )
     build_add_project(
-        onetbb
-        DIR ${CMAKE_SOURCE_DIR}/src/onetbb
-        DESCRIPTION "Onetbb"
-        BUILD ON
+              onetbb
+              DIR ${CMAKE_SOURCE_DIR}/src/onetbb
+              DESCRIPTION "Onetbb"
+              BUILD ON
     )
     build_add_project(
-        opensubdiv
-        DIR ${CMAKE_SOURCE_DIR}/src/opensubdiv
-        DESCRIPTION "opensubdiv"
-        BUILD ON
+              opensubdiv
+              DIR ${CMAKE_SOURCE_DIR}/src/opensubdiv
+              DESCRIPTION "opensubdiv"
+              BUILD ON
     )
     build_add_project(
-        tclap
-        DIR ${CMAKE_SOURCE_DIR}/src/tclap
-        DESCRIPTION "tclap"
-        BUILD ON
+              tclap
+              DIR ${CMAKE_SOURCE_DIR}/src/tclap
+              DESCRIPTION "tclap"
+              BUILD ON
     )
     build_add_project(
-        pyside
-        DIR ${CMAKE_SOURCE_DIR}/src/pyside
-        DESCRIPTION "pyside"
-        BUILD ON
+              pyside
+              DIR ${CMAKE_SOURCE_DIR}/src/pyside
+              DESCRIPTION "pyside"
+              BUILD ON
     )
     build_add_project(
-        rawtoaces
-        DIR ${CMAKE_SOURCE_DIR}/src/rawtoaces
-        DESCRIPTION "rawtoaces"
-        BUILD ON
+              rawtoaces
+              DIR ${CMAKE_SOURCE_DIR}/src/rawtoaces
+              DESCRIPTION "rawtoaces"
+              BUILD ON
     )
     build_add_project(
-        usd
-        DIR ${CMAKE_SOURCE_DIR}/src/usd
-        DESCRIPTION "usd"
-        BUILD ON
+              usd
+              DIR ${CMAKE_SOURCE_DIR}/src/usd
+              DESCRIPTION "usd"
+              BUILD ON
     )
 
 endif()
