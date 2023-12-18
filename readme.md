@@ -110,8 +110,8 @@ Darwin Kernel Version 21.6.0: Sun Nov  6 23:31:16 PST 2022; root:xnu-8020.240.14
 Apple clang version 14.0.0 (clang-1400.0.29.202)
 Target: x86_64-apple-darwin21.6.0
 
-Xcode 15.0.1
-Build version 15A507
+Xcode 13.3.1
+Build version 13E500a
 ```
 
 macOS Sonoma Apple M1
