@@ -1,4 +1,4 @@
-# 3rdparty #
+# <img src="images/icon.png" valign="middle" alt="Icon" width="50" height="50"> 3rdparty #
 
 3rdparty library for development and packaging of film and color applications.
 
