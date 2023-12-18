@@ -1,10 +1,6 @@
-##-*****************************************************************************
-##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
-##  All Rights Reserved.
-##
-##  automake CMakeLists.txt for 3rdparty
-##
-##-*****************************************************************************
+# Copyright 2023-present Contributors to the 3rdparty project.
+# SPDX-License-Identifier: BSD-3-Clause
+# https://github.com/mikaelsundell/3rdparty
 
 # automake Copyright
 # Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc.

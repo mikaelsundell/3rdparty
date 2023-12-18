@@ -1,10 +1,6 @@
-##-*****************************************************************************
-##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
-##  All Rights Reserved.
-##
-##  lcms CMakeLists.txt for 3rdparty
-##
-##-*****************************************************************************
+# Copyright 2023-present Contributors to the 3rdparty project.
+# SPDX-License-Identifier: BSD-3-Clause
+# https://github.com/mikaelsundell/3rdparty
 
 # lcms2 Copyright
 # Copyright (c) 1998-2012 Marti Maria Saguer

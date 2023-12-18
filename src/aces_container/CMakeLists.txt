@@ -1,5 +1,5 @@
 ##-*****************************************************************************
-##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
+##  Copyright 2012-present Mikael Sundell and the other authors and contributors.
 ##  All Rights Reserved.
 ##
 ##  aces_container CMakeLists.txt for 3rdparty

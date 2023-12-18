@@ -1,10 +1,6 @@
-##-*****************************************************************************
-##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
-##  All Rights Reserved.
-##
-##  OCIO CMakeLists.txt for 3rdparty
-##
-##-*****************************************************************************
+# Copyright 2023-present Contributors to the 3rdparty project.
+# SPDX-License-Identifier: BSD-3-Clause
+# https://github.com/mikaelsundell/3rdparty
 
 # OCIO Copyright
 # Copyright (c) 2003-2010 Sony Pictures Imageworks Inc., et al.

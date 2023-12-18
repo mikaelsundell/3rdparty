@@ -1,10 +1,6 @@
-##-*****************************************************************************
-##  Copyright 2012-2022 Mikael Sundell and the other authors and contributors.
-##  All Rights Reserved.
-##
-##  pcre2 CMakeLists.txt for 3rdparty
-##
-##-*****************************************************************************
+# Copyright 2023-present Contributors to the 3rdparty project.
+# SPDX-License-Identifier: BSD-3-Clause
+# https://github.com/mikaelsundell/3rdparty
 
 # pcre2 Copyright
 # Original API code Copyright (c) 1997-2012 University of Cambridge
