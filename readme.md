@@ -106,15 +106,29 @@ Target: x86_64-apple-darwin21.6.0
 
 macOS Monterey Apple M1
 ```
-Darwin Mikaels-iMac-M1 21.6.0 Darwin Kernel Version 21.6.0: Mon Aug 22 20:20:05 PDT 2022; root:xnu-8020.140.49~2/RELEASE_ARM64_T8101 arm64
-Apple clang version 13.1.6 (clang-1316.0.21.2.3)
-Target: arm64-apple-darwin21.6.0
+Darwin Kernel Version 21.6.0: Sun Nov  6 23:31:16 PST 2022; root:xnu-8020.240.14~1/RELEASE_X86_64 x86_64 i386
+Apple clang version 14.0.0 (clang-1400.0.29.202)
+Target: x86_64-apple-darwin21.6.0
+
+Xcode 15.0.1
+Build version 15A507
+```
+
+macOS Sonoma Apple M1
+```
+Darwin 23.1.0 Darwin Kernel Version 23.1.0: Mon Oct  9 21:27:24 PDT 2023; root:xnu-10002.41.9~6/RELEASE_ARM64_T6000 arm64
+Apple clang version 15.0.0 (clang-1500.0.40.1)
+Target: arm64-apple-darwin23.1.0
+
+Xcode 15.0.1
+Build version 15A507
 ```
 
 macOS Configuration
 ```shell
 uname -a
 clang --version
+xcodebuild -version
 ```
 
 ## Github ##

@@ -3,6 +3,7 @@
 In progress improvements
 ---------------------------------
 * MaterialX python support
+* MaterialX viewer (nanogui)
 * USD python support
 * Break for Qt builds in build.sh if not successful
 * Fix verbose consistency across projects
