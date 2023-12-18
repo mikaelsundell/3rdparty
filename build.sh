@@ -77,7 +77,7 @@ build_3rdparty() {
     make verbose=1 build_base=1 $build_type &&
 
     # path
-    export PATH=$PATH:"$script_dir/build/macosx/$machine_arch.$build_type/bin" &&
+    export PATH=$PATH:"$script_dir/build/macosx/$machine_arch.$build_type/ninja" &&
 
     # build
     echo "Build Qt for type: $build_type"
