@@ -182,8 +182,6 @@ IF( UNIX )
         ninja install
     )
 
-    message("build_make:${build_make}")
-
     # scripts
     if ( CMAKE_SHARED_LIBS )
         set( build_output ${build_output} ${lib_output} )
