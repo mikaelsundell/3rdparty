@@ -127,7 +127,7 @@ if( UNIX )
     
     if ( APPLE )
         list( APPEND lib_output 
-            ${build_dir}/site-packages/Shiboken6/${lib_file}.abi3${sitepackage_suffix}
+            ${build_dir}/site-packages/shiboken6/${lib_file}.abi3${sitepackage_suffix}
         )
     endif()    
 endforeach()
