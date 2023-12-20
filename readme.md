@@ -102,6 +102,9 @@ macOS Monterey x86_64
 Darwin Kernel Version 21.6.0: Sun Nov  6 23:31:16 PST 2022; root:xnu-8020.240.14~1/RELEASE_X86_64 x86_64 i386
 Apple clang version 14.0.0 (clang-1400.0.29.202)
 Target: x86_64-apple-darwin21.6.0
+
+Xcode 14.3.1
+Build version 14E300c
 ```
 
 macOS Monterey Apple M1
