@@ -11,15 +11,15 @@ major_version=$(echo "$macos_version" | cut -d '.' -f 1)
 # exit on error
 set -e 
 
-clear
-echo "Building 3rdparty for $build_type"
-echo "---------------------------------"
-
 build_type="$1"
 if [ "$build_type" != "debug" ] && [ "$build_type" != "release" ] && [ "$build_type" != "all" ]; then
     echo "invalid build type: $build_type (use 'debug', 'release', or 'all')"
     exit 1
 fi
+
+clear
+echo "Building 3rdparty for $build_type"
+echo "---------------------------------"
 
 # check if cmake is in the path
 if ! command -v cmake &> /dev/null; then
