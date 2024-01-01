@@ -146,6 +146,6 @@ endif()
 # custom target, always build
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${lib_output}
+    DEPENDS ${bin_output} ${bin_output} ${lib_output}
 )
 

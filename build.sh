@@ -5,8 +5,26 @@
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 machine_arch=$(uname -m)
-macos_version=$(sw_vers -productVersion)
-major_version=$(echo "$macos_version" | cut -d '.' -f 1)
+
+# major version
+parse_args() {
+    while [[ "$#" -gt 0 ]]; do
+        case $1 in
+            --target=*) major_version="${1#*=}"; shift ;;
+            *) shift ;;
+        esac
+    done
+}
+parse_args "$@"
+
+if [ -z "$major_version" ]; then
+    macos_version=$(sw_vers -productVersion)
+    major_version=$(echo "$macos_version" | cut -d '.' -f 1)
+fi
+
+# exports
+export MACOSX_DEPLOYMENT_TARGET=$major_version
+export CMAKE_OSX_DEPLOYMENT_TARGET=$major_version
 
 # exit on error
 set -e 
@@ -74,6 +92,7 @@ build_3rdparty() {
 
     # make base
     echo "Build 3rdparty base for type: $build_type"
+    echo "MacOS target: $major_version"
     make verbose=1 build_base=1 $build_type &&
 
     # path
