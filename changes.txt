@@ -1,5 +1,9 @@
 3rdparty changes:
 
+Update January 8 2024
+---------------------------------
+* Added OpenCV
+
 Update December 18 2023
 ---------------------------------
 * Fixed clang issue with pyside
