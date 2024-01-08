@@ -420,6 +420,12 @@ if( build_libs )
               BUILD ON
     )
     build_add_project(
+              opencv
+              DIR ${CMAKE_SOURCE_DIR}/src/opencv
+              DESCRIPTION "OpenCV"
+              BUILD ON
+    )
+    build_add_project(
               openexr
               DIR ${CMAKE_SOURCE_DIR}/src/openexr
               DESCRIPTION "OpenEXR"
