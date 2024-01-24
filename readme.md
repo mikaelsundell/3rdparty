@@ -29,7 +29,7 @@
 
 ### Install CMake ###
 
-Use CMake < 3.28.0 for Qt builds, get it from: 
+CMake version > 3.27.0 is required.
 
 ```shell
 http://www.cmake.org

@@ -83,6 +83,13 @@ ocio
 * TODO: Fix libyaml dependency
 * TODO: Fix pystring dependency
 
+opencv
+---------------------------------
+* Requires cmake > 3.27.0 for file download
+
+Bug 24093:
+https://gitlab.kitware.com/cmake/cmake/-/issues/24093
+
 ptex
 ---------------------------------
 CMakeLists.txt
