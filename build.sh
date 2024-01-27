@@ -49,6 +49,12 @@ if ! command -v cmake &> /dev/null; then
     fi
 fi
 
+# check if numpy is installed
+if ! python -c "import numpy" &>/dev/null; then
+    echo "python3 numpy could not be found, needed by opencv. Python install `pip3 install numpy`"
+    exit 1
+fi
+
 # check if cmake version is compatible
 if ! [[ $(cmake --version | grep -o '[0-9]\+\(\.[0-9]\+\)*' | head -n1) < "3.28.0" ]]; then
     echo "cmake version is not compatible with Qt, must be before 3.28.0 for multi configuration"
