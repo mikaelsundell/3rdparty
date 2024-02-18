@@ -50,12 +50,6 @@ if ! command -v cmake &> /dev/null; then
 fi
 
 # check if numpy is installed
-if ! python -c "import numpy" &>/dev/null; then
-    echo "python3 numpy could not be found, needed by opencv. Python install `pip3 install numpy`"
-    exit 1
-fi
-
-# check if numpy is installed
 if ! python3 -c "import numpy" &>/dev/null; then
     echo "python3 numpy could not be found, please install using \"pip3 install numpy\""
     exit 1

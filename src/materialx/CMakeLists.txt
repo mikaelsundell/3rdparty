@@ -17,7 +17,7 @@ build_info( " Adding materialx project" )
 set( project_name "materialx" )
 
 # project pkg
-set( project_pkg ${project_name}-master )
+set( project_pkg ${project_name}-master-240217 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -37,7 +37,7 @@ set( project_bin_dir
 
 # bin files
 set( bin_files
-#    MaterialXView
+    MaterialXView
 )
 
 # inc dir
@@ -72,6 +72,21 @@ set( lib_files
     MaterialXRenderOsl
 )
 
+# site-packages
+set( sitepackages_files
+    MaterialXCore
+    MaterialXFormat
+    MaterialXGenGlsl
+    MaterialXGenMdl
+    MaterialXGenMsl
+    MaterialXGenOsl
+    MaterialXGenShader
+    MaterialXRender
+    MaterialXRenderGlsl
+    MaterialXRenderMsl
+    MaterialXRenderOsl
+)
+
 if( UNIX )
 
     # bin files
@@ -85,11 +100,27 @@ if( UNIX )
     )
 
     # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
-    )
+    set( lib_version "1.38.8" )
+        
+    foreach( lib_file ${lib_files} )
+
+        if ( APPLE )
+            list( APPEND lib_output 
+                ${build_lib_dir}/${lib_prefix}${lib_file}.${lib_version}${lib_suffix}
+            )
+        endif()
+    endforeach()
+
+    # site packages files
+    foreach( sitepackages_file ${sitepackages_files} )
     
-ENDIF()
+        if ( APPLE )
+            list( APPEND lib_output 
+                ${build_sitepackages_dir}/MaterialX/Py${sitepackages_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
+            )
+        endif()    
+    endforeach()    
+endif()
 
 # build configuration
 
@@ -114,22 +145,16 @@ IF( UNIX )
         SET( build_options -DBUILD_SHARED_LIBS=false )
     endif()
 
-    if( CMAKE_BUILD_TYPE STREQUAL Debug )
-        set( build_options ${build_options} -DOIIO_LIBNAME_SUFFIX=_d )
-    endif()
-
     # config
+    set( build_config ${build_config} -DMATERIALX_BUILD_VIEWER=true )
     set( build_config ${build_config} -DMATERIALX_BUILD_SHARED_LIBS=true )
     set( build_config ${build_config} -DMATERIALX_BUILD_OIIO=true )
     set( build_config ${build_config} -DMATERIALX_BUILD_PYTHON=true )
-    set( build_config ${build_config} -DOPENIMAGEIO_ROOT_DIR=${build_dir} )
+    set( build_config ${build_config} -DMATERIALX_INSTALL_PYTHON=false )
     set( build_config ${build_config} -DMATERIALX_NANOGUI_EXTERNAL=true )
     set( build_config ${build_config} -DNANOGUI_ROOT=${build_dir} )
-    set( build_config ${build_config} -DCMAKE_CXX_STANDARD=14 )
+    set( build_config ${build_config} -DNANOGUI_EXTRA_DEFS="-DNANOGUI_USE_METAL=1" )
     set( build_config ${build_config} -DCMAKE_CXX_FLAGS="-I${build_inc_dir}/eigen3" )
-
-    # viewer
-    set( build_config ${build_config} -DMATERIALX_BUILD_VIEWER=false )
 
     # configure, make and install
     set( build_make
@@ -138,7 +163,7 @@ IF( UNIX )
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
-            -DMATERIALX_PYTHON_FOLDER_NAME=${build_sitepackages_dir}
+            -DMATERIALX_PYTHON_FOLDER_NAME=${build_sitepackages_dir}/MaterialX
             -DMATERIALX_BUILD_PYTHON=ON 
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
             -DPYTHON_EXECUTABLE=${build_python3}
@@ -151,6 +176,7 @@ IF( UNIX )
     )
 
     # scripts
+    set( build_output ${bin_output} )
 
     if ( CMAKE_SHARED_LIBS )
         set( build_output ${build_output} ${lib_output} )

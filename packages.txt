@@ -57,15 +57,6 @@ https://github.com/AcademySoftwareFoundation/MaterialX/pull/1492
 * Obsolete fixes in oiio
 * Use of config based find_package for oiio
 
-nanogui
----------------------------------
-* git submodule update --init --recursive, removed pybind11
-* CPLUS_INCLUDE_PATH and LD_LIBRARY_PATH for pybind11
-* Added cassert to tabheader.cpp, tabwidget.cpp, glcanvas.cpp, widget.cpp
-* TODO: Only copies openvg, gltw and Eigen - requires libraries for linking?
-* TODO: Create PR for project @ Github
-* TODO: GLFW and nanovg copied to include dir but requires nangogl for linking
-
 ocio
 ---------------------------------
 src/bindings/python/CMakeLists.txt

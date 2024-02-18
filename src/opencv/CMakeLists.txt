@@ -68,9 +68,8 @@ set( lib_files
     opencv_videoio
 )
 
-
 # site-packages
-set( opencv_files
+set( sitepackages_files
     cv2
 )
 
@@ -103,11 +102,11 @@ if( UNIX )
     endforeach()
 
     # site packages files
-    foreach( opencv_file ${opencv_files} )
+    foreach( sitepackages_file ${sitepackages_files} )
     
         if ( APPLE )
             list( APPEND lib_output 
-                ${build_sitepackages_dir}/cv2/python-${build_python3_version}/${opencv_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
+                ${build_sitepackages_dir}/cv2/python-${build_python3_version}/${sitepackages_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
             )
         endif()    
     endforeach()

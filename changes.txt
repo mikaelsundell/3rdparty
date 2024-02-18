@@ -1,5 +1,10 @@
 3rdparty changes:
 
+Update February 17 2024
+---------------------------------
+* Updated nangui
+* Updated MaterialX
+
 Update January 8 2024
 ---------------------------------
 * Added OpenCV

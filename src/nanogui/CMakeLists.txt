@@ -5,8 +5,8 @@
 # nanogui Copyright
 # NanoGUI was developed by Wenzel Jakob <wenzel.jakob@epfl.ch>.
 
-# nanogui from github 2022-03-26
-# https://github.com/wjakob/nanogui
+# nanogui from github 2024-02-16
+# https://github.com/mitsuba-renderer/nanogui
 
 build_info( " Adding nanogui project" )
 
@@ -16,7 +16,7 @@ build_info( " Adding nanogui project" )
 set( project_name "nanogui" )
 
 # project pkg
-set( project_pkg ${project_name}-master-220326 )
+set( project_pkg ${project_name}-master-240216 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -80,29 +80,22 @@ IF( UNIX )
         SET( build_options -DBUILD_SHARED_LIBS=false )
     endif()
 
-    # config
-    set( build_config ${build_config} -DCMAKE_MODULE_PATH=${build_dir}/share/cmake/pybind11 )
-    set( build_config ${build_config} -DNANOGUI_EIGEN_INCLUDE_DIR=${build_inc_dir}/eigen3 )
-
     # configure, make and install
     set( build_make
         ${build_env} &&
-        cd ${project_pkg} &&
-        export CPLUS_INCLUDE_PATH=${build_inc_dir} &&
-        export LD_LIBRARY_PATH=${build_lib_dir} &&
+        cd ${project_name} &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            ${build_options}
-            ${build_config} &&
+            ${build_options} &&
         make ${build_flags} &&
         make install
     )
 
     # copy include
     set( build_include
-        cd ${project_pkg} &&
+        cd ${project_name} &&
         ${copy_dir} ./ext/glfw/include/GLFW ${build_dir}/include/GLFW &&
         ${copy} ./ext/nanovg/src/fontstash.h ${build_dir}/include/fontstash.h &&
         ${copy} ./ext/nanovg/src/nanovg_gl_utils.h ${build_dir}/include/nanovg_gl_utils.h &&
