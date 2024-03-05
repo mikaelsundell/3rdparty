@@ -121,6 +121,9 @@ examples/common/glPtexMipmapTexture.cpp
 qt
 --------------------------------- 
 
+qtbase/src/gui/painting/qcoregraphics.mm
+* Line 87-99: Added ICC profile support in Qt core graphics
+
 QRhi static constants causing missing symbols
 * https://bugreports.qt.io/browse/QTBUG-118170
 

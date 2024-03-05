@@ -1,5 +1,9 @@
 3rdparty changes:
 
+Update March 4 2024
+---------------------------------
+* Added ICC profile support in Qt core graphics
+
 Update February 17 2024
 ---------------------------------
 * Updated nangui
