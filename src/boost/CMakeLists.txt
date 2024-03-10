@@ -6,7 +6,7 @@
 # Copyright Beman Dawes, David Abrahams, 1998-2005.
 # Copyright Rene Rivera 2004-2007.
 
-# boost from sourceforge.net 1.83.0 2023-08-24
+# boost from sourceforge.net 1.84.0 2024-03-10
 # https://www.boost.org/users/download/
 
 build_info( " Adding boost project" )
@@ -17,7 +17,7 @@ build_info( " Adding boost project" )
 set( project_name "boost" )
 
 # project pkg
-set( project_pkg ${project_name}_1_83_0 )
+set( project_pkg ${project_name}-1.84.0 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
