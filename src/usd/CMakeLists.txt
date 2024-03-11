@@ -16,7 +16,7 @@ build_info( " Adding usd project" )
 set( project_name "OpenUSD" )
 
 # project pkg
-set( project_pkg ${project_name}-master )
+set( project_pkg ${project_name}-24.03-240311 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -90,7 +90,7 @@ set( lib_files
     usd_usdProc
     usd_usdProcImaging
     usd_usdRi
-    usd_usdRiImaging
+    usd_usdRiPxrImaging
     usd_usdShade
     usd_usdSkel
     usd_usdSkelImaging
@@ -157,7 +157,7 @@ IF( UNIX )
     # configure, make and install
     SET( build_make
         ${build_env} &&
-        cd OpenUSD &&
+        cd ${project_pkg} &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}

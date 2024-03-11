@@ -1,5 +1,10 @@
 3rdparty changes:
 
+Update March 11 2024
+---------------------------------
+* Updated USD to 24.03
+* Updated boost to 1.84.0
+
 Update March 4 2024
 ---------------------------------
 * Added ICC profile support in Qt core graphics

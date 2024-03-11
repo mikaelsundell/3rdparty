@@ -81,6 +81,11 @@ opencv
 Bug 24093:
 https://gitlab.kitware.com/cmake/cmake/-/issues/24093
 
+openusd
+---------------------------------
+extras/usd/examples/usdObj/streamIO.cpp
+* Line 63: Added boost/range.hpp for make_iterator_range
+
 ptex
 ---------------------------------
 CMakeLists.txt
