@@ -432,6 +432,12 @@ if( build_libs )
               BUILD ON
     )
     build_add_project(
+              pkg-config
+              DIR ${CMAKE_SOURCE_DIR}/src/pkg-config
+              DESCRIPTION "pkg-config"
+              BUILD ON
+    )
+    build_add_project(
               ptex
               DIR ${CMAKE_SOURCE_DIR}/src/ptex
               DESCRIPTION "ptex"
