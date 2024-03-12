@@ -286,9 +286,6 @@ Pcre2
 Original API code Copyright (c) 1997-2012 University of Cambridge
 New API code Copyright (c) 2016-2020 University of Cambridge
 
-pkg-config
-Copyright (C) 2001, 2002 Red Hat Inc
-
 PTex
 Copyright 2014 Disney Enterprises, Inc.  All rights reserved
 

@@ -4,6 +4,7 @@ Update March 11 2024
 ---------------------------------
 * Updated USD to 24.03
 * Updated boost to 1.84.0
+* Removed pkg-config
 
 Update March 4 2024
 ---------------------------------

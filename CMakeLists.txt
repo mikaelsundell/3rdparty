@@ -114,7 +114,7 @@ endif()
 set_property( GLOBAL PROPERTY USE_FOLDERS ON )
 
 # define repo
-set( repo_url http://s3-eu-west-1.amazonaws.com/mikaelsundell/3rdparty )
+set( repo_url https://mikaelsundell.s3-eu-west-1.amazonaws.com/3rdparty )
 
 # define build dirs
 set( build_bin_dir ${build_dir}/bin )
@@ -429,12 +429,6 @@ if( build_libs )
               openexr
               DIR ${CMAKE_SOURCE_DIR}/src/openexr
               DESCRIPTION "OpenEXR"
-              BUILD ON
-    )
-    build_add_project(
-              pkg-config
-              DIR ${CMAKE_SOURCE_DIR}/src/pkg-config
-              DESCRIPTION "pkg-config"
               BUILD ON
     )
     build_add_project(
