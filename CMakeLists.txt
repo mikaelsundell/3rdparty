@@ -582,12 +582,6 @@ if( build_extras )
               BUILD ON
     )
     build_add_project(
-              rawtoaces
-              DIR ${CMAKE_SOURCE_DIR}/src/rawtoaces
-              DESCRIPTION "rawtoaces"
-              BUILD ON
-    )
-    build_add_project(
               usd
               DIR ${CMAKE_SOURCE_DIR}/src/usd
               DESCRIPTION "usd"
