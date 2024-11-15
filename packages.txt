@@ -141,11 +141,6 @@ https://codereview.qt-project.org/c/qt/qtbase/+/511730
 qtbase/src/corelib/Qt6CoreMacros.cmake 
 * Line 1065: CMAKE_CROSS_CONFIGS to is_multi_config
 
-rawtoaces
----------------------------------
-* Fixed CMAKE_CXX_FLAGS and CMAKE_C_FLAGS to not overwrite cmake flags
-* Removed export PACKAGE to prevent conflict with install
-
 see ms-fixes:
 https://github.com/mikaelsundell/rawtoaces/tree/ms-fixes
 
