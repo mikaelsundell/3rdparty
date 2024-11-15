@@ -1,5 +1,9 @@
 3rdparty changes:
 
+Update November 15 2024
+---------------------------------
+* Removed rawtoaces, moved to new project
+
 Update March 11 2024
 ---------------------------------
 * Updated USD to 24.03

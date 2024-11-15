@@ -140,6 +140,7 @@ IF( UNIX )
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DZLIB_ROOT=${build_dir}
+              -DOPENEXR_BUILD_PYTHON_LIBS=TRUE
               -DCMAKE_INSTALL_PREFIX=${build_dir}
               -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
               ${build_options} &&
