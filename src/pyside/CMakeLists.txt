@@ -16,7 +16,7 @@ build_info( " Adding pyside project" )
 set( project_name "pyside" )
 
 # project pkg
-set( project_pkg ${project_name}-6.6 )
+set( project_pkg ${project_name}-6.8.1 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -102,7 +102,7 @@ if( UNIX )
     )
 
     # lib files
-    set( lib_version "3.6.6.0" )
+    set( lib_version "3.6.8.1" )
     
     foreach( lib_file ${lib_files} )
     
@@ -162,7 +162,7 @@ IF( UNIX )
         ${build_env} &&
         export LLVM_INSTALL_DIR=${build_dir} &&
         export PATH=${build_ninja_dir}:$$PATH &&
-        cd pyside-6.6/pyside-pyside-setup &&
+        cd ${project_pkg} &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_PREFIX_PATH=${build_dir} 
@@ -203,8 +203,8 @@ IF( UNIX )
     # run
     add_custom_command( 
         OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
+        #COMMAND ${build_download}
+        #COMMAND ${build_uncompress}
         COMMAND ${build_make}
         COMMAND ${build_script}
         COMMAND ${build_check}

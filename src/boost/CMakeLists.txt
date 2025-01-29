@@ -17,7 +17,7 @@ build_info( " Adding boost project" )
 set( project_name "boost" )
 
 # project pkg
-set( project_pkg ${project_name}-1.84.0 )
+set( project_pkg ${project_name}_1_87_0 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -98,7 +98,7 @@ if( UNIX )
         set( lib_atag ${lib_arch} )
     endif()
 
-    set( lib_version "1.73.0" )
+    set( lib_version "1.87.0" )
 
     foreach( lib_file ${lib_files} )
     

@@ -39,16 +39,16 @@ http://www.cmake.org
   
 3rdparty is built using the ```build.sh``` script.
 
-Build all - Qt, debug and release:
+Build all - Qt, debug and release for development target 12.
 ```shell
-./build.sh all
+./build.sh all --target 12
 ```
 
 Qt will be downloaded and built in ```qt``` and 3rdparty in ```build```. Targets will use the product version as ```CMAKE_OSX_DEPLOYMENT_TARGET``` obtained using ```sw_vers -productVersion``` for compatibility. Build using arguments ```debug``` or ```release``` individually will not clean the build before starting.
 
 ### Debug Qt with 3rdparty ###
 
-Debugging in Qt with hybrid frameworks make uses of the DYLD_IMAGE_SUFFIX environment variable. Set it to _debug to force the linker to use the debug version when the framework.
+Debugging in Qt with hybrid frameworks make uses of the ```DYLD_IMAGE_SUFFIX``` environment variable. Set it to _debug to force the linker to use the debug version when the framework.
 
 ```
 DYLD_IMAGE_SUFFIX=_debug
@@ -69,7 +69,7 @@ deployment process to remap install names before distribution.
 
 ## CMake configuration ##
 
-Add cmake to path:
+Add cmake to path
 
 ```shell
 export PATH=$PATH:/Applications/CMake.app/Contents/bin
@@ -77,7 +77,7 @@ export PATH=$PATH:/Applications/CMake.app/Contents/bin
 
 ## Build configuration ##
 
-Useful make commands:
+Useful make commands
 
 ```shell
 make                      Build all projects for development and test in 'build/platform'
@@ -86,7 +86,7 @@ make clean                Get rid of all the temporary files in 'build/platform'
 make help                 Print all the make options
 ```
 
-Additionally, a few helpful modifiers:
+Additionally, a few helpful modifiers
 
 ```shell
 make verbose=0 ...        Show all compilation commands
@@ -97,37 +97,17 @@ make build_media=1 ...    Build media
 
 ## Platforms ##
 
-macOS Monterey x86_64
+MacOS Sonoma Apple M1
 ```
-Darwin Kernel Version 21.6.0: Sun Nov  6 23:31:16 PST 2022; root:xnu-8020.240.14~1/RELEASE_X86_64 x86_64 i386
-Apple clang version 14.0.0 (clang-1400.0.29.202)
-Target: x86_64-apple-darwin21.6.0
+Darwin Kernel Version 24.2.0: Fri Dec  6 18:40:14 PST 2024; root:xnu-11215.61.5~2/RELEASE_ARM64_T8103 arm64
+Apple clang version 16.0.0 (clang-1600.0.26.6)
+Target: arm64-apple-darwin24.2.0
 
-Xcode 14.3.1
-Build version 14E300c
-```
-
-macOS Monterey Apple M1
-```
-Darwin Kernel Version 21.6.0: Sun Nov  6 23:31:16 PST 2022; root:xnu-8020.240.14~1/RELEASE_X86_64 x86_64 i386
-Apple clang version 14.0.0 (clang-1400.0.29.202)
-Target: x86_64-apple-darwin21.6.0
-
-Xcode 13.3.1
-Build version 13E500a
+Xcode 16.2
+Build version 16C5032a
 ```
 
-macOS Sonoma Apple M1
-```
-Darwin 23.1.0 Darwin Kernel Version 23.1.0: Mon Oct  9 21:27:24 PDT 2023; root:xnu-10002.41.9~6/RELEASE_ARM64_T6000 arm64
-Apple clang version 15.0.0 (clang-1500.0.40.1)
-Target: arm64-apple-darwin23.1.0
-
-Xcode 15.0.1
-Build version 15A507
-```
-
-macOS Configuration
+MacOS Configuration
 ```shell
 uname -a
 clang --version

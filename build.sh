@@ -56,7 +56,7 @@ if ! python3 -c "import numpy" &>/dev/null; then
 fi
 
 # build qt
-qt_name="qt-everywhere-src-6.6.0"
+qt_name="qt-everywhere-src-6.8.1"
 qt_url="https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/$qt_name.tar.gz"
 build_qt() {
     mkdir -p "$script_dir/qt"

@@ -86,6 +86,16 @@ openusd
 extras/usd/examples/usdObj/streamIO.cpp
 * Line 63: Added boost/range.hpp for make_iterator_range
 
+opensubdiv
+--------------------------------- 
+examples/common/glPtexMipmapTexture.h
+* Line 28: Added glLoader to glLoader.h include
+
+examples/common/glPtexMipmapTexture.cpp
+* Line 25: Added glLoader to glLoader.h include
+
+* Create PR for project @ Github
+
 ptex
 ---------------------------------
 CMakeLists.txt
@@ -98,51 +108,17 @@ pcre2
 
 pyside
 ---------------------------------
-QtDesigner issue with Qt6.6 QtUiPlugin includes
-https://bugreports.qt.io/browse/PYSIDE-1684
-
-sources/pyside6/PySide6/QtDesigner/CMakeLists.txt
-* Line 1-73: Commented out QtDesigner, not compatible with Qt6.6 and QtUiPlugin/customerwidget.h, only forward declaration of QWidget
-
 sources/pyside6/qtexampleicons/CMakeLists.txt
 * Line 35: Added shiboken_python_include_dirs for target_include_directories
 
 sources/pyside6/Macros/PySideModules.cmake
-* Line 286: Added double /../.. to end of path
-
-build_scripts/utils.py
-* Line 23: Commented out setuptools, not needed and breaks macOS
-
-opensubdiv
---------------------------------- 
-examples/common/glPtexMipmapTexture.h
-* Line 28: Added glLoader to glLoader.h include
-
-examples/common/glPtexMipmapTexture.cpp
-* Line 25: Added glLoader to glLoader.h include
-
-* Create PR for project @ Github
+* Line 342: Added double /../.. to end of path
 
 qt
 --------------------------------- 
-
 qtbase/src/gui/painting/qcoregraphics.mm
+* Line 9: Added #include <QtGui/qcolorspace.h>
 * Line 87-99: Added ICC profile support in Qt core graphics
-
-QRhi static constants causing missing symbols
-* https://bugreports.qt.io/browse/QTBUG-118170
-
-qtbase/src/gui/rhi/qrhi.h
-* Line 498, 538, 1216, 1946: Changed to constexpr, fixed in Qt 6.6.1
-
-Update timestamp file for `multi-Config` builds
-https://codereview.qt-project.org/c/qt/qtbase/+/511730
-
-qtbase/src/corelib/Qt6CoreMacros.cmake 
-* Line 1065: CMAKE_CROSS_CONFIGS to is_multi_config
-
-see ms-fixes:
-https://github.com/mikaelsundell/rawtoaces/tree/ms-fixes
 
 usd_from_gltf
 ---------------------------------
