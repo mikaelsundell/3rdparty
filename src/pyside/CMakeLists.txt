@@ -203,8 +203,8 @@ IF( UNIX )
     # run
     add_custom_command( 
         OUTPUT ${bin_output} ${lib_output}
-        #COMMAND ${build_download}
-        #COMMAND ${build_uncompress}
+        COMMAND ${build_download}
+        COMMAND ${build_uncompress}
         COMMAND ${build_make}
         COMMAND ${build_script}
         COMMAND ${build_check}
