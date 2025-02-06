@@ -2,6 +2,7 @@
 ##  Copyright 2022-present Contributors to the 3rdparty project.
 ##  SPDX-License-Identifier: BSD-3-Clause
 ##  https://github.com/mikaelsundell/3rdparty
+
 # usage
 
 usage()
@@ -19,8 +20,6 @@ Options:
    -ld, --library-dir      Python3 library dir
 EOF
 }
-
-# parse arguments
 
 i=0; argv=()
 for ARG in "$@"; do
@@ -54,17 +53,12 @@ while test $i -lt $# ; do
     i=$((i + 1))
 done
 
-# test arguments
-
 if [ -z "${PYTHON3}" ] || [ -z "${VERSION}" ] || [ -z "${INCLUDEDIR}" ] || [ -z "${LIBRARYDIR}" ] ; then
     usage
     exit 1
 fi
 
-# install user-config for files
-
 for i in ${FILES[@]}
 do
     echo "using python : ${VERSION} : ${PYTHON3} : ${INCLUDEDIR} : ${LIBRARYDIR} ;" > ${i}
-
 done

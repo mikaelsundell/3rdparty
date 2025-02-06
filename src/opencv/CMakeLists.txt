@@ -148,6 +148,8 @@ IF( UNIX )
     set( build_config ${build_config} -DWITH_WEBP=ON )
     set( build_config ${build_config} -DBUILD_ZLIB=OFF )
     set( build_config ${build_config} -DWITH_ZLIB=ON )
+    set( build_config ${build_config} -DBUILD_TESTS=OFF )
+    set( build_config ${build_config} -DBUILD_PERF_TESTS=OFF )
 
     # configure, make and install
     set( build_make

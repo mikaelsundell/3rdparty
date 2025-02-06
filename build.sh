@@ -6,20 +6,32 @@
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 machine_arch=$(uname -m)
 
-# major version
+# Initialize variables
+major_version=""
+build_type=""
+
+# Parse arguments
 parse_args() {
     while [[ "$#" -gt 0 ]]; do
-        case $1 in
+        case "$1" in
             --target=*) major_version="${1#*=}"; shift ;;
-            *) shift ;;
+            --target) shift; major_version="$1"; shift ;;
+            debug|release|all) build_type="$1"; shift ;;
+            *) echo "Unknown argument: $1"; exit 1 ;;
         esac
     done
 }
 parse_args "$@"
 
+# If no build type was provided, set default (error handling)
+if [ -z "$build_type" ]; then
+    echo "Error: Missing build type. Use 'debug', 'release', or 'all'."
+    exit 1
+fi
+
 if [ -z "$major_version" ]; then
-    macos_version=$(sw_vers -productVersion)
-    major_version=$(echo "$macos_version" | cut -d '.' -f 1)
+    macos_version=0
+    major_version=12
 fi
 
 # exports
@@ -28,8 +40,6 @@ export CMAKE_OSX_DEPLOYMENT_TARGET=$major_version
 
 # exit on error
 set -e 
-
-build_type="$1"
 if [ "$build_type" != "debug" ] && [ "$build_type" != "release" ] && [ "$build_type" != "all" ]; then
     echo "invalid build type: $build_type (use 'debug', 'release', or 'all')"
     exit 1
@@ -38,6 +48,7 @@ fi
 clear
 echo "Building 3rdparty for $build_type"
 echo "---------------------------------"
+echo "Deployment target: $major_version"
 
 # check if cmake is in the path
 if ! command -v cmake &> /dev/null; then
@@ -51,7 +62,13 @@ fi
 
 # check if numpy is installed
 if ! python3 -c "import numpy" &>/dev/null; then
-    echo "python3 numpy could not be found, please install using \"pip3 install numpy\""
+    echo "python3 numpy could not be found, please install it using \"pip3 install numpy\""
+    exit 1
+fi
+
+# Check if pyopengl is installed
+if ! python3 -c "import OpenGL" &>/dev/null; then
+    echo "python3 PyOpenGL could not be found, please install it using: pip3 install PyOpenGL PyOpenGL-accelerate"
     exit 1
 fi
 

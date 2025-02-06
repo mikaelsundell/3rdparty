@@ -20,8 +20,6 @@ Options:
 EOF
 }
 
-# parse arguments
-
 i=0; argv=()
 for ARG in "$@"; do
     argv[$i]="${ARG}"
@@ -51,28 +49,20 @@ while test $i -lt $# ; do
     i=$((i + 1))
 done
 
-# test arguments
-
 if [ ! $PYTHON3 ] && [ ! $VERSION ] && [ ! $INCLUDEDIR ] && [ ! $LIBRARYDIR ]; then
     usage
     exit 1
 fi
 
-# executable
-
 if [ $PYTHON3 ]; then
     echo `which python3`
 fi
-
-# version
 
 if [ $VERSION ]; then
     echo `python3 -c \
         "import sys; \
          print(sys.version)"`
 fi
-
-# include dirs
 
 if [ $INCLUDEDIR ]; then
     echo `python3 -c \
@@ -81,10 +71,8 @@ if [ $INCLUDEDIR ]; then
          print(get_python_inc())"`
 fi
 
-# library dirs
-
 if [ $LIBRARYDIR ]; then
     echo `python3 -c \
         "import distutils.sysconfig as sysconfig; \
-         print(sysconfig.get_config_var('LIBDIR'))"`
+         print(sysconfig.get_config_var('LIBDIR'))"` # this gives the library inside the framework
 fi

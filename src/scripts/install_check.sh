@@ -18,8 +18,6 @@ Options:
 EOF
 }
 
-# parse arguments
-
 i=0; argv=()
 for ARG in "$@"; do
     argv[$i]="${ARG}"
@@ -43,7 +41,6 @@ while test $i -lt $# ; do
     i=$((i + 1))
 done
 
-# check files
 for i in ${FILES[@]}
 do
     if [ -f "${i}" ]; then

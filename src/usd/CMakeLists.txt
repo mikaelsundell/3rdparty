@@ -16,7 +16,7 @@ build_info( " Adding usd project" )
 set( project_name "OpenUSD" )
 
 # project pkg
-set( project_pkg ${project_name}-24.03-240311 )
+set( project_pkg ${project_name}-25.02 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -151,8 +151,12 @@ IF( UNIX )
     # config
     set( build_config ${build_config} -DCMAKE_CXX_STANDARD=14 )
     set( build_config ${build_config} -DBoost_NO_BOOST_CMAKE=false )
-    set( build_config ${build_config} -DPXR_BUILD_USDVIEW=false )
-    set( build_config ${build_config} -DPXR_ENABLE_PYTHON_SUPPORT=false )
+    set( build_config ${build_config} -DPXR_BUILD_USDVIEW=true )
+    set( build_config ${build_config} -DPXR_ENABLE_PYTHON_SUPPORT=true )
+    set( build_config ${build_config} -DPYSIDEUICBINARY=${build_dir}/libexec/uic )
+    if( CMAKE_BUILD_TYPE STREQUAL Debug )
+        set( build_config ${build_config} -DPXR_USE_DEBUG_PYTHON=ON )
+    endif()
 
     # configure, make and install
     SET( build_make

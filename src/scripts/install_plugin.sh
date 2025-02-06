@@ -66,82 +66,83 @@ while test $i -lt $# ; do
     i=$((i + 1))
 done
 
-# test arguments
-
 if  [ -z "${PREFIXLIB}" ] || [ -z "${PREFIXFRAMEWORK}" ] || [ -z "${PREFIXPLUGIN}" ] || [ -z "${ABSOLUTEPATH}" ]; then
     usage
     exit 1
 fi
 
-# install name for files
+RPATHS=( # portable paths
+    "/Applications/Xcode.app/Contents/Developer/Library/Frameworks"
+)
 
 for i in ${FILES[@]}
 do
     if [ ! -L "${i}" ]; then
-    
         FDIR=`dirName "${i}"`
         FNAME=`basename "${i}"`
         DNAME=
         
+        # change name
         if [[ `file "${i}" | grep 'shared library'` ]]; then
-            
-            # plugin
-                
+            # debug
             NAME="${PREFIXPLUGIN}"/"`basename ${FDIR}`"/"${FNAME}"
-
             install_name_tool -id "${NAME}" "${i}"
-                    
-            # changed shared library id
-                        
+                      
             if [ $VERBOSE ]; then
                 echo "Changed shared library id to '${NAME}' for '${i}'"
             fi
 
         fi
         
-        # find shared libraries used
-
-        LIBS=`otool -L "${i}" | tail -n+2 | awk '{print $1}'`
-        
+        # changed dependent names
+        LIBS=`otool -L "${i}" | tail -n+2 | awk '{print $1}'`        
         for l in ${LIBS[@]}
         do
             LDIR=`dirName "${l}"`
             LNAME=`basename ${l}`
             DNAME=
-
-            if [[ `echo ${LDIR} | grep "${ABSOLUTEPATH}"` ]] || [ $LDIR == "." ]; then
-            
-                # debug
-            
+            DEPENDENTNAME=
+            if [[ `echo ${LDIR} | grep "${ABSOLUTEPATH}"` ]] || [[ `echo ${LDIR} | grep "@rpath"` ]] || [ $LDIR == "." ]; then            
+                # debug            
                 if [ $SUFFIXDEBUG ] && [[ $LNAME = *"${SUFFIXDEBUG}" ]]; then
                     DNAME="${LNAME}"
                     LNAME=`echo "${LNAME}" | sed "s/${SUFFIXDEBUG}//g"`
-                fi
-            
-                # framework
-                
+                fi                        
                 if [[ `echo ${LDIR} | grep "${LNAME}.framework"` ]]; then
                     if [ $DNAME ]; then
-                        NAME="${PREFIXFRAMEWORK}/${LNAME}.framework/Versions/Current/${DNAME}"
+                        DEPENDENTNAME=${LNAME}.framework/Versions/Current/${DNAME}
                     else
-                        NAME="${PREFIXFRAMEWORK}/${LNAME}.framework/Versions/Current/${LNAME}"
+                        DEPENDENTNAME=${LNAME}.framework/Versions/Current/${LNAME}
                     fi
+                    NAME="${PREFIXFRAMEWORK}/${DEPENDENTNAME}"
                 else
                     NAME="${PREFIXLIB}"/"${LNAME}"
+                    DEPENDENTNAME=${NAME}
                 fi
-                
-                install_name_tool -change "${l}" "${NAME}" "${i}"
-            
-                # changed dependent shared library
-                    
-                if [ $VERBOSE ]; then
-                    echo "Changed dependent shared/framework library to '${NAME}' for '${i}'"
+
+                INSTALLNAME=
+                if [ -e "${NAME}" ]; then
+                    INSTALLNAME=${NAME}
+                    install_name_tool -change "${l}" "${NAME}" "${i}"
+                else
+                    for rpath in "${RPATHS[@]}"; do
+                        if [ -e "${rpath}/${DEPENDENTNAME}" ]; then
+                            INSTALLNAME=${rpath}/${DEPENDENTNAME}
+                            break
+                        fi
+                    done
                 fi
-            
-            fi
-        
-        done
-        
+
+                if [ -n "${INSTALLNAME}" ]; then
+                    install_name_tool -change "${l}" "${INSTALLNAME}" "${i}"
+                    if [ $VERBOSE ]; then
+                        echo "Changed dependent shared/framework library to '${INSTALLNAME}' for '${i}'"
+                    fi    
+                else
+                    echo "Could not find new install path for dependent shared/framework library ${INSTALLNAME}, will be skipped"
+                fi
+            fi        
+        done         
     else
         if [ $VERBOSE ]; then
             echo "Symbolic link will be skipped '${i}'"

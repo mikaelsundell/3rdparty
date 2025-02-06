@@ -5,8 +5,8 @@
 # Qt Copyright
 # Copyright (C) 2020 The Qt Company Ltd.
 
-# pyside from github 2023-11-29 (branch 6.6)
-# https://github.com/pyside/pyside-setup
+# pyside from github 2025-01-20 (tag 6.8.1)
+# https://github.com/pyside/pyside-setup/tree/v6.8.1
 
 build_info( " Adding pyside project" )
 
@@ -174,8 +174,7 @@ IF( UNIX )
             -DPYTHON_LIBRARY=${build_python3_library_dir}
             -DCMAKE_CXX_FLAGS=-stdlib=libc++
             -DBUILD_TESTS=OFF 
-            -DNO_QT_TOOLS=yes 
-            -DFORCE_LIMITED_API=yes
+            -DNO_QT_TOOLS=OFF
             ${build_options}
             -G Ninja &&
         cmake --build . --parallel &&

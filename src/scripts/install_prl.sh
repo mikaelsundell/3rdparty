@@ -20,9 +20,6 @@ Options:
 EOF
 }
 
-
-# parse arguments
-
 i=0; argv=()
 for ARG in "$@"; do
     argv[$i]="${ARG}"
@@ -55,42 +52,27 @@ while test $i -lt $# ; do
     i=$((i + 1))
 done
 
-# test arguments
-
 if [ -z "${BUILDPATH}" ] || [ -z "${DISTPATH}" ]; then
     usage
     exit 1
 fi
 
-# os
-
 os=`uname`
-
-# install name for files
-
 for i in ${FILES[@]}
 do
-
     if [ ! -L "${i}" ]; then     
-
         if [ "${os}" == "Darwin" ]; then # double quotes needed for -i on darwin
             sed -i "" s="${BUILDPATH}"="${DISTPATH}"=g "${i}"
         else
             sed -i s="${BUILDPATH}"="${DISTPATH}"=g "${i}"
-        fi
-
-        # changed shared library id
-                        
+        fi             
         if [ $VERBOSE ]; then
             echo "Changed paths to '${DISTPATH}' for '${i}'"
         fi
-        
     else
         if [ $VERBOSE ]; then
 
             echo "Symbolic link will be skipped '${i}'"
-
         fi
-
     fi
 done
