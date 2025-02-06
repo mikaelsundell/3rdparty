@@ -143,7 +143,7 @@ do
                         echo "Changed dependent shared/framework library to '${INSTALLNAME}' for '${i}'"
                     fi    
                 else
-                    echo "Could not find new install path for dependent shared/framework library ${INSTALLNAME}, will be skipped"
+                    echo "Could not find new install path for dependent shared/framework library ${l}, will be skipped"
                 fi
             fi        
         done        

@@ -90,6 +90,7 @@ function( build_install_script files dir prefix prefix_framework output_script )
             --prefix-lib ${prefix}
             --prefix-framework ${prefix_framework}
             --absolute-path ${dir}
+            --suffix-debug _debug
             ${files}
         )
         set(${output_script} ${install_script} PARENT_SCOPE)
