@@ -73,7 +73,7 @@ if( UNIX )
         "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
     )
     
-ENDIF()
+endif()
 
 # build configuration
 
@@ -112,6 +112,7 @@ IF( UNIX )
     )
 
     # scripts
+    set( build_output ${bin_output} )
 
     if ( CMAKE_SHARED_LIBS )
         set( build_output ${build_output} ${lib_output} )

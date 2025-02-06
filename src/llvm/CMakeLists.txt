@@ -417,7 +417,8 @@ IF( UNIX )
     )
 
     # scripts
-
+    set( build_output ${bin_output} )
+    
     if ( CMAKE_SHARED_LIBS )
         set( build_output ${build_output} ${lib_output} )
     endif()
