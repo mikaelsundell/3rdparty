@@ -266,6 +266,9 @@ Copyright © 2024 , OpenCV team
 OpenSubDiv
 Copyright 2022 Pixar
 
+OpenUSD
+Copyright 2022 Pixar
+
 Pcre2
 Original API code Copyright (c) 1997-2012 University of Cambridge
 New API code Copyright (c) 2016-2020 University of Cambridge
