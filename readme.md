@@ -56,7 +56,7 @@ DYLD_IMAGE_SUFFIX=_debug
 
 ### Deploy with 3rdparty ###
 
-Each project is installed with absolute search paths for all names and dependent libraries. The 3rdparty project is not intended for instant deployment but instead requires a deployment step, such as macdeployqt or a similar tool, to correctly configure @rpath, @executable_path, and other runtime application dependencies.
+Each project is installed with absolute search paths for all names and dependent libraries. The 3rdparty project is not intended for instant deployment but instead requires a deployment step, such as macdeployqt or a similar tool, to correctly configure ```@rpath```, ```@executable_path```, and other runtime application dependencies.
 
 ## 3rdparty advanced ##
 
