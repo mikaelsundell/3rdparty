@@ -1,8 +1,11 @@
 3rdparty changes:
 
-Update November 15 2024
+Update Feb 9 2024
 ---------------------------------
-* Removed rawtoaces, moved to new project
+* Updated oiio to 3.0.3.1
+* Updated USD to 25.0.2
+* Updated Qt to 6.8.1
+* Improved build configuration
 
 Update March 11 2024
 ---------------------------------
