@@ -6,8 +6,8 @@
 # Copyright 2008 Larry Gritz and the other authors and contributors.
 # All Rights Reserved.
 
-# oiio from github.com master 2023-08-24
-# https://github.com/OpenImageIO/oiio/tree/master
+# oiio from github.com master 2025-02-08
+# https://github.com/AcademySoftwareFoundation/OpenImageIO/releases
 
 build_info( " Adding oiio project" )
 
@@ -17,7 +17,7 @@ build_info( " Adding oiio project" )
 set( project_name "oiio" )
 
 # project pkg
-set( project_pkg "oiio-master-230824" )
+set( project_pkg "OpenImageIO-3.0.3.1" )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -81,7 +81,7 @@ if( UNIX )
         set( lib_dtag "_d" )
     endif()
 
-    set( lib_version "2.5.2" )
+    set( lib_version "3.0.3" )
 
     foreach( lib_file ${lib_files} )
         list( APPEND lib_output 
@@ -160,7 +160,7 @@ if( UNIX )
 
     # make and install
     set( build_make
-    	cd oiio &&
+    	cd ${project_pkg} &&
     )
 
     # enable in build Qt support using cmake
@@ -220,4 +220,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} boost freetype glew jasper giflib jpeg libpng libraw libwebp openjpeg openexr pkg-config ptex pybind tiff ffmpeg zlib )
+add_dependencies( ${project_name} boost freetype glew jasper giflib jpeg libpng libraw libwebp ocio openjpeg openexr pkg-config ptex pybind tiff ffmpeg zlib )

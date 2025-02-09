@@ -7,8 +7,8 @@
 # (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
 # (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
 
-# libpng from sourceforge.net/projects/libpng 1.2.40 2011-11-18
-# https://sourceforge.net/projects/libpng/files/libpng15/1.5.6
+# libpng from sourceforge.net/projects/libpng 2025-02-08
+# https://sourceforge.net/projects/libpng/files/libpng16/1.6.46/
 
 build_info( " Adding libpng project" )
 
@@ -18,7 +18,7 @@ build_info( " Adding libpng project" )
 set( project_name "libpng" )
 
 # project pkg
-set( project_pkg ${project_name}-1.5.6 )
+set( project_pkg ${project_name}-1.6.46 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -38,7 +38,7 @@ set( project_bin_dir
 
 # bin files
 set( bin_files
-    libpng15-config
+    libpng16-config
 )
 
 # inc files
@@ -50,22 +50,16 @@ set( inc_files
 
 # inc dir
 set( inc_dir
-    libpng15
+    libpng16
 )
 
 # lib files
 if( CMAKE_SHARED_LIBS )
     set( lib_files
         png
-        png15
-        png15.15
+        png16
+        png16.16
     )
-    # 15.6.0 is not built on apple
-    if( LINUX )
-        set( ${lib_files}
-             png15.15.6.0
-        )
-    endif()
 else()
     set( lib_files
         png
@@ -75,7 +69,7 @@ endif()
 # pkgfiles
 set( pkg_files
     libpng.pc
-    libpng15.pc
+    libpng16.pc
 )
 
 if( UNIX )

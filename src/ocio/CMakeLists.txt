@@ -185,4 +185,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} oiio lcms2 )
+add_dependencies( ${project_name} lcms2 )
