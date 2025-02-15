@@ -2,9 +2,6 @@
 
 In progress improvements
 ---------------------------------
-* MaterialX python support
-* MaterialX viewer (nanogui)
-* USD python support
 * Break for Qt builds in build.sh if not successful
 * Fix verbose consistency across projects
 * Zlib pkg-config path is in root instead of lib
@@ -41,22 +38,6 @@ nasm
 ---------------------------------
 * Build with empty nasm.1 and ndisasm.1 to skip pdf documentation dependencies
 
-materialx
----------------------------------
-in-progress ms-230824
-https://github.com/mikaelsundell/MaterialX/tree/ms-230824
-
-* TODO: Fix nanogui on Mac M1/ arm64 - cannot create opengl context?
-  GLFW error 65544: Cocoa: Failed to retrieve display name
-* TODO: Where is sitepackages?
-* TODO: Create PR for project @ Github
-
-Pending PR1492:
-https://github.com/AcademySoftwareFoundation/MaterialX/pull/1492 
-
-* Obsolete fixes in oiio
-* Use of config based find_package for oiio
-
 ocio
 ---------------------------------
 src/bindings/python/CMakeLists.txt
@@ -80,11 +61,6 @@ opencv
 
 Bug 24093:
 https://gitlab.kitware.com/cmake/cmake/-/issues/24093
-
-openusd
----------------------------------
-extras/usd/examples/usdObj/streamIO.cpp
-* Line 63: Added boost/range.hpp for make_iterator_range
 
 opensubdiv
 --------------------------------- 
