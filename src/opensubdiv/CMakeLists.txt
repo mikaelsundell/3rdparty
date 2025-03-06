@@ -5,7 +5,7 @@
 # opensubdiv Copyright
 # Copyright 2022 Pixar
 
-# opensubdiv from github.com master 2022-03-19
+# opensubdiv from github.com master 2025-03-06
 # https://github.com/PixarAnimationStudios/OpenSubdiv
 
 build_info( " Adding opensubdiv project" )
@@ -16,7 +16,7 @@ build_info( " Adding opensubdiv project" )
 set( project_name "opensubdiv" )
 
 # project pkg
-set( project_pkg ${project_name}-master-220324 )
+set( project_pkg OpenSubdiv-master-250306 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -41,26 +41,34 @@ set( inc_dir
 
 # lib files
 set( lib_files
-    osdCPU.3.4.4
-    osdGPU.3.4.4
+    osdCPU
+    osdGPU
 )
 
 # pkgfiles
 set( pkg_files
 )
 
-IF( UNIX )
+if( UNIX )
+
+    # bin files
+    build_add_files( 
+        "${bin_files}" "${build_bin_dir}" bin_output
+    )
 
     # inc dir
     build_add_dir( 
         "${inc_dir}" "${build_inc_dir}" dir_output
     )
 
-    # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
-    )
-    
+    set( lib_version "3.6.0" )
+
+    foreach( lib_file ${lib_files} )
+        list( APPEND lib_output 
+            ${build_lib_dir}/${lib_prefix}${lib_file}.${lib_version}${lib_suffix}
+        )
+    endforeach()
+
 endif()
 
 # build configuration
@@ -86,9 +94,6 @@ IF( UNIX )
         SET( build_options -DBUILD_SHARED_LIBS=FALSE )
     ENDIF()
 
-    # config
-    set( build_config ${build_config} -DBoost_NO_BOOST_CMAKE=false )
-
     # configure, make and install
     SET( build_make
         ${build_env} &&
@@ -98,8 +103,7 @@ IF( UNIX )
         cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
               -DCMAKE_INSTALL_PREFIX=${build_dir}
               -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-              ${build_options}
-              ${build_config} &&
+              ${build_options}  &&
         make ${build_flags} &&
         make install
     )

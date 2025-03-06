@@ -62,16 +62,6 @@ opencv
 Bug 24093:
 https://gitlab.kitware.com/cmake/cmake/-/issues/24093
 
-opensubdiv
---------------------------------- 
-examples/common/glPtexMipmapTexture.h
-* Line 28: Added glLoader to glLoader.h include
-
-examples/common/glPtexMipmapTexture.cpp
-* Line 25: Added glLoader to glLoader.h include
-
-* Create PR for project @ Github
-
 ptex
 ---------------------------------
 CMakeLists.txt

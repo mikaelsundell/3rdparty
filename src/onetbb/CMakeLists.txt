@@ -5,8 +5,8 @@
 # onetbb Copyright
 # Copyright (c) 2005-2021 Intel Corporation
 
-# onetbb from github.com 2018_U1 2022-03-19
-# https://github.com/oneapi-src/oneTBB/archive/
+# onetbb from github.com 2022.0.0 2025-03-06
+# https://github.com/uxlfoundation/oneTBB/releases/tag/v2022.0.0
 
 build_info( " Adding onetbb project" )
 
@@ -16,7 +16,7 @@ build_info( " Adding onetbb project" )
 set( project_name "onetbb" )
 
 # project pkg
-set( project_pkg ${project_name}-2018_U1 )
+set( project_pkg oneTBB-2022.0.0 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -42,14 +42,16 @@ set( inc_dir
 # lib files
 set( lib_files
     tbb
-    tbb_debug
     tbbmalloc
-    tbbmalloc_debug
     tbbmalloc_proxy
-    tbbmalloc_proxy_debug
 )
 
 if( UNIX )
+
+    # bin files
+    build_add_files( 
+        "${bin_files}" "${build_bin_dir}" bin_output
+    )
 
     # inc dir
     build_add_dir( 
@@ -57,11 +59,26 @@ if( UNIX )
     )
 
     # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
-    )
+    if( CMAKE_BUILD_TYPE STREQUAL Debug )
+        set( lib_dtag "_debug" )
+    endif()
+
+    set( default_version "12.14" )
+    set( tbb_version "2.14" )
     
-ENDIF()
+    foreach( lib_file ${lib_files} )
+        if( lib_file MATCHES "malloc|proxy" )
+            set( lib_version "${tbb_version}" )
+        else()
+            set( lib_version "${default_version}" )
+        endif()
+        
+        list( APPEND lib_output 
+            ${build_lib_dir}/${lib_prefix}${lib_file}${lib_dtag}.${lib_version}${lib_suffix}
+        )
+    endforeach()
+
+endif()
 
 # build configuration
 
@@ -70,58 +87,44 @@ ENDIF()
 IF( UNIX )
 
     # download
-
-    set( build_download 
+    SET( build_download 
         ${download} ${project_url}
     )
 
     # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
+    SET( build_uncompress
+        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
     )
 
     # options
     if( CMAKE_SHARED_LIBS )
-        set( build_options --enable-shared --disable-static )
-    else()
-        set( build_options --enable-static --disable-shared )
-    endif()
+        SET( build_options -DBUILD_SHARED_LIBS=TRUE )
+    ELSE()
+        SET( build_options -DBUILD_SHARED_LIBS=FALSE )
+    ENDIF()
 
-    set( build_options "arch=${lib_arch}" )
-
-    # configure, make and install
-    set( build_make
+     # configure, make and install
+     SET( build_make
         ${build_env} &&
         cd ${project_pkg} &&
-        make ${build_options} ${build_flags}
+        mkdir -p ${build_cmake} &&
+        cd ${build_cmake} &&
+        cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
+            -DCMAKE_INSTALL_PREFIX=${build_dir}
+            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            ${build_options}
+            ${build_config} &&
+        make ${build_flags} &&
+        make install
     )
-
-    # copy include
-    set( build_include
-        cd ${project_pkg} &&
-        ${make_dir} ${build_dir}/include &&
-        ${copy_dir} ./include/tbb ${build_dir}/include/tbb &&
-        ${copy_dir} ./include/serial ${build_dir}/include/serial
-    )
-
-    # copy libs
-    if( APPLE )
-        set( build_lib
-            ${copy} ${project_pkg}/build/macos_*_debug/*.dylib ${build_dir}/lib &&
-            ${copy} ${project_pkg}/build/macos_*_release/*.dylib ${build_dir}/lib
-        )
-    else()
-        set( build_lib
-            ${copy} ${project_pkg}/build/linux_*_debug/*.dylib ${build_dir}/lib &&
-            ${copy} ${project_pkg}/build/linux_*_release/*.dylib ${build_dir}/lib
-        )
-    endif()
 
     # scripts
+    set( build_output ${bin_output} )
+
     if ( CMAKE_SHARED_LIBS )
         set( build_output ${build_output} ${lib_output} )
     endif()
-    
+
     build_install_script( 
         "${build_output}" 
         ${build_dir} 
@@ -141,11 +144,9 @@ IF( UNIX )
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
         COMMAND ${build_make}
-        COMMAND ${build_include}
-        COMMAND ${build_lib}
         COMMAND ${build_script}
         COMMAND ${build_check}
-    )
+    )     
 
 endif()
 
