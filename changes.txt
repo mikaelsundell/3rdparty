@@ -1,5 +1,31 @@
 3rdparty changes:
 
+Update Mar 6 2025
+---------------------------------
+* Updated onetbb to version 2022.0.0
+* Updated opensubdiv to version 3.6.0
+
+Update Feb 9 2025
+---------------------------------
+* Updated libpng15 to libpng16
+
+Update Feb 6 2025
+---------------------------------
+* Improved documentation
+* Fixed --target issue
+
+Update Jan 29 2025
+---------------------------------
+* Updated Qt to 6.8.1
+
+Update Mar 10 2024
+---------------------------------
+* Updated boost to 1.8.4
+
+Update Mar 5 2024
+---------------------------------
+* Updated Qt to support ICC profiles in Qt core graphics
+
 Update Feb 9 2024
 ---------------------------------
 * Updated oiio to 3.0.3.1
