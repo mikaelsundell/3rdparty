@@ -293,9 +293,6 @@ Tiff
 Copyright (c) 1988-1997 Sam Leffler
 Copyright (c) 1991-1997 Silicon Graphics, Inc.
 
-Usd
-Copyright 2022 Pixar
-
 x264 Copyright
 Copyright (C) 2003-2013 x264 project
 

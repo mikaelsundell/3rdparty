@@ -5,18 +5,18 @@
 # usd Copyright
 # Copyright 2022 Pixar
 
-# imath from github.com 22.03 2023-08-27
-# https://github.com/PixarAnimationStudios/USD/
+# openusd from github.com master 2025-03-07
+# https://github.com/PixarAnimationStudios/OpenUSD
 
 build_info( " Adding usd project" )
 
 # project configuration
 
 # project name
-set( project_name "OpenUSD" )
+set( project_name "openusd" )
 
 # project pkg
-set( project_pkg ${project_name}-25.02 )
+set( project_pkg "OpenUSD-master-250307" )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -161,7 +161,7 @@ IF( UNIX )
     # configure, make and install
     SET( build_make
         ${build_env} &&
-        cd ${project_pkg} &&
+        cd OpenUSD &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
