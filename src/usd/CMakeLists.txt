@@ -51,6 +51,7 @@ set( inc_dir
 set( lib_files
     usd_ar
     usd_arch
+    usd_boost
     usd_cameraUtil
     usd_garch
     usd_geomUtil
@@ -72,15 +73,19 @@ set( lib_files
     usd_kind
     usd_ndr
     usd_pcp
+    usd_pegtl
     usd_plug
     usd_pxOsd
+    usd_python
     usd_sdf
     usd_sdr
     usd_tf
     usd_trace
+    usd_ts
     usd_usd
     usd_usdAppUtils
     usd_usdGeom
+    usd_usdGeomValidators
     usd_usdHydra
     usd_usdImaging
     usd_usdImagingGL
@@ -89,15 +94,22 @@ set( lib_files
     usd_usdPhysics
     usd_usdProc
     usd_usdProcImaging
+    usd_usdRender
     usd_usdRi
     usd_usdRiPxrImaging
+    usd_usdSemantics
     usd_usdShade
+    usd_usdShadeValidators
     usd_usdSkel
     usd_usdSkelImaging
+    usd_usdSkelValidators
     usd_usdUI
     usd_usdUtils
+    usd_usdUtilsValidators
+    usd_usdValidation
     usd_usdVol
     usd_usdVolImaging
+    usd_usdviewq
     usd_vt
     usd_work
 )
