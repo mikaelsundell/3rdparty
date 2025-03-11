@@ -65,8 +65,7 @@ if [ -z "${PREFIXLIB}" ] || [ -z "${PREFIXFRAMEWORK}" ] || [ -z "${ABSOLUTEPATH}
     exit 1
 fi
 
-RPATHS=( # portable paths
-    "/Applications/Xcode.app/Contents/Developer/Library/Frameworks"
+RPATHS=( # portable rpaths
 )
 
 for i in ${FILES[@]}
@@ -141,9 +140,7 @@ do
                     install_name_tool -change "${l}" "${INSTALLNAME}" "${i}"
                     if [ $VERBOSE ]; then
                         echo "Changed dependent shared/framework library to '${INSTALLNAME}' for '${i}'"
-                    fi    
-                else
-                    echo "Could not find new install path for dependent shared/framework library ${l}, will be skipped"
+                    fi
                 fi
             fi        
         done        
