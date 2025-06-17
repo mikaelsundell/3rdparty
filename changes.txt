@@ -1,5 +1,9 @@
 3rdparty changes:
 
+Update Jun 16 2025
+---------------------------------
+* Updated openimageio to version 3.1.3
+
 Update Mar 6 2025
 ---------------------------------
 * Updated onetbb to version 2022.0.0
