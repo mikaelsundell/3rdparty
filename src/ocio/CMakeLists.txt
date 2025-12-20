@@ -5,7 +5,7 @@
 # OCIO Copyright
 # Copyright (c) 2003-2010 Sony Pictures Imageworks Inc., et al.
 
-# ocio from github.com master 2023-12-11
+# ocio from github.com master 2025-12-19
 # https://github.com/AcademySoftwareFoundation/OpenColorIO
 
 build_info( " Adding ocio project" )
@@ -16,7 +16,7 @@ build_info( " Adding ocio project" )
 set( project_name "ocio" )
 
 # lib pkg
-set( project_pkg "OpenColorIO-2.3.1" )
+set( project_pkg "OpenColorIO-2.5.0" )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -58,7 +58,7 @@ set( inc_dir
 
 # lib files
 set( lib_files
-    OpenColorIO.2.3.1
+    OpenColorIO.2.5.0
 )
 
 # site-packages
@@ -87,7 +87,7 @@ IF( UNIX )
     foreach( lib_file ${sitepackages_files} )
         if ( APPLE )
             list( APPEND lib_output 
-                ${build_sitepackages_dir}/PyOpenColorIO/${lib_file}${sitepackage_suffix}
+                ${build_lib_dir}/python${build_python3_version}/site-packages/PyOpenColorIO/PyOpenColorIO${sitepackage_suffix}
             )
         endif()    
     endforeach()
@@ -185,4 +185,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} lcms2 )
+add_dependencies( ${project_name} lcms2 openexr )

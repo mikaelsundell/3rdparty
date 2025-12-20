@@ -492,12 +492,6 @@ if( build_extras )
     build_info( "Adding extras" )
 
     build_add_project(
-              aces_container
-              DIR ${CMAKE_SOURCE_DIR}/src/aces_container
-              DESCRIPTION "aces_container"
-              BUILD ON
-    )
-    build_add_project(
               alembic
               DIR ${CMAKE_SOURCE_DIR}/src/alembic
               DESCRIPTION "alembic"

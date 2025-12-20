@@ -1,5 +1,16 @@
 3rdparty changes:
 
+Update Dec 18 2025
+---------------------------------
+* Updated jpeg to 9f
+* Updated opencolorio to version 2.5.0
+* Updated openjpeg to 2.5.4
+* Updated openimageio to version 3.1.8
+* Updated qt to 6.10.1
+* Updated pyside to 6.10.1
+* Updated usd to version 25.11
+* Removed aces_container
+
 Update Jun 16 2025
 ---------------------------------
 * Updated openimageio to version 3.1.3

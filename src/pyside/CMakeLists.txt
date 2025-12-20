@@ -5,8 +5,8 @@
 # Qt Copyright
 # Copyright (C) 2020 The Qt Company Ltd.
 
-# pyside from github 2025-01-20 (tag 6.8.1)
-# https://github.com/pyside/pyside-setup/tree/v6.8.1
+# pyside from github 2025-12-18
+# https://github.com/pyside/pyside-setup/tree/v6.10.1
 
 build_info( " Adding pyside project" )
 
@@ -16,7 +16,7 @@ build_info( " Adding pyside project" )
 set( project_name "pyside" )
 
 # project pkg
-set( project_pkg ${project_name}-6.8.1 )
+set( project_pkg ${project_name}-setup-6.10.1 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -62,7 +62,6 @@ set( pyside6_files
     QtConcurrent
     QtCore
     QtDBus
-    QtExampleIcons
     QtGui
     QtHelp
     QtHttpServer
@@ -90,7 +89,6 @@ set( shiboken6_files
 )
 
 if( UNIX )
-
     # bin files
     build_add_files( 
         "${bin_files}" "${build_bin_dir}" bin_output
@@ -98,11 +96,11 @@ if( UNIX )
 
     # inc dir
     build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" include_output
+        "${inc_dir}" "${build_dir}" include_output
     )
 
     # lib files
-    set( lib_version "3.6.8.1" )
+    set( lib_version "3.6.10" )
     
     foreach( lib_file ${lib_files} )
     
@@ -118,7 +116,7 @@ if( UNIX )
     
         if ( APPLE )
             list( APPEND lib_output 
-                ${build_dir}/site-packages/PySide6/${lib_file}.abi3${sitepackage_suffix}
+                ${build_lib_dir}/python${build_python3_version}/site-packages/PySide6/${lib_file}.abi3${sitepackage_suffix}
             )
         endif()    
     endforeach()
@@ -126,8 +124,8 @@ if( UNIX )
     foreach( lib_file ${shiboken6_files} )
     
     if ( APPLE )
-        list( APPEND lib_output 
-            ${build_dir}/site-packages/shiboken6/${lib_file}.abi3${sitepackage_suffix}
+        list( APPEND lib_output
+            ${build_lib_dir}/python${build_python3_version}/site-packages/shiboken6/${lib_file}.abi3${sitepackage_suffix}
         )
     endif()    
 endforeach()
@@ -174,7 +172,7 @@ IF( UNIX )
             -DPYTHON_LIBRARY=${build_python3_library_dir}
             -DCMAKE_CXX_FLAGS=-stdlib=libc++
             -DBUILD_TESTS=OFF 
-            -DNO_QT_TOOLS=OFF
+            -DNO_QT_TOOLS=yes
             ${build_options}
             -G Ninja &&
         cmake --build . --parallel &&

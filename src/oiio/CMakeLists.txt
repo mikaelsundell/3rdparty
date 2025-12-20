@@ -6,7 +6,7 @@
 # Copyright 2008 Larry Gritz and the other authors and contributors.
 # All Rights Reserved.
 
-# oiio from github.com master 2025-06-16
+# oiio from github.com v3.1.8.0 2025-12-18
 # https://github.com/AcademySoftwareFoundation/OpenImageIO/releases
 
 build_info( " Adding oiio project" )
@@ -17,10 +17,10 @@ build_info( " Adding oiio project" )
 set( project_name "oiio" )
 
 # project pkg
-set( project_pkg "OpenImageIO-main" )
+set( project_pkg "OpenImageIO-3.1.8.0" )
 
 # project archive
-set( project_arc ${project_pkg}-250617.tar.gz )
+set( project_arc ${project_pkg}.tar.gz )
 
 # project url
 set( project_url ${repo_url}/${project_arc} )
@@ -81,7 +81,7 @@ if( UNIX )
         set( lib_dtag "_d" )
     endif()
 
-    set( lib_version "3.1.3" )
+    set( lib_version "3.1.8" )
 
     foreach( lib_file ${lib_files} )
         list( APPEND lib_output 

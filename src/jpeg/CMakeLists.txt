@@ -5,7 +5,7 @@
 # jpeg Copyright
 # Copyright (C) 1991-1997, Thomas G. Lane.
 
-# jpeg from ijg.org 9 2013-04-09
+# jpeg from ijg.org 9f 2025-12-21
 # http://www.ijg.org/files/
 
 build_info( " Adding jpeg project" )
@@ -19,7 +19,7 @@ set( project_name "jpeg" )
 set( project_pkg ${project_name} )
 
 # project archive
-set( project_arc ${project_pkg}src.v9.tar.gz )
+set( project_arc ${project_pkg}src.v9f.tar.gz )
 
 # project url
 set( project_url ${repo_url}/${project_arc} )
@@ -95,11 +95,6 @@ if( UNIX )
     set( build_uncompress
         ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
     )
-    
-    # patch
-    set( build_patch
-        patch ${project_bin_dir}/${project_pkg}-9/jmorecfg.h ${project_src_dir}/jmorecfg.h.patch
-    )
 
     # options
     if( CMAKE_SHARED_LIBS )
@@ -111,7 +106,7 @@ if( UNIX )
     # configure, make and install
     set( build_make
         ${build_env} &&
-    	cd ${project_pkg}-9 &&
+    	cd ${project_pkg}-9f &&
         ./configure 
             --prefix=${build_dir}
             ${build_options} &&
@@ -144,7 +139,6 @@ if( UNIX )
         OUTPUT ${bin_output} ${inc_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
-        COMMAND ${build_patch}
         COMMAND ${build_make}
         COMMAND ${build_script}
         COMMAND ${build_check}

@@ -6,8 +6,7 @@ In progress improvements
 * Fix verbose consistency across projects
 * Zlib pkg-config path is in root instead of lib
 * Experimental switch to Ninja
-* Experimental linux build
-* Experimental docker image (CI on Github)
+
 
 In progress notes
 ---------------------------------
@@ -15,15 +14,7 @@ In progress notes
   Clang system includes will not be generated properly when 3rdparty 
   clang binaries are exposed prior to system clang.
 
-Packages:
-
-aces_container
----------------------------------
-* Removed export PACKAGE to prevent conflict with install
-* Fixed cmake config files
-
-in-progress ms-fixes:
-https://github.com/mikaelsundell/aces_container/tree/ms-fixes
+Fixes:
 
 boost
 ---------------------------------
@@ -42,13 +33,6 @@ ocio
 ---------------------------------
 src/bindings/python/CMakeLists.txt
 * Line 241-249: Added PYTHON_SITE_DIR for site-packages
-
-oiio
----------------------------------
-in-progress PR3961:
-https://github.com/OpenImageIO/oiio/pull/3961
-
-* TODO: Fix broken ocio support
 
 ocio
 ---------------------------------
@@ -74,11 +58,8 @@ pcre2
 
 pyside
 ---------------------------------
-sources/pyside6/qtexampleicons/CMakeLists.txt
-* Line 35: Added shiboken_python_include_dirs for target_include_directories
-
-sources/pyside6/Macros/PySideModules.cmake
-* Line 342: Added double /../.. to end of path
+sources/pyside6/cmake/Macros/PySideModules.cmake
+* Line 355: Added "${CMAKE_BINARY_DIR}/sources" for build path to Shiboken6
 
 qt
 --------------------------------- 

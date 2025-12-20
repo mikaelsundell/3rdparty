@@ -7,7 +7,7 @@
 # Copyright (c) 2002-2014, Professor Benoit Macq
 # Copyright (c) 2010-2011, Kaori Hagihara
 
-# jasper from github.com/uclouvain/openjpeg 2020-10-25
+# jasper from github.com/uclouvain/openjpeg 2025-12-19
 # https://github.com/uclouvain/openjpeg
 
 build_info( " Adding openjpeg project" )
@@ -18,7 +18,7 @@ build_info( " Adding openjpeg project" )
 set( project_name "openjpeg" )
 
 # project pkg
-set( project_pkg "openjpeg-2.3.1" )
+set( project_pkg "openjpeg-2.5.4" )
 
 # project archive
 set( project_arc ${project_pkg}.zip )
@@ -44,12 +44,12 @@ set( bin_files
 
 # inc dir
 set( inc_dir
-    openjpeg-2.3
+    openjpeg-2.2
 )
 
 # lib files
 set( lib_files
-    openjp2.2.3.1
+    openjp2.2.5.4
 )
 
 if( UNIX )
@@ -95,7 +95,7 @@ if( UNIX )
     set( build_make
         ${build_env} &&
     	cd ${project_pkg} &&
-        mkdir ${build_cmake} &&
+        mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
               -DCMAKE_INSTALL_PREFIX=${build_dir} ${build_options} &&

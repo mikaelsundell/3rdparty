@@ -73,15 +73,15 @@ if ! python3 -c "import OpenGL" &>/dev/null; then
 fi
 
 # build qt
-qt_name="qt-everywhere-src-6.8.1"
-qt_url="https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/$qt_name.tar.gz"
+qt_name="qt-everywhere-src-6.10.1"
+qt_url="https://mikaelsundell.s3.eu-west-1.amazonaws.com/3rdparty/$qt_name.tar.xz"
 build_qt() {
     mkdir -p "$script_dir/qt"
     cd "$script_dir/qt"
-    if [ ! -f "$qt_name.tar.gz" ]; then
+    if [ ! -f "$qt_name.tar.xz" ]; then
         echo "Downloading Qt from: $qt_url"
         curl -O -L "$qt_url"
-        tar -xvf "$qt_name.tar.gz"
+        tar -xJvf "$qt_name.tar.xz"
     fi
 
     if [ ! -f "$qt_name" ]; then

@@ -46,6 +46,10 @@ Build all - Qt, debug and release for development target 12.
 
 Qt will be downloaded and built in ```qt``` and 3rdparty in ```build```. Targets will use the product version as ```CMAKE_OSX_DEPLOYMENT_TARGET``` obtained using ```sw_vers -productVersion``` for compatibility. Build using arguments ```debug``` or ```release``` individually will not clean the build before starting.
 
+```shell
+./build.sh debug/release --target 12
+```
+
 ### Debug Qt with 3rdparty ###
 
 Debugging in Qt with hybrid frameworks make uses of the ```DYLD_IMAGE_SUFFIX``` environment variable. Set it to _debug to force the linker to use the debug version when the framework.
@@ -101,14 +105,14 @@ make build_media=1 ...    Build media
 
 ## Platforms ##
 
-MacOS Sonoma Apple M1
+MacOS Tahoe Apple M2
 ```
-Darwin Kernel Version 24.2.0: Fri Dec  6 18:40:14 PST 2024; root:xnu-11215.61.5~2/RELEASE_ARM64_T8103 arm64
-Apple clang version 16.0.0 (clang-1600.0.26.6)
-Target: arm64-apple-darwin24.2.0
+Darwin Kernel Version 25.0.0: Wed Sep 17 21:41:45 PDT 2025; root:xnu-12377.1.9~141/RELEASE_ARM64_T6000 arm64
+Apple clang version 17.0.0 (clang-1700.3.19.1)
+Target: arm64-apple-darwin25.0.0
 
-Xcode 16.2
-Build version 16C5032a
+Xcode 26.0.1
+Build version 17A400
 ```
 
 MacOS Configuration
@@ -283,6 +287,9 @@ Pyside2
 Copyright (C) 2020 The Qt Company Ltd
 
 Pyside2-tools
+Copyright (C) 2020 The Qt Company Ltd
+
+Qt
 Copyright (C) 2020 The Qt Company Ltd
 
 Tclap
