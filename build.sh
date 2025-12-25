@@ -66,6 +66,19 @@ if ! python3 -c "import numpy" &>/dev/null; then
     exit 1
 fi
 
+# Check if typing_extensions is installed (required for Python < 3.11)
+if ! python3 - <<EOF
+import sys
+# typing_extensions is only needed for Python < 3.11
+if sys.version_info < (3, 11):
+    import typing_extensions
+EOF
+then
+    echo "python3: 'typing_extensions' module is missing for Python < 3.11."
+    echo "Please install it via: pip3 install typing_extensions"
+    exit 1
+fi
+
 # Check if pyopengl is installed
 if ! python3 -c "import OpenGL" &>/dev/null; then
     echo "python3 PyOpenGL could not be found, please install it using: pip3 install PyOpenGL PyOpenGL-accelerate"

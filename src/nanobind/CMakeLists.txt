@@ -2,26 +2,24 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# jasper Copyright
-# Copyright (c) 2001-2006 Michael David Adams
-# Copyright (c) 1999-2000 Image Power, Inc.
-# Copyright (c) 1999-2000 The University of British Columbia
+# nanobind from github.com v2.10.2 2025-12-25
+# https://github.com/wjakob/nanobind/tags
 
-# jasper from github.com/jasper-software/jasper 2020-10-25
-# https://github.com/jasper-software/jasper
-
-build_info( " Adding jasper project" )
+build_info( " Adding nanobind project" )
 
 # project configuration
 
 # project name
-set( project_name "jasper" )
+set( project_name "nanobind" )
 
 # project pkg
-set( project_pkg "jasper-master" )
+set( project_pkg "nanobind-master-251225" )
+
+# project archive
+set( project_arc ${project_pkg}.tar.gz )
 
 # project url
-set( project_url ${repo_url}/${project_pkg}.zip )
+set( project_url ${repo_url}/${project_pkg}.tar.gz )
 
 # project src dir
 set( project_src_dir
@@ -33,38 +31,16 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# bin files
-set( bin_files
-    imgcmp
-    jasper
-    jiv
-)
-
 # inc dir
 set( inc_dir
-    jasper
-)
-
-# lib files
-set( lib_files
-    jasper.5.0.0
+    nanobind
 )
 
 if( UNIX )
 
-    # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
-    )
-
-    # inc files
-    build_add_files( 
-        "${inc_files}" "${build_inc_dir}" inc_output
-    )
-
-    # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
+    # inc dir
+    build_add_dir( 
+        "${inc_dir}" "${build_dir}/nanobind/include" include_output
     )
     
 endif()
@@ -81,7 +57,7 @@ if( UNIX )
 
     # tar uncompress
     set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.zip -C ${project_bin_dir}
+        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
     )
 
     # options
@@ -91,7 +67,7 @@ if( UNIX )
     # configure, make and install
     set( build_make
         ${build_env} &&
-    	cd ${project_pkg} &&
+    	cd ${project_name} &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
@@ -123,7 +99,7 @@ if( UNIX )
     # run
 
     add_custom_command( 
-        OUTPUT ${bin_output} ${lib_output}
+        OUTPUT ${include_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
         COMMAND ${build_make}
@@ -136,5 +112,5 @@ endif()
 # custom target, always build
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${lib_output}
+    DEPENDS ${include_output}
 )

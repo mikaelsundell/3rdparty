@@ -546,6 +546,12 @@ if( build_extras )
               BUILD ON
     )
     build_add_project(
+              nanobind
+              DIR ${CMAKE_SOURCE_DIR}/src/nanobind
+              DESCRIPTION "nanobind"
+              BUILD ON
+    )
+    build_add_project(
               nanogui
               DIR ${CMAKE_SOURCE_DIR}/src/nanogui
               DESCRIPTION "nanogui"
