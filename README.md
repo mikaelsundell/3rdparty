@@ -6,24 +6,35 @@
 
 ## 3rdparty consists of ##
 
-  * A set of libraries, viewers and media provided on Mac based platforms.
-  
-  * A set of configurations to simplify the process of building 3rdparty support without the
-    knowledge of each individual build system. 
-        
-  * Up to date support for the latest Mac platforms and versions.
+3rdparty is a collection of scripts, configurations, and reference builds designed to simplify compiling third-party libraries on macOS from scratch. It focuses on providing:
 
-## 3rdparty can be used to ##
+* A curated set of libraries, tools, and media assets commonly used in film, color science, and image processing.
 
-  * Resolve the most common libraries used for film and color applications.
+* Build scripts and configuration presets that remove the need to understand each individual library’s build system in depth.
 
-  * Only build a subset of libraries with a default or non-default configuration.
+* Full control over each dependency, its version, and its configuration flags.
 
-  * Test new versions of libraries before official releases.
+* Up-to-date support for the latest macOS platforms, toolchains, and Xcode releases.
+
+## 3rdparty enables ##
+
+With 3rdparty, you can:
+
+* Build and manage only the libraries you need, with default or custom configurations.
+
+* Reproduce consistent, isolated, and debuggable builds for development or production.
+
+* Test new library versions ahead of official releases or platform adoption.
+
+* Understand and customize the build process rather than relying on binaries.
 
 ## 3rdparty is not ##
 
-  * A package manager, it's a complement.
+3rdparty is not a package manager. It does not replace tools like Homebrew or MacPorts.
+
+Instead, it complements them by offering a controlled, transparent, and reproducible build environment for developers who need to understand and influence how their dependencies are built.
+
+It is intended for environments where reproducibility, version control, and configuration transparency matter—such as VFX pipelines, color workflows, and specialized media tools.
 
 ## 3rdparty build ##
 
@@ -37,9 +48,10 @@ http://www.cmake.org
 
 ### Build 3rdparty ###
   
-3rdparty is built using the ```build.sh``` script.
+3rdparty is built using the ```build.sh``` script, which automates the compilation of all supported dependencies from source, including qt-everywhere-src-6.10.1 for UI/Toolkit support.
 
-Build all - Qt, debug and release for development target 12.
+To build everything (Qt, libraries, debug and release variants) targeting macOS 12 and newer:
+
 ```shell
 ./build.sh all --target 12
 ```
@@ -103,9 +115,14 @@ make build_viewers=1 ...  Build viewers
 make build_media=1 ...    Build media
 ```
 
-## Platforms ##
+## Releases ##
 
-MacOS Tahoe Apple M2
+MacOS Tahoe v26.0.1  
+
+Release page:   
+https://github.com/mikaelsundell/3rdparty/releases/tag/macOS_Tahoe_v26.0.1
+
+System configuration:   
 ```
 Darwin Kernel Version 25.0.0: Wed Sep 17 21:41:45 PDT 2025; root:xnu-12377.1.9~141/RELEASE_ARM64_T6000 arm64
 Apple clang version 17.0.0 (clang-1700.3.19.1)
@@ -114,13 +131,14 @@ Target: arm64-apple-darwin25.0.0
 Xcode 26.0.1
 Build version 17A400
 ```
-
-MacOS Configuration
+Commands used:   
 ```shell
 uname -a
 clang --version
 xcodebuild -version
 ```
+
+Note: Earlier macOS builds were not tagged individually; version tagging began with macOS updates starting from v26.0.1.
 
 ## Github ##
 
