@@ -1,5 +1,9 @@
 3rdparty changes:
 
+Update Dec 25 2025
+---------------------------------
+* Added nanobind
+
 Update Dec 18 2025
 ---------------------------------
 * Updated jpeg to 9f
