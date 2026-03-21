@@ -2,21 +2,21 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# zlib Copyright
-# Copyright (C) 1995-2004 Jean-loup Gailly.
+# zlib-ng Copyright
+# Maintained by Hans Kristian Rosbach aka Dead2 (zlib-ng àt circlestorm dót org)
 
-# zlib from zlib.net 2011-11-18
-# http://zlib.net/
+# zlib-ng 2.3.3 from github 2026-03-14
+# https://github.com/zlib-ng/zlib-ng/releases/tag/2.3.3
 
-build_info( " Adding zlib project" )
+build_info( " Adding zlib-ng project" )
 
 # project configuration
 
 # project name
-set( project_name "zlib" )
+set( project_name "zlib-ng" )
 
 # project pkg
-set( project_pkg ${project_name}-1.2.5 )
+set( project_pkg ${project_name}-2.3.3 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -42,7 +42,7 @@ set( inc_files
 
 # lib files
 set( lib_files
-    z.1.2.5
+    z.1.3.1.zlib-ng
 )
 
 if( UNIX )
@@ -57,7 +57,7 @@ if( UNIX )
         "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
     )
     
-ENDIF()
+endif()
 
 # build configuration
 
@@ -72,7 +72,7 @@ IF( UNIX )
 
     # tar uncompress
     set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
+        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
     )
 
     # options
@@ -89,6 +89,7 @@ IF( UNIX )
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
+            -DZLIB_COMPAT=ON 
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
             ${build_options} &&
         make ${build_flags} &&
@@ -96,6 +97,8 @@ IF( UNIX )
     )
 
     # scripts
+    set( build_output ${bin_output} )
+
     if ( CMAKE_SHARED_LIBS )
         set( build_output ${build_output} ${lib_output} )
     endif()

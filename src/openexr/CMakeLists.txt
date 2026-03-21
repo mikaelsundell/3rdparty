@@ -5,7 +5,7 @@
 # openexr Copyright
 # Copyright (c) 2002, Industrial Light & Magic, a division of Lucas Digital Ltd. LLC
 
-# openexr from github.com 3.1.4 2022-03-19
+# openexr from github.com 3.4.6 2026-03-14
 # https://github.com/AcademySoftwareFoundation/openexr
 
 build_info( " Adding openexr project" )
@@ -16,7 +16,7 @@ build_info( " Adding openexr project" )
 set( project_name "openexr" )
 
 # project pkg
-set( project_pkg ${project_name}-3.1.4 )
+set( project_pkg ${project_name}-3.4.6 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -53,11 +53,11 @@ set( inc_dir
 
 # lib files
 set( lib_files
-    Iex-3_1
-    IlmThread-3_1
-    OpenEXR-3_1
-    OpenEXRCore-3_1
-    OpenEXRUtil-3_1   
+    Iex-3_4
+    IlmThread-3_4
+    OpenEXR-3_4
+    OpenEXRCore-3_4
+    OpenEXRUtil-3_4   
 )
 
 # pkgfiles
@@ -85,7 +85,7 @@ IF( UNIX )
     
         if ( APPLE )
             list( APPEND lib_output 
-                ${build_lib_dir}/${lib_prefix}${lib_file}${lib_dtag}.30.4.1${lib_suffix}
+                ${build_lib_dir}/${lib_prefix}${lib_file}${lib_dtag}.33.3.4.6${lib_suffix}
             )
 
 	    else()
@@ -188,4 +188,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} imath boost zlib )
+add_dependencies( ${project_name} imath boost zlib-ng )

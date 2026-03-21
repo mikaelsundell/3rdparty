@@ -250,4 +250,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} bzip2 zlib )
+add_dependencies( ${project_name} bzip2 zlib-ng )

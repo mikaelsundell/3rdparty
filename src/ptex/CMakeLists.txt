@@ -150,4 +150,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} zlib )
+add_dependencies( ${project_name} zlib-ng )

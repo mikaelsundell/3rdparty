@@ -199,4 +199,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} jpeg zlib )
+add_dependencies( ${project_name} jpeg zlib-ng )

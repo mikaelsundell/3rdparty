@@ -220,4 +220,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} boost freetype glew jasper giflib jpeg libpng libraw libwebp ocio openjpeg openexr pkg-config ptex pybind tiff ffmpeg zlib )
+add_dependencies( ${project_name} boost freetype glew jasper giflib jpeg libpng libraw libwebp ocio openjpeg openexr pkg-config ptex pybind tiff ffmpeg zlib-ng )

@@ -200,9 +200,28 @@ build_clean() {
     make clean
 }
 
+confirm_clean() {
+    if [ -d "$script_dir/build" ]; then
+        echo ""
+        echo "Build directory already exists:"
+        echo "  $script_dir/build"
+        echo ""
+        read -p "Do you really want to wipe it before building all configurations? (y/N): " answer
+        case "$answer" in
+            [yY]|[yY][eE][sS])
+                echo "Cleaning build directory..."
+                build_clean
+                ;;
+            *)
+                echo "Skipping clean step."
+                ;;
+        esac
+    fi
+}
+
 # build types
 if [ "$build_type" == "all" ]; then
-    build_clean
+    confirm_clean
     build_3rdparty "debug"
     build_3rdparty "release"
 else

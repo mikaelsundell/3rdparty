@@ -210,4 +210,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} ffmpeg jpeg libpng libwebp openexr tiff zlib  )
+add_dependencies( ${project_name} ffmpeg jpeg libpng libwebp openexr tiff zlib-ng  )

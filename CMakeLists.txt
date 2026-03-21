@@ -355,9 +355,9 @@ if( build_base )
               BUILD ON
     )
     build_add_project(
-              zlib
-              DIR ${CMAKE_SOURCE_DIR}/src/zlib
-              DESCRIPTION "Zlib"
+              zlib-ng
+              DIR ${CMAKE_SOURCE_DIR}/src/zlib-ng
+              DESCRIPTION "Zlib-ng"
               BUILD ON
     )
 endif()

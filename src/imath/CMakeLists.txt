@@ -5,7 +5,7 @@
 # openexr Copyright
 # Copyright (c) 2002, Industrial Light & Magic, a division of Lucas Digital Ltd. LLC
 
-# imath from github.com 3.1.4 2022-03-19
+# imath from github.com 3.2.2 2026-03-14
 # https://github.com/AcademySoftwareFoundation/Imath
 
 build_info( " Adding openexr project" )
@@ -16,7 +16,7 @@ build_info( " Adding openexr project" )
 set( project_name "imath" )
 
 # project pkg
-set( project_pkg ${project_name}-3.1.4 )
+set( project_pkg ${project_name}-3.2.2 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -45,7 +45,7 @@ set( inc_dir
 
 # lib files
 set( lib_files
-    Imath-3_1
+    Imath-3_2
 )
 
 # pkgfiles
@@ -73,7 +73,7 @@ IF( UNIX )
     
         if ( APPLE )
             list( APPEND lib_output 
-                ${build_lib_dir}/${lib_prefix}${lib_file}${lib_dtag}.29.3.0${lib_suffix}
+                ${build_lib_dir}/${lib_prefix}${lib_file}${lib_dtag}.30.3.2.2${lib_suffix}
             )
 
 	    else()
@@ -124,7 +124,7 @@ IF( UNIX )
     # configure, make and install
     SET( build_make
         ${build_env} &&
-        cd Imath-3.1.4 &&
+        cd Imath-3.2.2 &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir}

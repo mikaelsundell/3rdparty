@@ -7,7 +7,6 @@ In progress improvements
 * Zlib pkg-config path is in root instead of lib
 * Experimental switch to Ninja
 
-
 In progress notes
 ---------------------------------
 * ninja moved to build_dir/ninja to not conflict in projects with clang, pyside.

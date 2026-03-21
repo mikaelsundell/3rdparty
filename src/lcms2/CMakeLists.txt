@@ -180,4 +180,4 @@ add_custom_target(
 )
 
 # dependencies
-add_dependencies( ${project_name} jpeg tiff zlib )
+add_dependencies( ${project_name} jpeg tiff zlib-ng )
