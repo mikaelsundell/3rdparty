@@ -1,5 +1,9 @@
 3rdparty changes:
 
+Update Apr 17 2026
+---------------------------------
+* Updated materialx to 1.39.4
+
 Update Mar 14 2026
 ---------------------------------
 * Updated openexr to 3.4.6
@@ -312,16 +316,16 @@ Update Apr 9 2013
 
 Update Jan 25 2013
 --------------------------------
-* Qt qstylesheetstyle patch.
-* Fixed install_pkg.sh sed syntax on macosx. 
-* Renamed text files to lowercase.
+* Qt qstylesheetstyle patch
+* Fixed install_pkg.sh sed syntax on macosx.
+* Renamed text files to lowercase
 
 Update Dec 22 2012
 --------------------------------
-* First linux release.
-* Build fixes.
+* First linux release
+* Build fixes
 
 Update Feb 8 2012
 --------------------------------
-* First package.
-* Removed tbb lib.
+* First package
+* Removed tbb

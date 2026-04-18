@@ -2,6 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
+# Nanobind Copyright
+# Copyright (c) 2022 Wenzel Jakob
+
 # nanobind from github.com v2.10.2 2025-12-25
 # https://github.com/wjakob/nanobind/tags
 

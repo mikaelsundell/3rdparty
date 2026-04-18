@@ -115,7 +115,7 @@ make build_viewers=1 ...  Build viewers
 make build_media=1 ...    Build media
 ```
 
-## Releases ##
+## Current release ##
 
 MacOS Tahoe v26.0.1  
 
@@ -171,15 +171,14 @@ Boost
 Copyright Beman Dawes, David Abrahams, 1998-2005
 Copyright Rene Rivera 2004-2007
 
-bzip2 Copyright 
+bzip2 
 Copyright © 1996-2007 Julian Seward
-
-CMake
-Copyright 2006-2010 Kitware, Inc
-Copyright 2006 Alexander Neundorf <neundorf@kde.org>
 
 Draco
 Copyright 2019 The Draco Authors
+
+Eigen
+Copyright (C) 2009-2015 Gael Guennebaud <gael.guennebaud@inria.fr>
 
 FFmpeg
 Copyright (c) Fabrice Bellard
@@ -215,20 +214,7 @@ Copyright (c) 1999-2000 The University of British Columbia
 Jpeg
 Copyright (C) 1991-1997, Thomas G. Lane
 
-GTest
-Copyright 2005, Google Inc
-
-HDF5
-Copyright by The HDF Group.
-Copyright by the Board of Trustees of the University of Illinois
-All rights reserved. 
-
-Ilmbase
-Copyright (c) 2002, Industrial Light & Magic, a division of Lucas Digital Ltd. LLC
-
 Json
-Licensed under the MIT License <http://opensource.org/licenses/MIT>.
-SPDX-License-Identifier: MIT
 Copyright (c) 2013-2022 Niels Lohmann <http://nlohmann.me>.
 
 Lcms2
@@ -243,6 +229,9 @@ Copyright (c) 1998-2009 Glenn Randers-Pehrson
 (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
 (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
 
+Libraw
+Copyright (C) 2008-2021 LibRaw LLC
+
 Libtool
 Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc
 
@@ -255,8 +244,8 @@ Copyright (C) 2022 The llvm project
 MaterialX
 TM & (c) 2017 Lucasfilm Entertainment Company Ltd. and Lucasfilm Ltd.
 
-NanoGUI
-NanoGUI was developed by Wenzel Jakob <wenzel.jakob@epfl.ch>.
+Nanobind
+Copyright (c) 2022 Wenzel Jakob
 
 Nasm
 1996-2017 The NASM Authors
@@ -264,15 +253,15 @@ Nasm
 Ninja
 Copyright 2011 Google Inc. All Rights Reserved.
 
-OCIO
-Copyright (c) 2003-2010 Sony Pictures Imageworks Inc., et al
-
 OIIO
 Copyright 2008 Larry Gritz and the other authors and contributors.
 All Rights Reserved.
 
 OneTBB
 Copyright (c) 2005-2021 Intel Corporation
+
+OpenCV
+Copyright © 2024 , OpenCV team
 
 OpenEXR
 Copyright (c) 2002, Industrial Light & Magic, a division of Lucas Digital Ltd. LLC
@@ -282,32 +271,23 @@ Copyright (c) 2002-2014, Universite catholique de Louvain (UCL), Belgium
 Copyright (c) 2002-2014, Professor Benoit Macq
 Copyright (c) 2010-2011, Kaori Hagihara
 
-OpenCV
-Copyright © 2024 , OpenCV team
-
 OpenSubDiv
-Copyright 2022 Pixar
-
-OpenUSD
 Copyright 2022 Pixar
 
 Pcre2
 Original API code Copyright (c) 1997-2012 University of Cambridge
 New API code Copyright (c) 2016-2020 University of Cambridge
 
+Pkg-config
+Copyright (C) 2001, 2002 Red Hat Inc.
+
 PTex
 Copyright 2014 Disney Enterprises, Inc.  All rights reserved
 
 Pybind
-Copyright (c) 2016 Wenzel Jakob <wenzel.jakob@epfl.ch>, All rights reserved
+Copyright (c) 2016 Wenzel Jakob <wenzel.jakob@epfl.ch>, All rights reserved.
 
-Pyside2
-Copyright (C) 2020 The Qt Company Ltd
-
-Pyside2-tools
-Copyright (C) 2020 The Qt Company Ltd
-
-Qt
+Pyside
 Copyright (C) 2020 The Qt Company Ltd
 
 Tclap
@@ -317,6 +297,9 @@ All rights reserved
 Tiff
 Copyright (c) 1988-1997 Sam Leffler
 Copyright (c) 1991-1997 Silicon Graphics, Inc.
+
+Usd
+Copyright 2022 Pixar
 
 x264 Copyright
 Copyright (C) 2003-2013 x264 project

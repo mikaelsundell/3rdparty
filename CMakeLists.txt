@@ -582,9 +582,9 @@ if( build_extras )
               BUILD ON
     )
     build_add_project(
-              usd
-              DIR ${CMAKE_SOURCE_DIR}/src/usd
-              DESCRIPTION "usd"
+              openusd
+              DIR ${CMAKE_SOURCE_DIR}/src/openusd
+              DESCRIPTION "openusd"
               BUILD ON
     )
 

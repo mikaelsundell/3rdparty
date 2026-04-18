@@ -6,7 +6,7 @@
 # TM & (c) 2017 Lucasfilm Entertainment Company Ltd. and Lucasfilm Ltd.
 # All rights reserved.  See LICENSE.txt for license.
 
-# materialx from github 2023-08-24
+# materialx from github 2026-04-17
 # https://github.com/AcademySoftwareFoundation/MaterialX
 
 build_info( " Adding materialx project" )
@@ -17,7 +17,7 @@ build_info( " Adding materialx project" )
 set( project_name "materialx" )
 
 # project pkg
-set( project_pkg ${project_name}-master-240217 )
+set( project_pkg "MaterialX-1.39.4" )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -100,7 +100,7 @@ if( UNIX )
     )
 
     # lib files
-    set( lib_version "1.38.8" )
+    set( lib_version "1.39.4" )
         
     foreach( lib_file ${lib_files} )
 
@@ -159,7 +159,7 @@ IF( UNIX )
     # configure, make and install
     set( build_make
         ${build_env} &&
-        cd MaterialX &&
+        cd ${project_pkg} &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
