@@ -1,6 +1,6 @@
 # <img src="images/icon.png" valign="middle" alt="Icon" width="50" height="50"> 3rdparty #
 
-3rdparty library for development and packaging of film and color applications.
+3rdparty library for development and packaging of color, film, and 3D applications, including pipelines and tools for OpenUSD, MaterialX, rendering, visualization, and digital content workflows.
 
 ![3rdparty.](images/image.png '3rdparty')
 
