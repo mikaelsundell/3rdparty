@@ -123,7 +123,7 @@ build_3rdparty() {
     # make base
     echo "Build 3rdparty base for type: $build_type"
     echo "MacOS target: $major_version"
-    make verbose=1 build_base=1 $build_type &&
+    make verbose=1 build_base=1 build_libs=0 build_extras=0 $build_type &&
 
     # path
     export PATH=$PATH:"$script_dir/build/macosx/$machine_arch.$build_type/ninja" &&
@@ -189,7 +189,7 @@ build_3rdparty() {
     ninja install  &&
 
     # make extras
-    echo "Build 3rdparty extras for type: $build_type"
+    echo "Build 3rdparty libs and extras for type: $build_type"
     cd "$script_dir"
     make verbose=1 build_libs=1 build_extras=1 $build_type
 }

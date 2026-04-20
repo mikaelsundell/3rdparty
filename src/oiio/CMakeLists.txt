@@ -142,7 +142,6 @@ if( UNIX )
     # PTex = Not used
     # R3DSDK = Not used
     # Nuke = Not used
-    # Qt = Not used
     # Libsquish = Not used
 
     set( build_config ${build_config} Boost_ROOT=${build_dir} )
@@ -153,7 +152,6 @@ if( UNIX )
     set( build_config ${build_config} PNG_ROOT=${build_dir} )
     set( build_config ${build_config} PTex_ROOT=${build_dir} )
     set( build_config ${build_config} TIFF_ROOT=${build_dir} )
-    set( build_config ${build_config} Qt5_ROOT=${build_dir} )
 
     # TBB - Use internal
     set( build_config ${build_config} USE_TBB=0 )
