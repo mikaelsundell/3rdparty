@@ -60,30 +60,17 @@ pyside
 sources/pyside6/cmake/Macros/PySideModules.cmake
 * Line 355: Added "${CMAKE_BINARY_DIR}/sources" for build path to Shiboken6
 
-qt
---------------------------------- 
-qtbase/src/gui/painting/qcoregraphics.mm
-* Line 9: Added #include <QtGui/qcolorspace.h>
-* Line 87-99: Added ICC profile support in Qt core graphics
-
-usd_from_gltf
----------------------------------
-gltf/CMakeLists.txt
-* Line 15: Changed from find_library to find_path for single header json.hpp
-
-* build notes
-cmake ../ 
--DUSD_DIR=/Volumes/Build/3rdparty/build/macosx/arm64.debug 
--Djson_DIR=/Volumes/Build/3rdparty/build/macosx/arm64.debug/include/nlohmann 
--DCMAKE_PREFIX_PATH=/Volumes/Build/3rdparty/build/macosx/arm64.debug 
--DCMAKE_MODULE_PATH=/Users/mikaelsundell/Git/usd_from_gltf/cmake/modules 
--DDRACO_ROOT=/Volumes/Build/3rdparty/build/macosx/arm64.debug 
--Ddclap_DIR=/Volumes/Build/3rdparty/build/macosx/arm64.debug/include/tclap
-
 zlib
 ---------------------------------
 CMakeLists.txt
 * Fixed pkgconfig for CMake
+
+openusd
+---------------------------------
+pxr/imaging/hdSt/materialXShaderGen.cpp
+
+Patch:
+https://github.com/mistafunk/USD/commit/4978aa8143bdd64f07c410828278aacf1b2bb005#diff-b11dbfbf3666a7281d79be4af1686efc3839d4fde8a747ff8e9e440346a2f664
 
 3rdparty buckets:
 
