@@ -16,7 +16,7 @@ build_info( " Adding onetbb project" )
 set( project_name "onetbb" )
 
 # project pkg
-set( project_pkg oneTBB-2022.0.0 )
+set( project_pkg oneTBB-2022.3.0 )
 
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
@@ -63,8 +63,8 @@ if( UNIX )
         set( lib_dtag "_debug" )
     endif()
 
-    set( default_version "12.14" )
-    set( tbb_version "2.14" )
+    set( default_version "12.17" )
+    set( tbb_version "2.17" )
     
     foreach( lib_file ${lib_files} )
         if( lib_file MATCHES "malloc|proxy" )

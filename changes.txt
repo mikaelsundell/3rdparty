@@ -1,5 +1,9 @@
 3rdparty changes:
 
+Update Sep 15 2026
+---------------------------------
+* Updated onetbb to 2022.3.0
+
 Update Apr 17 2026
 ---------------------------------
 * Updated materialx to 1.39.4
