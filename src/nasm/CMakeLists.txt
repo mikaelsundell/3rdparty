@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# nasm Copyright
-# 1996-2017 The NASM Authors
-
-# nasm from github.com 2.16.01
-# https://github.com/netwide-assembler/nasm
+# Upstream package: nasm-nasm-2.16.01
+# Archive: nasm-nasm-2.16.01.tar.gz
+# Upstream copyright and license notices: licenses/third-party/nasm/
 
 build_info( " Adding nasm project" )
 
@@ -94,7 +92,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -105,11 +103,11 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} automake )
+build_add_dependencies( ${project_name} automake )

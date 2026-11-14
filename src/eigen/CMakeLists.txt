@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# eigen3 Copyright
-# Copyright (C) 2009-2015 Gael Guennebaud <gael.guennebaud@inria.fr>
-
-# eigen3 from gitlab.com master 2022-06-01
-# https://gitlab.com/libeigen/eigen
+# Upstream package: eigen-master
+# Archive: eigen-master.tar.gz
+# Upstream copyright and license notices: licenses/third-party/eigen/
 
 build_info( " Adding eigen project" )
 
@@ -113,7 +111,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${dir_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -125,7 +123,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${dir_output}

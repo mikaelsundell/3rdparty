@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# LLVM Copyright
-# Copyright (C) 2024 The llvm project.
-
-# llvm from github 2025-01-28
-# https://github.com/llvm/llvm-project/releases/tag/llvmorg-16.0.6
+# Upstream package: llvm-project-16.0.6.src
+# Archive: llvm-project-16.0.6.src.tar.gz
+# Upstream copyright and license notices: licenses/third-party/llvm/
 
 build_info( " Adding llvm project" )
 
@@ -437,7 +435,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -448,11 +446,8 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${lib_output}
 )
-
-# dependencies
-add_dependencies( ${project_name} llvm )

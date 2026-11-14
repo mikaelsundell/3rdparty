@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# openexr Copyright
-# Copyright (c) 2002, Industrial Light & Magic, a division of Lucas Digital Ltd. LLC
-
-# openexr from github.com 3.4.6 2026-03-14
-# https://github.com/AcademySoftwareFoundation/openexr
+# Upstream package: openexr-3.4.6
+# Archive: openexr-3.4.6.tar.gz
+# Upstream copyright and license notices: licenses/third-party/openexr/
 
 build_info( " Adding openexr project" )
 
@@ -169,7 +167,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -181,11 +179,11 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} imath boost zlib-ng )
+build_add_dependencies( ${project_name} imath boost zlib-ng )

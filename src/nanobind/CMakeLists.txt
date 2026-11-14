@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# Nanobind Copyright
-# Copyright (c) 2022 Wenzel Jakob
-
-# nanobind from github.com v2.10.2 2025-12-25
-# https://github.com/wjakob/nanobind/tags
+# Upstream package: nanobind-master-251225
+# Archive: nanobind-master-251225.tar.gz
+# Upstream copyright and license notices: licenses/third-party/nanobind/
 
 build_info( " Adding nanobind project" )
 
@@ -101,7 +99,7 @@ if( UNIX )
 
     # run
 
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${include_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -112,7 +110,7 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${include_output}

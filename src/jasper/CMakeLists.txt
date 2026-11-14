@@ -2,13 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# jasper Copyright
-# Copyright (c) 2001-2006 Michael David Adams
-# Copyright (c) 1999-2000 Image Power, Inc.
-# Copyright (c) 1999-2000 The University of British Columbia
-
-# jasper from github.com/jasper-software/jasper 2020-10-25
-# https://github.com/jasper-software/jasper
+# Upstream package: jasper-master
+# Archive: None
+# Upstream copyright and license notices: licenses/third-party/jasper/
 
 build_info( " Adding jasper project" )
 
@@ -122,7 +118,7 @@ if( UNIX )
 
     # run
 
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -133,7 +129,7 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}

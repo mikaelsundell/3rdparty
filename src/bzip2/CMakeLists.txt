@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# bzip2 Copyright
-# Copyright © 1996-2007 Julian Seward.
-
-# bzip2 from bzip.org 2012-12-15
-# http://www.bzip.org/
+# Upstream package: bzip2-1.0.6
+# Archive: bzip2-1.0.6.tar.gz
+# Upstream copyright and license notices: licenses/third-party/bzip2/
 
 build_info( " Adding bzip2 project" )
 
@@ -131,7 +129,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${inc_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -143,7 +141,7 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${bin_output} ${lib_output}

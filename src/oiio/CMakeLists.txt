@@ -2,12 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# OIIO Copyright
-# Copyright 2008 Larry Gritz and the other authors and contributors.
-# All Rights Reserved.
-
-# oiio from github.com v3.1.8.0 2025-12-18
-# https://github.com/AcademySoftwareFoundation/OpenImageIO/releases
+# Upstream package: OpenImageIO-3.1.8.0
+# Archive: OpenImageIO-3.1.8.0.tar.gz
+# Upstream copyright and license notices: licenses/third-party/oiio/
 
 build_info( " Adding oiio project" )
 
@@ -200,7 +197,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -211,11 +208,11 @@ if( UNIX )
 
 endif()
 
-# custom target, always run
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} boost freetype glew jasper giflib jpeg libpng libraw libwebp ocio openjpeg openexr pkg-config ptex pybind tiff ffmpeg zlib-ng )
+build_add_dependencies( ${project_name} boost freetype glew jasper giflib jpeg libpng libraw libwebp ocio openjpeg openexr pkg-config ptex pybind tiff ffmpeg zlib-ng )

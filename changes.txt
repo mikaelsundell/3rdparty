@@ -1,5 +1,23 @@
 3rdparty changes:
 
+Update Nov 14 2026
+---------------------------------
+* Fixed per-package CMake switches and added dependency validation
+* Added libpng's dependency on zlib-ng and removed LLVM's self-dependency
+* Track recipe, flag, and supporting-file changes for incremental builds
+* Use FindPython3 for matching interpreter, version, headers, and library files
+* Require CMake 3.27 and provide a fallback for CPU-count detection
+* Select Debug/Release explicitly for Qt builds and installs using Ninja
+* Reconfigure reused Qt builds and remove the Qt Multimedia exclusion
+* Track Qt module changes in PySide and verify Multimedia bindings
+* Apply the ARM intrinsic header fix for Qt 6.10.1 with AppleClang 21
+* Remove unused build options and add fast configuration regression checks
+* Document Qt/PySide rebuilds, cleaning behavior, and SDK compatibility limits
+* Standardize all repository CMake copyright/SPDX headers and add LICENSE
+* Replace stale dependency copyright summaries with verbatim notice references
+* Add third-party notice provenance and checksums; flag unverified media/artwork
+* Static-library support and full dependency builds remain unvalidated
+
 Update Sep 15 2026
 ---------------------------------
 * Updated onetbb to 2022.3.0

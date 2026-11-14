@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# nanogui Copyright
-# NanoGUI was developed by Wenzel Jakob <wenzel.jakob@epfl.ch>.
-
-# nanogui from github 2024-02-16
-# https://github.com/mitsuba-renderer/nanogui
+# Upstream package: nanogui-master-240216
+# Archive: nanogui-master-240216.tar.gz
+# Upstream copyright and license notices: licenses/third-party/nanogui/
 
 build_info( " Adding nanogui project" )
 
@@ -124,7 +122,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -136,11 +134,11 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} pybind )
+build_add_dependencies( ${project_name} pybind )

@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# automake Copyright
-# Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc.
-
-# automake from ftp.gnu.org 2021-10-03
-# http://ftp.gnu.org/gnu/automake/
+# Upstream package: automake-1.16.5
+# Archive: automake-1.16.5.tar.gz
+# Upstream copyright and license notices: licenses/third-party/automake/
 
 build_info( " Adding automake library" )
 
@@ -134,7 +132,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -145,11 +143,11 @@ if( UNIX )
 
 ENDIF()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} autoconf )
+build_add_dependencies( ${project_name} autoconf )

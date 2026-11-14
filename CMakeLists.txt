@@ -1,14 +1,10 @@
-##-*****************************************************************************
-##  Copyright 2012-present Mikael Sundell and the other authors and contributors.
-##  All Rights Reserved.
-##
-##  Master CMakeLists.txt for 3rdparty
-##  
-##  Run 'make help' to list helpful options.
-##
-##-*****************************************************************************
+# Copyright 2012-present Mikael Sundell and the other authors and contributors.
+# SPDX-License-Identifier: BSD-3-Clause
+# https://github.com/mikaelsundell/3rdparty
+#
+# Master CMakeLists.txt for 3rdparty. Run 'make help' for build options.
 
-cmake_minimum_required( VERSION 3.5 )
+cmake_minimum_required( VERSION 3.27 )
 
 # project configuration
 message( STATUS "Project configuration" )
@@ -44,20 +40,6 @@ set( build_extras
     CACHE
     BOOL
     "Build extras"
-)
-
-set( build_autotools 
-    OFF
-    CACHE
-    BOOL
-    "Build autotools"
-)
-
-set( build_tests
-    OFF
-    CACHE
-    BOOL
-    "Build tests" 
 )
 
 set( build_media
@@ -157,11 +139,10 @@ else()
 endif()
 
 # test if wget is present
-exec_program( command ARGS -v wget OUTPUT_VARIABLE wget )
+find_program( wget wget )
 if ( wget )
     SET( download wget -N --verbose )
 else()
-# -C skips the file if it's already downloaded
     set( download curl -OJL --verbose )
 endif()
 
@@ -204,38 +185,24 @@ set( sitepackage_suffix ".so" )
 # define arch
 set( lib_arch ${CMAKE_SYSTEM_PROCESSOR} )
 
-# define cpus
-if( UNIX )
-    if( APPLE )
-        find_program( cmd_sysctl "sysctl")
-        if( cmd_sysctl )
-            execute_process( COMMAND ${cmd_sysctl} -n hw.physicalcpu OUTPUT_VARIABLE cpus )
-            string( REGEX MATCH "([0-9]+)" num_cpus "${cpus}" )
-        endif()
-    else()
-        set( cpuinfo_file "/proc/cpuinfo" )
-        if( exists "${cpuinfo_file}" )
-            file( STRINGS "${cpuinfo_file}" procs REGEX "^processor.: [0-9]+$" )
-            list( LENGTH procs num_cpus )
-        endif()
-    endif()
+# Define a bounded parallelism even when CPU detection is unavailable.
+include(ProcessorCount)
+ProcessorCount(num_cpus)
+if(NOT num_cpus GREATER 0)
+    set(num_cpus 1)
 endif()
+set(build_flags ${build_flags} -j${num_cpus} --load-average=${num_cpus})
 
-set( build_flags ${build_flags} -j${num_cpus} --load-average=${num_cpus} )
-
-# define python3
-if ( UNIX )
-    if ( APPLE )
-        # build relies on python3 version for both
-        # naming of files and project configuration
-        build_find_python3( 
-            build_python3 
-            build_python3_version
-            build_python3_versiontag
-            build_python3_include_dir
-            build_python3_library_dir 
-        )
-    endif()
+# Python names and development files must describe the same interpreter.
+if(UNIX)
+    build_find_python3(
+        build_python3
+        build_python3_version
+        build_python3_versiontag
+        build_python3_include_dir
+        build_python3_library
+    )
+    get_filename_component(build_python3_library_dir "${build_python3_library}" DIRECTORY)
 endif()
 
 # define environment
@@ -618,6 +585,9 @@ if( build_media )
               BUILD ON
     )
 endif()
+
+# Validate dependencies after every enabled target has been registered.
+build_validate_dependencies()
 
 # summary
 if( build_summary )

@@ -2,11 +2,8 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# jpeg Copyright
-# Copyright (C) 1991-1997, Thomas G. Lane.
-
-# jpeg images from ijg.org 8c 2011-11-18
-# http://www.ijg.org/files/
+# Upstream media package: jpeg2000_images
+# Upstream licensing: see THIRD_PARTY_NOTICES.md (archive not verified locally).
 
 build_info( " Adding jpeg2000_images images" )
 
@@ -72,7 +69,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${media_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -81,7 +78,7 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${media_name} ALL
     DEPENDS ${media_output}

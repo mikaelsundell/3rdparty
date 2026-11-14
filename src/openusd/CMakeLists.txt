@@ -2,13 +2,11 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# usd Copyright
-# Copyright 2022 Pixar
+# Upstream package: OpenUSD-25.11
+# Archive: OpenUSD-25.11.tar.gz
+# Upstream copyright and license notices: licenses/third-party/openusd/
 
-# openusd from github.com 25.11 2025-12-20
-# https://github.com/PixarAnimationStudios/OpenUSD/releases/tag/v25.11
-
-build_info( " Adding usd project" )
+build_info( " Adding openusd project" )
 
 # project configuration
 
@@ -181,7 +179,7 @@ IF( UNIX )
               -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
               -DPYTHON_EXECUTABLE=${build_python3}
               -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
-              -DPYTHON_LIBRARY=${build_python3_library_dir}
+              -DPYTHON_LIBRARY=${build_python3_library}
               ${build_options}
               ${build_config} &&
         make ${build_flags} &&
@@ -209,7 +207,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -220,11 +218,11 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${include_output} ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} alembic draco materialx onetbb opensubdiv ptex pybind pyside )
+build_add_dependencies( ${project_name} alembic draco materialx onetbb opensubdiv ptex pybind pyside )

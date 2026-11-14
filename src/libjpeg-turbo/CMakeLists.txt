@@ -2,12 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# jpeg-turbo Copyright
-# Copyright (C) 1994-1997, Thomas G. Lane.
-# Modified 2019 by Guido Vollbeding.
-
-# jpeg-turbo from github.com 2022-03-29
-# https://github.com/libjpeg-turbo/libjpeg-turbo/releases/tag/2.1.3
+# Upstream package: libjpeg-turbo-2.1.3
+# Archive: libjpeg-turbo-2.1.3.tar.gz
+# Upstream copyright and license notices: licenses/third-party/libjpeg-turbo/
 
 build_info( " Adding libjpeg-turbo project" )
 
@@ -119,7 +116,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -130,7 +127,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${lib_output}

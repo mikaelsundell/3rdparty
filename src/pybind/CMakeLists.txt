@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# Pybind Copyright
-# Copyright (c) 2016 Wenzel Jakob <wenzel.jakob@epfl.ch>, All rights reserved.
-
-# pybind from github.com 2.9.1 2022-03-19
-# https://github.com/pybind/pybind11
+# Upstream package: pybind11-2.9.1
+# Archive: pybind11-2.9.1.tar.gz
+# Upstream copyright and license notices: licenses/third-party/pybind/
 
 build_info( " Adding pybind project" )
 
@@ -82,13 +80,13 @@ IF( UNIX )
             -DCMAKE_INSTALL_PREFIX=${build_dir} ${build_options} 
             -DPYTHON_EXECUTABLE=${build_python3}
             -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
-            -DPYTHON_LIBRARY=${build_python3_library_dir} &&
+            -DPYTHON_LIBRARY=${build_python3_library} &&
         make ${build_flags} &&
         make install
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${inc_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -97,7 +95,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always run
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${inc_output}

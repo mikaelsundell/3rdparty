@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# x264 Copyright
-# Copyright (C) 2003-2013 x264 project
-
-# x264 from ftp.videolan.org 2014-02-04
-# ftp://ftp.videolan.org/pub/videolan/x264/snapshots/
+# Upstream package: x264-master
+# Archive: x264-master.tar.bz2
+# Upstream copyright and license notices: licenses/third-party/x264/
 
 build_info( " Adding x264 project" )
 
@@ -133,7 +131,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -144,11 +142,11 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} nasm yasm )
+build_add_dependencies( ${project_name} nasm yasm )

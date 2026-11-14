@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# zlib-ng Copyright
-# Maintained by Hans Kristian Rosbach aka Dead2 (zlib-ng àt circlestorm dót org)
-
-# zlib-ng 2.3.3 from github 2026-03-14
-# https://github.com/zlib-ng/zlib-ng/releases/tag/2.3.3
+# Upstream package: zlib-ng-2.3.3
+# Archive: zlib-ng-2.3.3.tar.gz
+# Upstream copyright and license notices: licenses/third-party/zlib-ng/
 
 build_info( " Adding zlib-ng project" )
 
@@ -117,7 +115,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -128,7 +126,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${lib_output}

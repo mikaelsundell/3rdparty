@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# opensubdiv Copyright
-# Copyright 2022 Pixar
-
-# opensubdiv from github.com master 2025-03-06
-# https://github.com/PixarAnimationStudios/OpenSubdiv
+# Upstream package: OpenSubdiv-master-250306
+# Archive: OpenSubdiv-master-250306.tar.gz
+# Upstream copyright and license notices: licenses/third-party/opensubdiv/
 
 build_info( " Adding opensubdiv project" )
 
@@ -129,7 +127,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -140,11 +138,11 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} onetbb ptex pybind )
+build_add_dependencies( ${project_name} onetbb ptex pybind )

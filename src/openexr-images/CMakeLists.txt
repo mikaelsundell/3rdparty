@@ -2,11 +2,8 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# openexr-images Copyright
-# Copyright (c) 2002, Industrial Light & Magic, a division of Lucas Digital Ltd. LLC
-
-# openexr-images from openexr.com 1.0.2 2011-10-16
-# http://www.openexr.com/downloads.html
+# Upstream media package: openexr-images-1.7.0
+# Upstream licensing: see THIRD_PARTY_NOTICES.md (archive not verified locally).
 
 build_info( " Adding openexr-images images" )
 
@@ -72,7 +69,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${media_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -81,7 +78,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${media_name} ALL
     DEPENDS ${media_output}

@@ -66,13 +66,12 @@ fi
 
 if [ $INCLUDEDIR ]; then
     echo `python3 -c \
-        "from distutils.sysconfig \
-         import get_python_inc; \
-         print(get_python_inc())"`
+        "import sysconfig; \
+         print(sysconfig.get_path('include'))"`
 fi
 
 if [ $LIBRARYDIR ]; then
     echo `python3 -c \
-        "import distutils.sysconfig as sysconfig; \
+        "import sysconfig; \
          print(sysconfig.get_config_var('LIBDIR'))"` # this gives the library inside the framework
 fi

@@ -2,13 +2,11 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# openexr Copyright
-# Copyright (c) 2002, Industrial Light & Magic, a division of Lucas Digital Ltd. LLC
+# Upstream package: imath-3.2.2
+# Archive: imath-3.2.2.tar.gz
+# Upstream copyright and license notices: licenses/third-party/imath/
 
-# imath from github.com 3.2.2 2026-03-14
-# https://github.com/AcademySoftwareFoundation/Imath
-
-build_info( " Adding openexr project" )
+build_info( " Adding imath project" )
 
 # project configuration
 
@@ -155,7 +153,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -167,7 +165,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}

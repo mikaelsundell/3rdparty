@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# ptex Copyright
-# Copyright 2014 Disney Enterprises, Inc.  All rights reserved
-
-# ptex from github.com master 2022-03-19
-# https://github.com/wdas/ptex
+# Upstream package: ptex-master-220319
+# Archive: ptex-master-220319.tar.gz
+# Upstream copyright and license notices: licenses/third-party/ptex/
 
 build_info( " Adding ptex project" )
 
@@ -132,7 +130,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -143,11 +141,11 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} zlib-ng )
+build_add_dependencies( ${project_name} zlib-ng )

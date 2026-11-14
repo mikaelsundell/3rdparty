@@ -1,0 +1,1030 @@
+{
+  "reviewed": "2026-11-14",
+  "scope": "Top-level upstream notices from local extracted sources; per-file and bundled component notices remain in their source distributions.",
+  "packages": [
+    {
+      "package": "alembic",
+      "recipe": "src/alembic/CMakeLists.txt",
+      "source_package": "alembic-master",
+      "archive": "alembic-master.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/alembic/LICENSE.txt",
+          "source": "build/macosx/arm64.release/src/alembic/alembic/LICENSE.txt",
+          "sha256": "00a7b288ee40635e15adf85703b0fb3be3ef2f3000beb74d21c1f19b19147906"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "autoconf",
+      "recipe": "src/autoconf/CMakeLists.txt",
+      "source_package": "autoconf-2.71",
+      "archive": "autoconf-2.71.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/autoconf/AUTHORS",
+          "source": "build/macosx/arm64.release/src/autoconf/autoconf-2.71/AUTHORS",
+          "sha256": "950ba1c498155ab16cb553db7051acae59230ddb40e3a68ed5ed0f9734605dfc"
+        },
+        {
+          "path": "licenses/third-party/autoconf/COPYING",
+          "source": "build/macosx/arm64.release/src/autoconf/autoconf-2.71/COPYING",
+          "sha256": "4e60a9849b8eb452af000170e5d4f01954070e3b621f2056002ea21f98dbada2"
+        },
+        {
+          "path": "licenses/third-party/autoconf/COPYING.EXCEPTION",
+          "source": "build/macosx/arm64.release/src/autoconf/autoconf-2.71/COPYING.EXCEPTION",
+          "sha256": "1f1cde9fb68b9b3cff18c420894bec5bd4defacd700b7d13df54a887301e5350"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "automake",
+      "recipe": "src/automake/CMakeLists.txt",
+      "source_package": "automake-1.16.5",
+      "archive": "automake-1.16.5.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/automake/AUTHORS",
+          "source": "build/macosx/arm64.release/src/automake/automake-1.16.5/AUTHORS",
+          "sha256": "8cd3c7537054938b1e2bdced4845250ba12c406ef38bf0418138a59119013284"
+        },
+        {
+          "path": "licenses/third-party/automake/COPYING",
+          "source": "build/macosx/arm64.release/src/automake/automake-1.16.5/COPYING",
+          "sha256": "ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "boost",
+      "recipe": "src/boost/CMakeLists.txt",
+      "source_package": "boost_1_87_0",
+      "archive": "boost_1_87_0.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/boost/LICENSE_1_0.txt",
+          "source": "build/macosx/arm64.release/src/boost/boost_1_87_0/LICENSE_1_0.txt",
+          "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "bzip2",
+      "recipe": "src/bzip2/CMakeLists.txt",
+      "source_package": "bzip2-1.0.6",
+      "archive": "bzip2-1.0.6.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/bzip2/LICENSE",
+          "source": "build/macosx/arm64.release/src/bzip2/bzip2-1.0.6/LICENSE",
+          "sha256": "4919cfb14a73cd64fcef67b107613970cf1659a09aa675dba31314f373bc7204"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "ceres-solver",
+      "recipe": "src/ceres-solver/CMakeLists.txt",
+      "source_package": "ceres-solver-master",
+      "archive": "ceres-solver-master.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/ceres-solver/LICENSE",
+          "source": "build/macosx/arm64.release/src/ceres-solver/ceres-solver-master/LICENSE",
+          "sha256": "8bff046a8f8993b79f30919519849c9d6b811b378d1b0bf336ff82534c539b03"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "draco",
+      "recipe": "src/draco/CMakeLists.txt",
+      "source_package": "draco-1.5.2",
+      "archive": "draco-1.5.2.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/draco/AUTHORS",
+          "source": "build/macosx/arm64.release/src/draco/draco-1.5.2/AUTHORS",
+          "sha256": "7399754545fa82fbf402e3e91d50de0b63772870fd807c48dd9af25c042efb10"
+        },
+        {
+          "path": "licenses/third-party/draco/LICENSE",
+          "source": "build/macosx/arm64.release/src/draco/draco-1.5.2/LICENSE",
+          "sha256": "d3709b0fb4b8a94bbb1d02b8a2e484f258b0d9c5c5a01f940391f3fe662cd1a4"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "eigen",
+      "recipe": "src/eigen/CMakeLists.txt",
+      "source_package": "eigen-master",
+      "archive": "eigen-master.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/eigen/COPYING.APACHE",
+          "source": "build/macosx/arm64.release/src/eigen/eigen-master/COPYING.APACHE",
+          "sha256": "03379001a7b12a2ec997a25554247d985270b353c10d5bafee9ac8d6519820b7"
+        },
+        {
+          "path": "licenses/third-party/eigen/COPYING.BSD",
+          "source": "build/macosx/arm64.release/src/eigen/eigen-master/COPYING.BSD",
+          "sha256": "51928dce36213c5333ba3172e847d735d4c6e9b7ff2722a326c49067155b82eb"
+        },
+        {
+          "path": "licenses/third-party/eigen/COPYING.MINPACK",
+          "source": "build/macosx/arm64.release/src/eigen/eigen-master/COPYING.MINPACK",
+          "sha256": "c87b7f8ee88f6195e91743820c00354833583aef091b72e2d4a49c8e28e798a0"
+        },
+        {
+          "path": "licenses/third-party/eigen/COPYING.MPL2",
+          "source": "build/macosx/arm64.release/src/eigen/eigen-master/COPYING.MPL2",
+          "sha256": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172"
+        },
+        {
+          "path": "licenses/third-party/eigen/COPYING.README",
+          "source": "build/macosx/arm64.release/src/eigen/eigen-master/COPYING.README",
+          "sha256": "db640ff2bd90c6abd6a4d3fbb351e0ee4d555417cf840492054d1cbb2ea85644"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "ffmpeg",
+      "recipe": "src/ffmpeg/CMakeLists.txt",
+      "source_package": "ffmpeg-4.3",
+      "archive": "ffmpeg-4.3.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/ffmpeg/COPYING.GPLv2",
+          "source": "build/macosx/arm64.release/src/ffmpeg/ffmpeg-4.3/COPYING.GPLv2",
+          "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+        },
+        {
+          "path": "licenses/third-party/ffmpeg/COPYING.GPLv3",
+          "source": "build/macosx/arm64.release/src/ffmpeg/ffmpeg-4.3/COPYING.GPLv3",
+          "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+        },
+        {
+          "path": "licenses/third-party/ffmpeg/COPYING.LGPLv2.1",
+          "source": "build/macosx/arm64.release/src/ffmpeg/ffmpeg-4.3/COPYING.LGPLv2.1",
+          "sha256": "b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe"
+        },
+        {
+          "path": "licenses/third-party/ffmpeg/COPYING.LGPLv3",
+          "source": "build/macosx/arm64.release/src/ffmpeg/ffmpeg-4.3/COPYING.LGPLv3",
+          "sha256": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768"
+        },
+        {
+          "path": "licenses/third-party/ffmpeg/LICENSE.md",
+          "source": "build/macosx/arm64.release/src/ffmpeg/ffmpeg-4.3/LICENSE.md",
+          "sha256": "cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "freetype",
+      "recipe": "src/freetype/CMakeLists.txt",
+      "source_package": "freetype-2.10.0",
+      "archive": "freetype-2.10.0.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/freetype/docs/FTL.TXT",
+          "source": "build/macosx/arm64.release/src/freetype/freetype-2.10.0/docs/FTL.TXT",
+          "sha256": "08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1"
+        },
+        {
+          "path": "licenses/third-party/freetype/docs/GPLv2.TXT",
+          "source": "build/macosx/arm64.release/src/freetype/freetype-2.10.0/docs/GPLv2.TXT",
+          "sha256": "c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18"
+        },
+        {
+          "path": "licenses/third-party/freetype/docs/LICENSE.TXT",
+          "source": "build/macosx/arm64.release/src/freetype/freetype-2.10.0/docs/LICENSE.TXT",
+          "sha256": "fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "gettext",
+      "recipe": "src/gettext/CMakeLists.txt",
+      "source_package": "gettext-0.18.3.1",
+      "archive": "gettext-0.18.3.1.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/gettext/AUTHORS",
+          "source": "build/macosx/arm64.release/src/gettext/gettext-0.18.3.1/AUTHORS",
+          "sha256": "b5a0860df3e21b2bfdef52893bfcdd5ca3a81f3714d5591682c845a1cbf46359"
+        },
+        {
+          "path": "licenses/third-party/gettext/COPYING",
+          "source": "build/macosx/arm64.release/src/gettext/gettext-0.18.3.1/COPYING",
+          "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "giflib",
+      "recipe": "src/giflib/CMakeLists.txt",
+      "source_package": "giflib-5.1.4",
+      "archive": null,
+      "notices": [
+        {
+          "path": "licenses/third-party/giflib/AUTHORS",
+          "source": "build/macosx/arm64.release/src/giflib/giflib-5.1.4/AUTHORS",
+          "sha256": "5788998d4049d18f79c130370fc162af5dbc9ec1f9d117345f749146e8d04fd7"
+        },
+        {
+          "path": "licenses/third-party/giflib/COPYING",
+          "source": "build/macosx/arm64.release/src/giflib/giflib-5.1.4/COPYING",
+          "sha256": "0c9b7990ecdca88b676db232c226548ac408b279f550d424d996f0d83591dd8e"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "glew",
+      "recipe": "src/glew/CMakeLists.txt",
+      "source_package": "glew-2.2.0",
+      "archive": "glew-2.2.0.tgz",
+      "notices": [
+        {
+          "path": "licenses/third-party/glew/LICENSE.txt",
+          "source": "build/macosx/arm64.release/src/glew/glew-2.2.0/LICENSE.txt",
+          "sha256": "8991cd11befec7c6a63662700f03c0cc42e864b6e77c7e70b80297c951a7f0ff"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "glm",
+      "recipe": "src/glm/CMakeLists.txt",
+      "source_package": "glm-0.9.4.3",
+      "archive": "glm-0.9.4.3.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/glm/copying.txt",
+          "source": "build/macosx/arm64.release/src/glm/glm-0.9.4.3/copying.txt",
+          "sha256": "c305dba60d6686067dba9f51169cf96746671bfd92f9288f2414da24ea171aa5"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "glog",
+      "recipe": "src/glog/CMakeLists.txt",
+      "source_package": "glog-master",
+      "archive": "glog-master.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/glog/AUTHORS",
+          "source": "build/macosx/arm64.release/src/glog/glog-master/AUTHORS",
+          "sha256": "4a68c5e621d848d2825b398cde7519b1ba2634d7aced9bc7e17ac24a325a7dfe"
+        },
+        {
+          "path": "licenses/third-party/glog/COPYING",
+          "source": "build/macosx/arm64.release/src/glog/glog-master/COPYING",
+          "sha256": "0fc497129c5c69ff6f22da6933c7e4aaef082fde8437fd57680c2780100772a4"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "harfbuzz",
+      "recipe": "src/harfbuzz/CMakeLists.txt",
+      "source_package": "harfbuzz-4.3.0",
+      "archive": "harfbuzz-4.3.0.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/harfbuzz/AUTHORS",
+          "source": "build/macosx/arm64.release/src/harfbuzz/harfbuzz-4.3.0/AUTHORS",
+          "sha256": "19bfe8f5ed100636cd24ab0c90a3f71c21d8b02d9ba00719447a0faab364d49f"
+        },
+        {
+          "path": "licenses/third-party/harfbuzz/COPYING",
+          "source": "build/macosx/arm64.release/src/harfbuzz/harfbuzz-4.3.0/COPYING",
+          "sha256": "4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "imath",
+      "recipe": "src/imath/CMakeLists.txt",
+      "source_package": "imath-3.2.2",
+      "archive": "imath-3.2.2.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/imath/LICENSE.md",
+          "source": "build/macosx/arm64.release/src/imath/Imath-3.2.2/LICENSE.md",
+          "sha256": "c20236d3b39fd20eba8e3d1fb3b892a5483df2e7d8d61bf43f165d3fac22f601"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "jasper",
+      "recipe": "src/jasper/CMakeLists.txt",
+      "source_package": "jasper-master",
+      "archive": null,
+      "notices": [
+        {
+          "path": "licenses/third-party/jasper/COPYRIGHT",
+          "source": "build/macosx/arm64.release/src/jasper/jasper-master/COPYRIGHT",
+          "sha256": "cc32790553f3c5ab1b7743cc75ec62bb2c36b10ff4850c80d4ad943b76b3bfe0"
+        },
+        {
+          "path": "licenses/third-party/jasper/LICENSE",
+          "source": "build/macosx/arm64.release/src/jasper/jasper-master/LICENSE",
+          "sha256": "4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "jpeg",
+      "recipe": "src/jpeg/CMakeLists.txt",
+      "source_package": "jpeg",
+      "archive": "jpegsrc.v9f.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/jpeg/README",
+          "source": "build/macosx/arm64.release/src/jpeg/jpeg-9f/README",
+          "sha256": "7c25493a9f64fed34d01445467341bda77bc1cdbeccbe33558659ef173fb9ff2"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "jpeg2000_images",
+      "recipe": "src/jpeg2000_images/CMakeLists.txt",
+      "source_package": "jpeg2000_images",
+      "archive": null,
+      "notices": [],
+      "status": "Unverified: media archive not available locally",
+      "archive_expression": "${project_pkg}.tar.gz"
+    },
+    {
+      "package": "json",
+      "recipe": "src/json/CMakeLists.txt",
+      "source_package": "json-master-231214",
+      "archive": "json-master-231214.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/json/LICENSE.MIT",
+          "source": "build/macosx/arm64.release/src/json/json/LICENSE.MIT",
+          "sha256": "86b998c792894ccb911a1cb7994f7a9652894e7a094c0b5e45be2f553f45cf14"
+        },
+        {
+          "path": "licenses/third-party/json/LICENSES/Apache-2.0.txt",
+          "source": "build/macosx/arm64.release/src/json/json/LICENSES/Apache-2.0.txt",
+          "sha256": "074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff"
+        },
+        {
+          "path": "licenses/third-party/json/LICENSES/BSD-3-Clause.txt",
+          "source": "build/macosx/arm64.release/src/json/json/LICENSES/BSD-3-Clause.txt",
+          "sha256": "5a93d5831e1297ab10fe643e1a631e83be392896da14ee2951285a79012df69d"
+        },
+        {
+          "path": "licenses/third-party/json/LICENSES/GPL-3.0-only.txt",
+          "source": "build/macosx/arm64.release/src/json/json/LICENSES/GPL-3.0-only.txt",
+          "sha256": "b6a8bf63ae2c95b0aa256ee774680d7bd18f21f457da75466f7610b3b16acc4e"
+        },
+        {
+          "path": "licenses/third-party/json/LICENSES/MIT.txt",
+          "source": "build/macosx/arm64.release/src/json/json/LICENSES/MIT.txt",
+          "sha256": "b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "lcms2",
+      "recipe": "src/lcms2/CMakeLists.txt",
+      "source_package": "lcms2-master",
+      "archive": "lcms2-master.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/lcms2/AUTHORS",
+          "source": "build/macosx/arm64.release/src/lcms2/lcms2-master/AUTHORS",
+          "sha256": "323c760957c274c1a44a36e86d8c9aa4460bd88bd60e758bfce7153e2afd781c"
+        },
+        {
+          "path": "licenses/third-party/lcms2/COPYING",
+          "source": "build/macosx/arm64.release/src/lcms2/lcms2-master/COPYING",
+          "sha256": "46d4e05af3bce75332a12d01f19bcce7e32b6bac544be28a64043d0231291e31"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "libjpeg-turbo",
+      "recipe": "src/libjpeg-turbo/CMakeLists.txt",
+      "source_package": "libjpeg-turbo-2.1.3",
+      "archive": "libjpeg-turbo-2.1.3.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/libjpeg-turbo/LICENSE.md",
+          "source": "build/macosx/arm64.release/src/libjpeg-turbo/libjpeg-turbo-2.1.3/LICENSE.md",
+          "sha256": "ee1eaf194d5924b6360af8a6ba6a4e1554037091f7505943300cdeec65f1aebb"
+        },
+        {
+          "path": "licenses/third-party/libjpeg-turbo/README.ijg",
+          "source": "build/macosx/arm64.release/src/libjpeg-turbo/libjpeg-turbo-2.1.3/README.ijg",
+          "sha256": "4b7b9f8c03bb8d60270dfd12684e70ab21e4abfd27e73905cd1a7c4cae6f5cdb"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "libpng",
+      "recipe": "src/libpng/CMakeLists.txt",
+      "source_package": "libpng-1.6.46",
+      "archive": "libpng-1.6.46.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/libpng/AUTHORS",
+          "source": "build/macosx/arm64.release/src/libpng/libpng-1.6.46/AUTHORS",
+          "sha256": "cb3a8e25c2b418d6b23af682d2ff850e67ba0785caa83531f746af62bcb4c6dd"
+        },
+        {
+          "path": "licenses/third-party/libpng/LICENSE",
+          "source": "build/macosx/arm64.release/src/libpng/libpng-1.6.46/LICENSE",
+          "sha256": "16d9daaafbf63a31a5bdc91d4600972548fef5aaa1244202393288dbd079c49a"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "libraw",
+      "recipe": "src/libraw/CMakeLists.txt",
+      "source_package": "libraw-0.21.1",
+      "archive": "libraw-0.21.1.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/libraw/COPYRIGHT",
+          "source": "build/macosx/arm64.release/src/libraw/libraw-0.21.1/COPYRIGHT",
+          "sha256": "d6ed03c89e25fcda5db454c1badc2c321f241799aab2062418a7fb3742c935ce"
+        },
+        {
+          "path": "licenses/third-party/libraw/LICENSE.CDDL",
+          "source": "build/macosx/arm64.release/src/libraw/libraw-0.21.1/LICENSE.CDDL",
+          "sha256": "0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f"
+        },
+        {
+          "path": "licenses/third-party/libraw/LICENSE.LGPL",
+          "source": "build/macosx/arm64.release/src/libraw/libraw-0.21.1/LICENSE.LGPL",
+          "sha256": "eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "libtool",
+      "recipe": "src/libtool/CMakeLists.txt",
+      "source_package": "libtool-2.4",
+      "archive": "libtool-2.4.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/libtool/AUTHORS",
+          "source": "build/macosx/arm64.release/src/libtool/libtool-2.4/AUTHORS",
+          "sha256": "206f711270537ac7519df6c3d5238f36d433fecab6b97c382362c13225c865e2"
+        },
+        {
+          "path": "licenses/third-party/libtool/COPYING",
+          "source": "build/macosx/arm64.release/src/libtool/libtool-2.4/COPYING",
+          "sha256": "ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "libwebp",
+      "recipe": "src/libwebp/CMakeLists.txt",
+      "source_package": "libwebp-1.2.2",
+      "archive": "libwebp-1.2.2.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/libwebp/AUTHORS",
+          "source": "build/macosx/arm64.release/src/libwebp/libwebp-1.2.2/AUTHORS",
+          "sha256": "f6399f3a0574412944d3a6c5910b62c6f9c4ec58728ca8eccd3a2cfe3e665fdb"
+        },
+        {
+          "path": "licenses/third-party/libwebp/COPYING",
+          "source": "build/macosx/arm64.release/src/libwebp/libwebp-1.2.2/COPYING",
+          "sha256": "5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "llvm",
+      "recipe": "src/llvm/CMakeLists.txt",
+      "source_package": "llvm-project-16.0.6.src",
+      "archive": "llvm-project-16.0.6.src.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/llvm/LICENSE.TXT",
+          "source": "build/macosx/arm64.release/src/llvm/llvm-project-16.0.6.src/LICENSE.TXT",
+          "sha256": "8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "materialx",
+      "recipe": "src/materialx/CMakeLists.txt",
+      "source_package": "MaterialX-1.39.4",
+      "archive": "MaterialX-1.39.4.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/materialx/LICENSE",
+          "source": "build/macosx/arm64.release/src/materialx/MaterialX-1.39.4/LICENSE",
+          "sha256": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "nanobind",
+      "recipe": "src/nanobind/CMakeLists.txt",
+      "source_package": "nanobind-master-251225",
+      "archive": "nanobind-master-251225.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/nanobind/LICENSE",
+          "source": "build/macosx/arm64.release/src/nanobind/nanobind/LICENSE",
+          "sha256": "f305091a4e57805870b217a28ea4b1f16610eece8457d2370f822a9696b75836"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "nanogui",
+      "recipe": "src/nanogui/CMakeLists.txt",
+      "source_package": "nanogui-master-240216",
+      "archive": "nanogui-master-240216.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/nanogui/LICENSE.txt",
+          "source": "build/macosx/arm64.release/src/nanogui/nanogui/LICENSE.txt",
+          "sha256": "8f9d91002eabbe1667a2394b51e28b38162ff5889aca3245179d0e8aa153fa2c"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "nasm",
+      "recipe": "src/nasm/CMakeLists.txt",
+      "source_package": "nasm-nasm-2.16.01",
+      "archive": "nasm-nasm-2.16.01.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/nasm/AUTHORS",
+          "source": "build/macosx/arm64.release/src/nasm/nasm-nasm-2.16.01/AUTHORS",
+          "sha256": "8a7bd0cc6c517a220265548bf2ecf62fe89bf682b6a9938afb7521008679149e"
+        },
+        {
+          "path": "licenses/third-party/nasm/LICENSE",
+          "source": "build/macosx/arm64.release/src/nasm/nasm-nasm-2.16.01/LICENSE",
+          "sha256": "1563996c52e220e15ef2418e67d39488255aa8c28c89e617074d3afe3ee329e0"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "ninja",
+      "recipe": "src/ninja/CMakeLists.txt",
+      "source_package": "ninja-1.11.1",
+      "archive": "ninja-1.11.1.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/ninja/COPYING",
+          "source": "build/macosx/arm64.release/src/ninja/ninja-1.11.1/COPYING",
+          "sha256": "eb7e9ab9690124c5c9f42bdc81383d886a3dede26345b6ed15bbad7caf81f7ea"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "ocio",
+      "recipe": "src/ocio/CMakeLists.txt",
+      "source_package": "OpenColorIO-2.5.0",
+      "archive": "OpenColorIO-2.5.0.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/ocio/LICENSE",
+          "source": "build/macosx/arm64.release/src/ocio/OpenColorIO-2.5.0/LICENSE",
+          "sha256": "82a40c52065ee968aa62015735e84378ac11425db7a233e6a2dcd2c83fc24276"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "ocio-images",
+      "recipe": "src/ocio-images/CMakeLists.txt",
+      "source_package": "ocio-images.1.0v1",
+      "archive": null,
+      "notices": [],
+      "status": "Unverified: media archive not available locally",
+      "archive_expression": "${project_pkg}.tgz"
+    },
+    {
+      "package": "oiio",
+      "recipe": "src/oiio/CMakeLists.txt",
+      "source_package": "OpenImageIO-3.1.8.0",
+      "archive": "OpenImageIO-3.1.8.0.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/oiio/LICENSE.md",
+          "source": "build/macosx/arm64.release/src/oiio/OpenImageIO-3.1.8.0/LICENSE.md",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "oiio-images",
+      "recipe": "src/oiio-images/CMakeLists.txt",
+      "source_package": "OpenImageIO-oiio-images-3819677",
+      "archive": null,
+      "notices": [],
+      "status": "Unverified: media archive not available locally",
+      "archive_expression": "${project_pkg}.tgz"
+    },
+    {
+      "package": "onetbb",
+      "recipe": "src/onetbb/CMakeLists.txt",
+      "source_package": "oneTBB-2022.3.0",
+      "archive": "oneTBB-2022.3.0.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/onetbb/LICENSE.txt",
+          "source": "build/macosx/arm64.release/src/onetbb/oneTBB-2022.3.0/LICENSE.txt",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "opencv",
+      "recipe": "src/opencv/CMakeLists.txt",
+      "source_package": "opencv-4.x",
+      "archive": "opencv-4.x.zip",
+      "notices": [
+        {
+          "path": "licenses/third-party/opencv/COPYRIGHT",
+          "source": "build/macosx/arm64.release/src/opencv/opencv-4.x/COPYRIGHT",
+          "sha256": "bba849c98da85a2b27b86113284a90812c959b1c1fc4ed67de9355475d1e6831"
+        },
+        {
+          "path": "licenses/third-party/opencv/LICENSE",
+          "source": "build/macosx/arm64.release/src/opencv/opencv-4.x/LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "openexr",
+      "recipe": "src/openexr/CMakeLists.txt",
+      "source_package": "openexr-3.4.6",
+      "archive": "openexr-3.4.6.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/openexr/LICENSE.md",
+          "source": "build/macosx/arm64.release/src/openexr/openexr-3.4.6/LICENSE.md",
+          "sha256": "84853c91d4c2e0310741d4773469d98bb93e61029608e0ba0882a3fffdf330bd"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "openexr-images",
+      "recipe": "src/openexr-images/CMakeLists.txt",
+      "source_package": "openexr-images-1.7.0",
+      "archive": null,
+      "notices": [],
+      "status": "Unverified: media archive not available locally",
+      "archive_expression": "${project_pkg}.tar.gz"
+    },
+    {
+      "package": "openjpeg",
+      "recipe": "src/openjpeg/CMakeLists.txt",
+      "source_package": "openjpeg-2.5.4",
+      "archive": "openjpeg-2.5.4.zip",
+      "notices": [
+        {
+          "path": "licenses/third-party/openjpeg/AUTHORS.md",
+          "source": "build/macosx/arm64.release/src/openjpeg/openjpeg-2.5.4/AUTHORS.md",
+          "sha256": "cf22e984f9fbb9be7550e9a94120595ba8c4a7de0d63f47d3725f4b2e28a4387"
+        },
+        {
+          "path": "licenses/third-party/openjpeg/LICENSE",
+          "source": "build/macosx/arm64.release/src/openjpeg/openjpeg-2.5.4/LICENSE",
+          "sha256": "a6af136f3e15038a666b61f376612a07d9a4e48cb7c01adbf3e33b3f14ab49b6"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "opensubdiv",
+      "recipe": "src/opensubdiv/CMakeLists.txt",
+      "source_package": "OpenSubdiv-master-250306",
+      "archive": "OpenSubdiv-master-250306.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/opensubdiv/LICENSE.txt",
+          "source": "build/macosx/arm64.release/src/opensubdiv/OpenSubdiv/LICENSE.txt",
+          "sha256": "c52718780b46e8c7ea48b9ae0406061d4918761e385b6e024571a37c6d02dd95"
+        },
+        {
+          "path": "licenses/third-party/opensubdiv/NOTICE.txt",
+          "source": "build/macosx/arm64.release/src/opensubdiv/OpenSubdiv/NOTICE.txt",
+          "sha256": "c9a283f0d3752b74d348a57e1d45e71cf69651ce6cbdce866983e459f6422c7c"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "openusd",
+      "recipe": "src/openusd/CMakeLists.txt",
+      "source_package": "OpenUSD-25.11",
+      "archive": "OpenUSD-25.11.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/openusd/LICENSE.txt",
+          "source": "build/macosx/arm64.release/src/openusd/OpenUSD-25.11/LICENSE.txt",
+          "sha256": "96ab8f00d1f73b78e20a4aa950818db1e8b36809e4553f322773cf4a9df15b2d"
+        },
+        {
+          "path": "licenses/third-party/openusd/NOTICE.txt",
+          "source": "build/macosx/arm64.release/src/openusd/OpenUSD-25.11/NOTICE.txt",
+          "sha256": "f6ad9d41f77b1bd8edaecd64bd1e13f4224876b010e2415e308267a84862bc14"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "pcre2",
+      "recipe": "src/pcre2/CMakeLists.txt",
+      "source_package": "pcre2-10.32",
+      "archive": "pcre2-10.32.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/pcre2/AUTHORS",
+          "source": "build/macosx/arm64.release/src/pcre2/pcre2-10.32/AUTHORS",
+          "sha256": "dc5a9ead0af68d7c8b8e1030d8b19d2cef289e1aafe9d6efdc90e9b13afd0d68"
+        },
+        {
+          "path": "licenses/third-party/pcre2/COPYING",
+          "source": "build/macosx/arm64.release/src/pcre2/pcre2-10.32/COPYING",
+          "sha256": "99272c55f3dcfa07a8a7e15a5c1a33096e4727de74241d65fa049fccfdd59507"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "pkg-config",
+      "recipe": "src/pkg-config/CMakeLists.txt",
+      "source_package": "pkg-config-0.28",
+      "archive": "pkg-config-0.28.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/pkg-config/AUTHORS",
+          "source": "build/macosx/arm64.release/src/pkg-config/pkg-config-0.28/AUTHORS",
+          "sha256": "28b8e4097e7b6566c0f3055418ac00864d2162492b4ee1e770b2cfab49cd95b4"
+        },
+        {
+          "path": "licenses/third-party/pkg-config/COPYING",
+          "source": "build/macosx/arm64.release/src/pkg-config/pkg-config-0.28/COPYING",
+          "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "ptex",
+      "recipe": "src/ptex/CMakeLists.txt",
+      "source_package": "ptex-master-220319",
+      "archive": "ptex-master-220319.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/ptex/LICENSE",
+          "source": "build/macosx/arm64.release/src/ptex/ptex/LICENSE",
+          "sha256": "05f9c3eca10676f37a6eec97d02f0cd6187bc30190cbd191d6f965908e4e8154"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "pybind",
+      "recipe": "src/pybind/CMakeLists.txt",
+      "source_package": "pybind11-2.9.1",
+      "archive": "pybind11-2.9.1.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/pybind/LICENSE",
+          "source": "build/macosx/arm64.release/src/pybind/pybind11-2.9.1/LICENSE",
+          "sha256": "83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "pyside",
+      "recipe": "src/pyside/CMakeLists.txt",
+      "source_package": "pyside-setup-6.10.1",
+      "archive": "pyside-setup-6.10.1.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/pyside/LICENSES/Apache-2.0.txt",
+          "source": "build/macosx/arm64.release/src/pyside/pyside-setup-6.10.1/LICENSES/Apache-2.0.txt",
+          "sha256": "e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb"
+        },
+        {
+          "path": "licenses/third-party/pyside/LICENSES/BSD-3-Clause.txt",
+          "source": "build/macosx/arm64.release/src/pyside/pyside-setup-6.10.1/LICENSES/BSD-3-Clause.txt",
+          "sha256": "9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce"
+        },
+        {
+          "path": "licenses/third-party/pyside/LICENSES/GFDL-1.3-no-invariants-only.txt",
+          "source": "build/macosx/arm64.release/src/pyside/pyside-setup-6.10.1/LICENSES/GFDL-1.3-no-invariants-only.txt",
+          "sha256": "110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4"
+        },
+        {
+          "path": "licenses/third-party/pyside/LICENSES/GPL-2.0-only.txt",
+          "source": "build/macosx/arm64.release/src/pyside/pyside-setup-6.10.1/LICENSES/GPL-2.0-only.txt",
+          "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+        },
+        {
+          "path": "licenses/third-party/pyside/LICENSES/GPL-3.0-only.txt",
+          "source": "build/macosx/arm64.release/src/pyside/pyside-setup-6.10.1/LICENSES/GPL-3.0-only.txt",
+          "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+        },
+        {
+          "path": "licenses/third-party/pyside/LICENSES/LGPL-3.0-only.txt",
+          "source": "build/macosx/arm64.release/src/pyside/pyside-setup-6.10.1/LICENSES/LGPL-3.0-only.txt",
+          "sha256": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768"
+        },
+        {
+          "path": "licenses/third-party/pyside/LICENSES/LicenseRef-Qt-Commercial.txt",
+          "source": "build/macosx/arm64.release/src/pyside/pyside-setup-6.10.1/LICENSES/LicenseRef-Qt-Commercial.txt",
+          "sha256": "9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700"
+        },
+        {
+          "path": "licenses/third-party/pyside/LICENSES/Qt-GPL-exception-1.0.txt",
+          "source": "build/macosx/arm64.release/src/pyside/pyside-setup-6.10.1/LICENSES/Qt-GPL-exception-1.0.txt",
+          "sha256": "40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "tclap",
+      "recipe": "src/tclap/CMakeLists.txt",
+      "source_package": "tclap-1.2.5",
+      "archive": "tclap-1.2.5.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/tclap/AUTHORS",
+          "source": "build/macosx/arm64.release/src/tclap/tclap-1.2.5/AUTHORS",
+          "sha256": "18e3046d8d2d8e37857055d5dd1cf9f6f5eb8ffeb174c34d5c052ab3827e34d9"
+        },
+        {
+          "path": "licenses/third-party/tclap/COPYING",
+          "source": "build/macosx/arm64.release/src/tclap/tclap-1.2.5/COPYING",
+          "sha256": "cd81a61d47aeb1ed63036ca260baee37719923bbd7ebd988ec4edae128f3b6eb"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "tiff",
+      "recipe": "src/tiff/CMakeLists.txt",
+      "source_package": "tiff-4.0.3",
+      "archive": "tiff-4.0.3.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/tiff/COPYRIGHT",
+          "source": "build/macosx/arm64.release/src/tiff/tiff-4.0.3/COPYRIGHT",
+          "sha256": "fbd6fed7938541d2c809c0826225fc85e551fdbfa8732b10f0c87e0847acafd7"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "x264",
+      "recipe": "src/x264/CMakeLists.txt",
+      "source_package": "x264-master",
+      "archive": "x264-master.tar.bz2",
+      "notices": [
+        {
+          "path": "licenses/third-party/x264/AUTHORS",
+          "source": "build/macosx/arm64.release/src/x264/x264-master/AUTHORS",
+          "sha256": "783150c1bef404fc7140924f3006eff27c940ea73ef38b3bc76fcb9c173229a5"
+        },
+        {
+          "path": "licenses/third-party/x264/COPYING",
+          "source": "build/macosx/arm64.release/src/x264/x264-master/COPYING",
+          "sha256": "32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "yasm",
+      "recipe": "src/yasm/CMakeLists.txt",
+      "source_package": "yasm-1.3.0",
+      "archive": "yasm-1.3.0.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/yasm/AUTHORS",
+          "source": "build/macosx/arm64.release/src/yasm/yasm-1.3.0/AUTHORS",
+          "sha256": "23af4b32e66ffa500f77f6455765dc18c8559c3825d920610360c5cee6b2e85d"
+        },
+        {
+          "path": "licenses/third-party/yasm/COPYING",
+          "source": "build/macosx/arm64.release/src/yasm/yasm-1.3.0/COPYING",
+          "sha256": "795f8d76eade6130129b680ac72ea81cb3e143467a65ea1f5f64946151d7fa20"
+        },
+        {
+          "path": "licenses/third-party/yasm/license.c",
+          "source": "build/macosx/arm64.release/src/yasm/yasm-1.3.0/license.c",
+          "sha256": "879d04a2c7e3e26d07d7e4987739fb8da8f453bbe3f5e9f8073b67076a54f3fa"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "zlib-ng",
+      "recipe": "src/zlib-ng/CMakeLists.txt",
+      "source_package": "zlib-ng-2.3.3",
+      "archive": "zlib-ng-2.3.3.tar.gz",
+      "notices": [
+        {
+          "path": "licenses/third-party/zlib-ng/LICENSE.md",
+          "source": "build/macosx/arm64.release/src/zlib-ng/zlib-ng-2.3.3/LICENSE.md",
+          "sha256": "6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee"
+        },
+        {
+          "path": "licenses/third-party/zlib-ng/zlib.h.in",
+          "source": "build/macosx/arm64.release/src/zlib-ng/zlib-ng-2.3.3/zlib.h.in",
+          "sha256": "6f26e7087dca385c181b6dfa3760dbfdc37a703cddfb682ce494577183669678"
+        }
+      ],
+      "status": "Copied from local extracted source"
+    },
+    {
+      "package": "qt",
+      "source_package": "qt-everywhere-src-6.10.1",
+      "archive": "qt-everywhere-src-6.10.1.tar.xz",
+      "status": "Copied from local extracted source",
+      "notices": [
+        {
+          "path": "licenses/third-party/qt/LICENSES/BSD-3-Clause.txt",
+          "source": "qt/qt-everywhere-src-6.10.1/LICENSES/BSD-3-Clause.txt",
+          "sha256": "9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce"
+        },
+        {
+          "path": "licenses/third-party/qt/LICENSES/GFDL-1.3-no-invariants-only.txt",
+          "source": "qt/qt-everywhere-src-6.10.1/LICENSES/GFDL-1.3-no-invariants-only.txt",
+          "sha256": "110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4"
+        },
+        {
+          "path": "licenses/third-party/qt/LICENSES/GPL-2.0-only.txt",
+          "source": "qt/qt-everywhere-src-6.10.1/LICENSES/GPL-2.0-only.txt",
+          "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+        },
+        {
+          "path": "licenses/third-party/qt/LICENSES/GPL-3.0-only.txt",
+          "source": "qt/qt-everywhere-src-6.10.1/LICENSES/GPL-3.0-only.txt",
+          "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+        },
+        {
+          "path": "licenses/third-party/qt/LICENSES/LGPL-3.0-only.txt",
+          "source": "qt/qt-everywhere-src-6.10.1/LICENSES/LGPL-3.0-only.txt",
+          "sha256": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768"
+        },
+        {
+          "path": "licenses/third-party/qt/LICENSES/LicenseRef-Qt-Commercial.txt",
+          "source": "qt/qt-everywhere-src-6.10.1/LICENSES/LicenseRef-Qt-Commercial.txt",
+          "sha256": "9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700"
+        },
+        {
+          "path": "licenses/third-party/qt/LICENSES/Qt-GPL-exception-1.0.txt",
+          "source": "qt/qt-everywhere-src-6.10.1/LICENSES/Qt-GPL-exception-1.0.txt",
+          "sha256": "40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2"
+        }
+      ]
+    }
+  ]
+}

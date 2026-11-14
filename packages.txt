@@ -5,7 +5,7 @@ In progress improvements
 * Break for Qt builds in build.sh if not successful
 * Fix verbose consistency across projects
 * Zlib pkg-config path is in root instead of lib
-* Experimental switch to Ninja
+* Qt and PySide use Ninja; switching other dependency recipes remains experimental
 
 In progress notes
 ---------------------------------
@@ -14,6 +14,13 @@ In progress notes
   clang binaries are exposed prior to system clang.
 
 Fixes:
+
+qt 6.10.1
+---------------------------------
+* src/scripts/patch_qt.py adds <arm_acle.h> to qyieldcpu.h on ARM for
+  AppleClang 21's __yield declaration. build.sh applies this idempotently.
+* Multimedia is enabled; reused Qt build trees are reconfigured.
+* SDK 27 remains outside Qt 6.10.1's reported tested SDK range.
 
 boost
 ---------------------------------

@@ -2,12 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# libtiff Copyright
-# Copyright (c) 1988-1997 Sam Leffler
-# Copyright (c) 1991-1997 Silicon Graphics, Inc.
-
-# libtiff from libtiff.maptools.org 4.1.0 2020-08-04
-# ftp://ftp.remotesensing.org/pub/libtiff
+# Upstream package: tiff-4.0.3
+# Archive: tiff-4.0.3.tar.gz
+# Upstream copyright and license notices: licenses/third-party/tiff/
 
 build_info( " Adding tiff project" )
 
@@ -181,7 +178,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -192,11 +189,11 @@ if( UNIX )
 
 ENDIF()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} jpeg zlib-ng )
+build_add_dependencies( ${project_name} jpeg zlib-ng )

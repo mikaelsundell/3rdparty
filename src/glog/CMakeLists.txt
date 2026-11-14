@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# glog Copyright
-# Copyright (c) 2006, Google Inc.
-
-# glog from github.com master 2022-06-01
-# https://github.com/google/glog
+# Upstream package: glog-master
+# Archive: glog-master.tar.gz
+# Upstream copyright and license notices: licenses/third-party/glog/
 
 build_info( " Adding glog project" )
 
@@ -161,7 +159,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${dir_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -173,7 +171,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${dir_output}

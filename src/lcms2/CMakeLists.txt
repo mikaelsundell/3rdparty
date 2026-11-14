@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# lcms2 Copyright
-# Copyright (c) 1998-2012 Marti Maria Saguer
-
-# lcms2 from sourceforge.net 2.11 2020-08-04
-# http://sourceforge.net/projects/lcms/files/lcms/2.11
+# Upstream package: lcms2-master
+# Archive: lcms2-master.tar.gz
+# Upstream copyright and license notices: licenses/third-party/lcms2/
 
 build_info( " Adding lcms2 project" )
 
@@ -162,7 +160,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -173,11 +171,11 @@ IF( UNIX )
 
 ENDIF()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${project_name} ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} jpeg tiff zlib-ng )
+build_add_dependencies( ${project_name} jpeg tiff zlib-ng )

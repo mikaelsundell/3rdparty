@@ -2,13 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# Alembic Copyright
-# Copyright (c) 2013,
-# Sony Pictures Imageworks Inc. and
-# Industrial Light & Magic, a division of Lucasfilm Entertainment Company Ltd.
-
-# alembic from github 2023-08-24
-# https://github.com/alembic/alembic
+# Upstream package: alembic-master
+# Archive: alembic-master.tar.gz
+# Upstream copyright and license notices: licenses/third-party/alembic/
 
 build_info( " Adding alembic project" )
 
@@ -132,7 +128,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -143,11 +139,11 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} llvm )
+build_add_dependencies( ${project_name} llvm )

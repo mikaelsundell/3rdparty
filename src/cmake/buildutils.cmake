@@ -1,6 +1,6 @@
-##  Copyright 2022-present Contributors to the 3rdparty project.
-##  SPDX-License-Identifier: BSD-3-Clause
-##  https://github.com/mikaelsundell/3rdparty
+# Copyright 2022-present Contributors to the 3rdparty project.
+# SPDX-License-Identifier: BSD-3-Clause
+# https://github.com/mikaelsundell/3rdparty
 
 function( build_info message )
     message( STATUS ${message} )
@@ -26,7 +26,7 @@ function( build_add_project NAME )
     set( 
         "${NAME}" ${args_BUILD} CACHE BOOL ${args_DESCRIPTION}
     )
-    if( ${args_BUILD} )
+    if( ${NAME} )
         add_subdirectory( ${args_DIR} )
     endif()
 endfunction()
@@ -109,30 +109,60 @@ endfunction()
 
 ##-*****************************************************************************
 
-function( build_find_python3 output_python3 output_version output_versiontag output_include_dir output_library_dir )
-    execute_process( 
-        COMMAND "${PROJECT_SOURCE_DIR}/src/scripts/find_python3.sh" "--python3" OUTPUT_VARIABLE python3
-    )
-    string(REGEX REPLACE "(\n)+" "" python3 ${python3})
-    set(${output_python3} ${python3} PARENT_SCOPE)
-    execute_process( 
-        COMMAND "${PROJECT_SOURCE_DIR}/src/scripts/find_python3.sh" "--version" OUTPUT_VARIABLE version
-    )
-    string( REGEX REPLACE "^([0-9]+)\\.[0-9]+.*" "\\1" python_major "${version}" )
-    string( REGEX REPLACE "^[0-9]+\\.([0-9])+.*" "\\1" python_minor "${version}" )
-    set(${output_version} "${python_major}.${python_minor}" PARENT_SCOPE)
-    set(${output_versiontag} "${python_major}${python_minor}" PARENT_SCOPE)    
-    execute_process( 
-        COMMAND "${PROJECT_SOURCE_DIR}/src/scripts/find_python3.sh" "--include-dir" OUTPUT_VARIABLE include_dir
-    )
-    string(REGEX REPLACE "(\n)+" "" include_dir ${include_dir})
-    set(${output_include_dir} ${include_dir} PARENT_SCOPE)
-
-    execute_process( 
-        COMMAND "${PROJECT_SOURCE_DIR}/src/scripts/find_python3.sh" "--library-dir" OUTPUT_VARIABLE library_dir
-    )
-    string(REGEX REPLACE "(\n)+" "" library_dir ${library_dir})
-    set(${output_library_dir} ${library_dir} PARENT_SCOPE)
+function(build_find_python3 output_python3 output_version output_versiontag output_include_dir output_library)
+    find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+    set(${output_python3} "${Python3_EXECUTABLE}" PARENT_SCOPE)
+    set(${output_version} "${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}" PARENT_SCOPE)
+    set(${output_versiontag} "${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR}" PARENT_SCOPE)
+    list(GET Python3_INCLUDE_DIRS 0 python_include_dir)
+    set(${output_include_dir} "${python_include_dir}" PARENT_SCOPE)
+    set(${output_library} "${Python3_LIBRARIES}" PARENT_SCOPE)
 endfunction()
 
-##-*****************************************************************************
+# Record edges now; targets in later groups may not exist yet.
+function(build_add_dependencies target)
+    foreach(dependency IN LISTS ARGN)
+        set_property(GLOBAL APPEND PROPERTY build_dependency_edges "${target}|${dependency}")
+    endforeach()
+endfunction()
+
+function(build_validate_dependencies)
+    get_property(edges GLOBAL PROPERTY build_dependency_edges)
+    foreach(edge IN LISTS edges)
+        string(REPLACE "|" ";" pair "${edge}")
+        list(GET pair 0 target)
+        list(GET pair 1 dependency)
+        if(NOT TARGET "${dependency}")
+            if(dependency STREQUAL "eigen")
+                set(dependency_option eigen3)
+            else()
+                set(dependency_option "${dependency}")
+            endif()
+            message(FATAL_ERROR
+                "${target} requires disabled or unavailable target '${dependency}'. "
+                "Enable its build group (build_base, build_libs, or build_extras) "
+                "and -D${dependency_option}=ON, or disable -D${target}=OFF.")
+        endif()
+        add_dependencies("${target}" "${dependency}")
+    endforeach()
+endfunction()
+
+# Installed outputs are rebuilt when the recipe, flags, or support files change.
+# file(CONFIGURE) preserves the timestamp when command arguments are unchanged.
+function(build_add_custom_command)
+    string(SHA256 recipe_hash "${ARGN}")
+    list(FIND ARGN OUTPUT output_index)
+    math(EXPR output_index "${output_index} + 1")
+    list(GET ARGN ${output_index} first_output)
+    string(SHA256 output_hash "${first_output}")
+    set(recipe_file "${CMAKE_CURRENT_BINARY_DIR}/build-recipe-${output_hash}.txt")
+    file(CONFIGURE OUTPUT "${recipe_file}" CONTENT "${recipe_hash}\n" @ONLY)
+    file(GLOB support_files CONFIGURE_DEPENDS LIST_DIRECTORIES false
+        "${CMAKE_CURRENT_SOURCE_DIR}/*"
+        "${PROJECT_SOURCE_DIR}/src/scripts/*")
+    add_custom_command(${ARGN}
+        DEPENDS "${recipe_file}"
+            "${PROJECT_SOURCE_DIR}/CMakeLists.txt"
+            "${PROJECT_SOURCE_DIR}/src/cmake/buildutils.cmake"
+            ${support_files})
+endfunction()

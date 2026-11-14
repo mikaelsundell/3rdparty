@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# ceres-solver Copyright
-# Copyright 2022 Google Inc. All rights reserved.
-
-# ceres-solver from github.com master 2022-06-01
-# https://github.com/ceres-solver/ceres-solver
+# Upstream package: ceres-solver-master
+# Archive: ceres-solver-master.tar.gz
+# Upstream copyright and license notices: licenses/third-party/ceres-solver/
 
 build_info( " Adding ceres-solver project" )
 
@@ -160,7 +158,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -172,11 +170,11 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} eigen glog )
+build_add_dependencies( ${project_name} eigen glog )

@@ -2,13 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# openjpeg Copyright
-# Copyright (c) 2002-2014, Universite catholique de Louvain (UCL), Belgium
-# Copyright (c) 2002-2014, Professor Benoit Macq
-# Copyright (c) 2010-2011, Kaori Hagihara
-
-# jasper from github.com/uclouvain/openjpeg 2025-12-19
-# https://github.com/uclouvain/openjpeg
+# Upstream package: openjpeg-2.5.4
+# Archive: openjpeg-2.5.4.zip
+# Upstream copyright and license notices: licenses/third-party/openjpeg/
 
 build_info( " Adding openjpeg project" )
 
@@ -124,7 +120,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -135,7 +131,7 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}

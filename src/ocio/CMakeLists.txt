@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# OCIO Copyright
-# Copyright (c) 2003-2010 Sony Pictures Imageworks Inc., et al.
-
-# ocio from github.com master 2025-12-19
-# https://github.com/AcademySoftwareFoundation/OpenColorIO
+# Upstream package: OpenColorIO-2.5.0
+# Archive: OpenColorIO-2.5.0.tar.gz
+# Upstream copyright and license notices: licenses/third-party/ocio/
 
 build_info( " Adding ocio project" )
 
@@ -167,7 +165,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -178,11 +176,11 @@ IF( UNIX )
 
 endif()
 
-# custom target, always run
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} lcms2 openexr )
+build_add_dependencies( ${project_name} lcms2 openexr )

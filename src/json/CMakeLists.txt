@@ -2,13 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# json Copyright
-# Licensed under the MIT License <http://opensource.org/licenses/MIT>.
-# SPDX-License-Identifier: MIT
-# Copyright (c) 2013-2022 Niels Lohmann <http://nlohmann.me>.
-
-# json from github.com 2022-03-29
-# https://github.com/nlohmann/json/releases/tag/v3.10.5
+# Upstream package: json-master-231214
+# Archive: json-master-231214.tar.gz
+# Upstream copyright and license notices: licenses/third-party/json/
 
 build_info( " Adding json project" )
 
@@ -105,7 +101,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${include_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -116,7 +112,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${include_output}

@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# libwebp Copyright
-# Copyright 2011 Google Inc. All Rights Reserved.
-
-# libwebp from developers.google.com/speed/webp 0.3.1 2013-09-07
-# https://developers.google.com/speed/webp/download
+# Upstream package: libwebp-1.2.2
+# Archive: libwebp-1.2.2.tar.gz
+# Upstream copyright and license notices: licenses/third-party/libwebp/
 
 build_info( " Adding libwebp project" )
 
@@ -152,7 +150,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -163,7 +161,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}

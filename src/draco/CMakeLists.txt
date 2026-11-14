@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# draco Copyright
-# Copyright 2019 The Draco Authors.
-
-# draco from github 2022-03-27
-# https://github.com/google/draco/releases/tag/1.5.2
+# Upstream package: draco-1.5.2
+# Archive: draco-1.5.2.tar.gz
+# Upstream copyright and license notices: licenses/third-party/draco/
 
 build_info( " Adding draco project" )
 
@@ -130,7 +128,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -141,7 +139,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${lib_output}

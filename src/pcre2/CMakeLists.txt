@@ -2,12 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# pcre2 Copyright
-# Original API code Copyright (c) 1997-2012 University of Cambridge
-# New API code Copyright (c) 2016-2020 University of Cambridge
-
-# pcre2 from github.com 10.39 2022-03-19
-# https://github.com/PhilipHazel/pcre2
+# Upstream package: pcre2-10.32
+# Archive: pcre2-10.32.tar.gz
+# Upstream copyright and license notices: licenses/third-party/pcre2/
 
 build_info( " Adding pcre2 project" )
 
@@ -130,7 +127,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -141,7 +138,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${lib_output}

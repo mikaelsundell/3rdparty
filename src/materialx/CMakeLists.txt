@@ -2,12 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# Materialx Copyright
-# TM & (c) 2017 Lucasfilm Entertainment Company Ltd. and Lucasfilm Ltd.
-# All rights reserved.  See LICENSE.txt for license.
-
-# materialx from github 2026-04-17
-# https://github.com/AcademySoftwareFoundation/MaterialX
+# Upstream package: MaterialX-1.39.4
+# Archive: MaterialX-1.39.4.tar.gz
+# Upstream copyright and license notices: licenses/third-party/materialx/
 
 build_info( " Adding materialx project" )
 
@@ -168,7 +165,7 @@ IF( UNIX )
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
             -DPYTHON_EXECUTABLE=${build_python3}
             -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
-            -DPYTHON_LIBRARY=${build_python3_library_dir}
+            -DPYTHON_LIBRARY=${build_python3_library}
             ${build_options}
             ${build_config} &&
         make ${build_flags} &&
@@ -196,7 +193,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -207,11 +204,11 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} nanogui oiio )
+build_add_dependencies( ${project_name} nanogui oiio )

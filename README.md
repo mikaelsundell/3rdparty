@@ -14,7 +14,7 @@
 
 * Full control over each dependency, its version, and its configuration flags.
 
-* Up-to-date support for the latest macOS platforms, toolchains, and Xcode releases.
+* Explicit macOS deployment targets and documented toolchain compatibility fixes.
 
 ## 3rdparty enables ##
 
@@ -40,11 +40,14 @@ It is intended for environments where reproducibility, version control, and conf
 
 ### Install CMake ###
 
-CMake version > 3.27.0 is required.
+CMake version 3.27 or newer is required.
 
-```shell
-http://www.cmake.org
-```
+Install [CMake](https://cmake.org/), Xcode with its command-line tools, and a
+Python 3 installation with development headers and libraries. `build.sh` checks
+for NumPy, PyOpenGL, and `typing_extensions` (for Python older than 3.11). CMake
+uses `FindPython3` to select a matching interpreter and development files;
+`-DPython3_EXECUTABLE=/path/to/python3` can select an interpreter when configuring
+the dependency project directly.
 
 ### Build 3rdparty ###
   
@@ -56,15 +59,77 @@ To build everything (Qt, libraries, debug and release variants) targeting macOS 
 ./build.sh all --target 12
 ```
 
-Qt will be downloaded and built in ```qt``` and 3rdparty in ```build```. Targets will use the product version as ```CMAKE_OSX_DEPLOYMENT_TARGET``` obtained using ```sw_vers -productVersion``` for compatibility. Build using arguments ```debug``` or ```release``` individually will not clean the build before starting.
+Qt will be downloaded and built in ```qt``` and 3rdparty in ```build```. The deployment target defaults to macOS 12 and can be changed with `--target`. Build using arguments ```debug``` or ```release``` individually will not clean the build before starting.
 
 ```shell
-./build.sh debug/release --target 12
+./build.sh debug --target 12
+./build.sh release --target 12
 ```
+
+The script builds base dependencies, then Qt, then libraries and extras. `all`
+asks whether to remove the existing `build` directory before starting. That
+removes installed dependencies too; Qt source and build trees under `qt` remain.
+The install prefixes on Apple Silicon are `build/macosx/arm64.debug` and
+`build/macosx/arm64.release`.
+
+### Rebuild Qt or PySide separately ###
+
+Qt uses Ninja Multi-Config. `cmake --build` invokes Ninja; `--config Release`
+or `--config Debug` selects the configuration independently of the directory name.
+Multimedia is enabled by default. `build.sh` clears the previous Multimedia
+exclusion and reconfigures existing Qt build directories on every run.
+
+To resume an already configured Release Qt build, run from the repository root:
+
+```shell
+export PATH="$PWD/build/macosx/arm64.release/ninja:$PATH"
+python3 src/scripts/patch_qt.py qt/qt-everywhere-src-6.10.1 &&
+cmake --build qt/qt-everywhere-src-6.10.1/build.release --config Release --parallel &&
+cmake --install qt/qt-everywhere-src-6.10.1/build.release --config Release
+```
+
+If the existing Qt cache still excludes Multimedia, reconfigure it before the
+build, preserving its other cached settings:
+
+```shell
+cmake -S qt/qt-everywhere-src-6.10.1 \
+  -B qt/qt-everywhere-src-6.10.1/build.release -U BUILD_qtmultimedia
+```
+
+Removing `build.release` requires a fresh Qt configuration before these resume
+commands can run.
+
+After installing Qt Multimedia, rebuild PySide to add `PySide6.QtMultimedia`
+and `PySide6.QtMultimediaWidgets`. For an existing dependency build configured
+with libraries and extras enabled:
+
+```shell
+cmake -S . -B build/macosx/arm64.release &&
+cmake --build build/macosx/arm64.release --target pyside
+```
+
+This selects PySide and its declared prerequisites instead of the default target
+for all dependencies. PySide tracks installed Qt module configurations and checks
+that its Multimedia bindings are installed. Installing a disabled Qt module does
+not happen until Qt is rebuilt; disabling a module also does not remove files
+left in an existing install prefix.
+
+### Qt compiler compatibility ###
+
+`build.sh` applies `src/scripts/patch_qt.py` to fresh and reused Qt 6.10.1 source
+trees. The patch includes `<arm_acle.h>` on ARM so AppleClang 21 can compile Qt's
+`__yield()` intrinsic. It can also be run manually as shown above and is safe to
+repeat.
+
+Qt 6.10.1 reports that SDK 27 exceeds its tested SDK version. The header patch
+fixes the observed compiler error; it does not establish compatibility with the
+entire SDK. The full Qt build with this toolchain still needs validation.
 
 ### Debug Qt with 3rdparty ###
 
-Debugging in Qt with hybrid frameworks make uses of the ```DYLD_IMAGE_SUFFIX``` environment variable. Set it to _debug to force the linker to use the debug version when the framework.
+When using a Qt framework containing a `_debug` binary, set `DYLD_IMAGE_SUFFIX`
+to `_debug` to load it. The selected framework must actually contain that binary;
+a directory named `arm64.debug` alone does not establish its build configuration.
 
 ```
 DYLD_IMAGE_SUFFIX=_debug
@@ -100,19 +165,38 @@ export PATH=$PATH:/Applications/CMake.app/Contents/bin
 Useful make commands
 
 ```shell
-make                      Build all projects for development and test in 'build/platform'
+make                      Build enabled dependency groups (base only in a fresh cache).
 make debug                Build all projects with debugging symbols when possible.
-make clean                Get rid of all the temporary files in 'build/platform'.
+make clean                Remove the entire build directory, including installed files.
 make help                 Print all the make options
 ```
 
 Additionally, a few helpful modifiers
 
 ```shell
-make verbose=0 ...        Show all compilation commands
-make build_libs=1 ...     Build libraries
-make build_viewers=1 ...  Build viewers
+make verbose=1 ...        Enable verbose CMake makefiles
+make build_base=1 ...     Enable base dependencies
+make build_libs=1 ...     Enable libraries
+make build_extras=1 ...   Enable extras (also requires base and libraries)
 make build_media=1 ...    Build media
+```
+
+Individual packages can be disabled with CMake cache options, for example
+`-Dlibpng=OFF`. Enabled packages require their dependency targets: enable the
+corresponding groups (`build_base`, `build_libs`, `build_extras`) and package
+options, or disable the dependent package. Configuration reports missing targets.
+The Eigen package option is named `eigen3`.
+
+Dependency recipes rebuild their installed outputs when their commands, flags,
+or support files change. Existing builds may rebuild once after adopting this
+tracking. The top-level project and most dependency recipes still use Make;
+Qt and PySide use Ninja. Static-library builds have not been repaired or validated
+as part of these changes.
+
+Fast configuration regression checks (no dependency downloads or compilation):
+
+```shell
+python3 -m unittest discover -s tests -v
 ```
 
 ## Current release ##
@@ -122,7 +206,7 @@ MacOS Tahoe v26.0.1
 Release page:   
 https://github.com/mikaelsundell/3rdparty/releases/tag/macOS_Tahoe_v26.0.1
 
-System configuration:   
+System configuration for this published release (not the current build host):
 ```
 Darwin Kernel Version 25.0.0: Wed Sep 17 21:41:45 PDT 2025; root:xnu-12377.1.9~141/RELEASE_ARM64_T6000 arm64
 Apple clang version 17.0.0 (clang-1700.3.19.1)
@@ -151,161 +235,11 @@ Mikael Sundell - mikael.sundell@gmail.com
 
 ## License ##
 
-3rdparty packages and their copyrights:
+The build scripts and configuration files in this repository are licensed under
+[BSD-3-Clause](LICENSE). Third-party dependencies, media, and artwork retain their
+own licenses and copyright notices.
 
-Icon designed using images from Flaticon.com
-https://www.flaticon.com/authors/vectaicon
-
-Alembic
-Copyright (c) 2013,
-Sony Pictures Imageworks Inc. and
-Industrial Light & Magic, a division of Lucasfilm Entertainment Company Ltd
-
-Autoconf
-Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc
-
-Automake
-Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc
-
-Boost
-Copyright Beman Dawes, David Abrahams, 1998-2005
-Copyright Rene Rivera 2004-2007
-
-bzip2 
-Copyright © 1996-2007 Julian Seward
-
-Draco
-Copyright 2019 The Draco Authors
-
-Eigen
-Copyright (C) 2009-2015 Gael Guennebaud <gael.guennebaud@inria.fr>
-
-FFmpeg
-Copyright (c) Fabrice Bellard
-
-Freetype
-David Turner, Robert Wilhelm, and Werner Lemberg
-
-Gettext
-Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc
-
-Giflib
-Copyright (c) 1997 Eric S. Raymond
-
-GLEW
-Copyright (C) 2002-2007, Milan Ikits <milan ikits[]ieee org>
-Copyright (C) 2002-2007, Marcelo E. Magallon <mmagallo[]debian org>
-Copyright (C) 2002, Lev Povalahev
-
-GLM
-Copyright (c) 2005 - 2013 G-Truc Creation
-
-Harfbuzz
-Copyright © 2018  Google, Inc.
-
-Imath
-Copyright (c) 2002, Industrial Light & Magic, a division of Lucas Digital Ltd. LLC
-
-Jasper
-Copyright (c) 2001-2006 Michael David Adams
-Copyright (c) 1999-2000 Image Power, Inc
-Copyright (c) 1999-2000 The University of British Columbia
-
-Jpeg
-Copyright (C) 1991-1997, Thomas G. Lane
-
-Json
-Copyright (c) 2013-2022 Niels Lohmann <http://nlohmann.me>.
-
-Lcms2
-Copyright (c) 1998-2012 Marti Maria Saguer
-
-Libjpeg-turbo
-Copyright (C) 1994-1997, Thomas G. Lane
-Modified 2019 by Guido Vollbeding
-
-Libpng
-Copyright (c) 1998-2009 Glenn Randers-Pehrson
-(Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
-(Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
-
-Libraw
-Copyright (C) 2008-2021 LibRaw LLC
-
-Libtool
-Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc
-
-LibWebp
-Copyright 2010 Google Inc. All Rights Reserved
-
-LLVM
-Copyright (C) 2022 The llvm project
-
-MaterialX
-TM & (c) 2017 Lucasfilm Entertainment Company Ltd. and Lucasfilm Ltd.
-
-Nanobind
-Copyright (c) 2022 Wenzel Jakob
-
-Nasm
-1996-2017 The NASM Authors
-
-Ninja
-Copyright 2011 Google Inc. All Rights Reserved.
-
-OIIO
-Copyright 2008 Larry Gritz and the other authors and contributors.
-All Rights Reserved.
-
-OneTBB
-Copyright (c) 2005-2021 Intel Corporation
-
-OpenCV
-Copyright © 2024 , OpenCV team
-
-OpenEXR
-Copyright (c) 2002, Industrial Light & Magic, a division of Lucas Digital Ltd. LLC
-
-OpenJPEG
-Copyright (c) 2002-2014, Universite catholique de Louvain (UCL), Belgium
-Copyright (c) 2002-2014, Professor Benoit Macq
-Copyright (c) 2010-2011, Kaori Hagihara
-
-OpenSubDiv
-Copyright 2022 Pixar
-
-Pcre2
-Original API code Copyright (c) 1997-2012 University of Cambridge
-New API code Copyright (c) 2016-2020 University of Cambridge
-
-Pkg-config
-Copyright (C) 2001, 2002 Red Hat Inc.
-
-PTex
-Copyright 2014 Disney Enterprises, Inc.  All rights reserved
-
-Pybind
-Copyright (c) 2016 Wenzel Jakob <wenzel.jakob@epfl.ch>, All rights reserved.
-
-Pyside
-Copyright (C) 2020 The Qt Company Ltd
-
-Tclap
-Copyright (c) 2018 Google LLC
-All rights reserved
-
-Tiff
-Copyright (c) 1988-1997 Sam Leffler
-Copyright (c) 1991-1997 Silicon Graphics, Inc.
-
-Usd
-Copyright 2022 Pixar
-
-x264 Copyright
-Copyright (C) 2003-2013 x264 project
-
-yasm Copyright
-Copyright (c) 2001-2007 Peter Johnson
-
-Zlib Copyright
-Copyright (C) 1995-2004 Jean-loup Gailly.
+See [Third-party notices](THIRD_PARTY_NOTICES.md) for the dependency source
+snapshots, verbatim notice copies, and items that still need verification. The
+[notice manifest](licenses/manifest.json) records provenance and checksums.
+Upstream copyright years are preserved from the source distributions.

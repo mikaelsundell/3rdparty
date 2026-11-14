@@ -2,13 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# libpng Copyright
-# Copyright (c) 1998-2009 Glenn Randers-Pehrson
-# (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
-# (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
-
-# libpng from sourceforge.net/projects/libpng 2025-02-08
-# https://sourceforge.net/projects/libpng/files/libpng16/1.6.46/
+# Upstream package: libpng-1.6.46
+# Archive: libpng-1.6.46.tar.gz
+# Upstream copyright and license notices: licenses/third-party/libpng/
 
 build_info( " Adding libpng project" )
 
@@ -160,7 +156,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -171,8 +167,11 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}
 )
+
+# dependencies
+build_add_dependencies(${project_name} zlib-ng)

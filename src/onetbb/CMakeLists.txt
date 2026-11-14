@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# onetbb Copyright
-# Copyright (c) 2005-2021 Intel Corporation
-
-# onetbb from github.com 2022.0.0 2025-03-06
-# https://github.com/uxlfoundation/oneTBB/releases/tag/v2022.0.0
+# Upstream package: oneTBB-2022.3.0
+# Archive: oneTBB-2022.3.0.tar.gz
+# Upstream copyright and license notices: licenses/third-party/onetbb/
 
 build_info( " Adding onetbb project" )
 
@@ -139,7 +137,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -150,7 +148,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${lib_output}

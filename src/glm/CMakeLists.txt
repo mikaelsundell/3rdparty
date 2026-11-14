@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# ogl-math Copyright
-# Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
-
-# ogl-math from sourceforge.net 0.9.4.3 2013-04-26
-# http://sourceforge.net/projects/ogl-math/
+# Upstream package: glm-0.9.4.3
+# Archive: glm-0.9.4.3.tar.gz
+# Upstream copyright and license notices: licenses/third-party/glm/
 
 build_info( " Adding glm project" )
 
@@ -67,7 +65,7 @@ if( UNIX )
     )
 	
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${inc_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -76,7 +74,7 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${inc_output}

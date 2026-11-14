@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# Qt Copyright
-# Copyright (C) 2020 The Qt Company Ltd.
-
-# pyside from github 2025-12-18
-# https://github.com/pyside/pyside-setup/tree/v6.10.1
+# Upstream package: pyside-setup-6.10.1
+# Archive: pyside-setup-6.10.1.tar.gz
+# Upstream copyright and license notices: licenses/third-party/pyside/
 
 build_info( " Adding pyside project" )
 
@@ -65,6 +63,8 @@ set( pyside6_files
     QtGui
     QtHelp
     QtHttpServer
+    QtMultimedia
+    QtMultimediaWidgets
     QtNetwork
     QtNetworkAuth
     QtOpenGL
@@ -169,7 +169,7 @@ IF( UNIX )
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
             -DPYTHON_EXECUTABLE=${build_python3}
             -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
-            -DPYTHON_LIBRARY=${build_python3_library_dir}
+            -DPYTHON_LIBRARY=${build_python3_library}
             -DCMAKE_CXX_FLAGS=-stdlib=libc++
             -DBUILD_TESTS=OFF 
             -DNO_QT_TOOLS=yes
@@ -197,9 +197,14 @@ IF( UNIX )
         build_check
     )
     
+    # Reconfigure/rebuild bindings when installed Qt modules are added or changed.
+    file(GLOB qt_module_configs CONFIGURE_DEPENDS
+        "${build_lib_dir}/cmake/Qt6*/Qt6*Config.cmake")
+
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
+        DEPENDS ${qt_module_configs}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
         COMMAND ${build_make}
@@ -210,11 +215,11 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${include_output} ${lib_output} 
 )
 
 # dependencies
-add_dependencies( ${project_name} llvm ninja )
+build_add_dependencies( ${project_name} llvm ninja )

@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# ffmpeg Copyright
-# Copyright (c) Fabrice Bellard
-
-# ffmpeg from www.ffmpeg.org snapshot 2014-02-03
-# http://www.ffmpeg.org/releases
+# Upstream package: ffmpeg-4.3
+# Archive: ffmpeg-4.3.tar.gz
+# Upstream copyright and license notices: licenses/third-party/ffmpeg/
 
 build_info( " Adding ffmpeg project" )
 
@@ -159,7 +157,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -170,11 +168,11 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} jpeg libpng yasm x264 )
+build_add_dependencies( ${project_name} jpeg libpng yasm x264 )

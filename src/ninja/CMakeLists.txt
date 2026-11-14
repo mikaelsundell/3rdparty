@@ -2,12 +2,11 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# Copyright 2011 Google Inc. All Rights Reserved.
+# Upstream package: ninja-1.11.1
+# Archive: ninja-1.11.1.tar.gz
+# Upstream copyright and license notices: licenses/third-party/ninja/
 
-# ninja from gitlab.com 1.11.1 2023-12-17
-# https://github.com/ninja-build/ninja
-
-build_info( " Adding eigen project" )
+build_info( " Adding ninja project" )
 
 # project configuration
 
@@ -104,7 +103,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -115,7 +114,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output}

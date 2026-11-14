@@ -1,16 +1,9 @@
-##-*****************************************************************************
-##  Copyright 2010-2022 Mikael Sundell and the other authors and contributors.
-##  All Rights Reserved.
-##
-##  oiio-images CMakeLists.txt for thirdparty
-##
-##-*****************************************************************************
+# Copyright 2010-present Mikael Sundell and the other authors and contributors.
+# SPDX-License-Identifier: BSD-3-Clause
+# https://github.com/mikaelsundell/3rdparty
 
-# OIIO Copyright
-# Copyright (c) 2003-2010 Sony Pictures Imageworks Inc., et al.
-
-# oiio images from github.com 2011-11-24
-# https://github.com/OpenImageIO/oiio-images/downloads
+# Upstream media package: OpenImageIO-oiio-images-3819677
+# Upstream licensing: see THIRD_PARTY_NOTICES.md (archive not verified locally).
 
 build_info( " Adding oiio-images images" )
 
@@ -76,7 +69,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${media_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -85,7 +78,7 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${media_name} ALL
     DEPENDS ${media_output}

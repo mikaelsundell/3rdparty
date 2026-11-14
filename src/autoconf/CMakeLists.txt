@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# autoconf Copyright
-# Copyright © 1992-1996, 1998-2012 Free Software Foundation, Inc.
-
-# autoconf from ftp.gnu.org 2021-01-28
-# http://ftp.gnu.org/gnu/autoconf/
+# Upstream package: autoconf-2.71
+# Archive: autoconf-2.71.tar.gz
+# Upstream copyright and license notices: licenses/third-party/autoconf/
 
 build_info( " Adding autoconf project" )
 
@@ -135,7 +133,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -146,7 +144,7 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}

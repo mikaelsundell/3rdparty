@@ -1,4 +1,6 @@
-# License and copyright goes here
+# Copyright 2026-present Contributors to the 3rdparty project.
+# SPDX-License-Identifier: BSD-3-Clause
+# https://github.com/mikaelsundell/3rdparty
 
 
 #########################################################################

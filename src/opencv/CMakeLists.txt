@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# OpenCV Copyright
-# Copyright © 2024 , OpenCV team
-
-# opencv from github 2024-01-08
-# https://github.com/opencv/opencv
+# Upstream package: opencv-4.x
+# Archive: opencv-4.x.zip
+# Upstream copyright and license notices: licenses/third-party/opencv/
 
 build_info( " Adding opencv project" )
 
@@ -162,7 +160,7 @@ IF( UNIX )
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
             -DPYTHON_EXECUTABLE=${build_python3}
             -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
-            -DPYTHON_LIBRARY=${build_python3_library_dir}
+            -DPYTHON_LIBRARY=${build_python3_library}
             -DPYTHON3_PACKAGES_PATH=${build_sitepackages_dir}
             -DCMAKE_CXX_FLAGS=-stdlib=libc++
             -DCMAKE_CXX_STANDARD=17
@@ -191,7 +189,7 @@ IF( UNIX )
     )
     
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -203,11 +201,11 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${include_output} ${lib_output} 
 )
 
 # dependencies
-add_dependencies( ${project_name} ffmpeg jpeg libpng libwebp openexr tiff zlib-ng  )
+build_add_dependencies( ${project_name} ffmpeg jpeg libpng libwebp openexr tiff zlib-ng  )

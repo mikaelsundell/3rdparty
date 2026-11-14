@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# harfbuzz Copyright
-# Copyright © 2018  Google, Inc.
-
-# harfbuzz from github.com 4.3.0 2022-06-04
-# https://github.com/harfbuzz/harfbuzz
+# Upstream package: harfbuzz-4.3.0
+# Archive: harfbuzz-4.3.0.tar.gz
+# Upstream copyright and license notices: licenses/third-party/harfbuzz/
 
 build_info( " Adding harfbuzz project" )
 
@@ -114,7 +112,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -125,7 +123,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${lib_output}

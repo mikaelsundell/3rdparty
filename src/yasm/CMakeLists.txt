@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# yasm Copyright
-# Copyright (c) 2001-2007 Peter Johnson
-
-# yasm from www.tortall.net 1.2.0 2014-02-03
-# http://www.tortall.net/projects/yasm/releases
+# Upstream package: yasm-1.3.0
+# Archive: yasm-1.3.0.tar.gz
+# Upstream copyright and license notices: licenses/third-party/yasm/
 
 build_info( " Adding yasm project" )
 
@@ -130,7 +128,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}

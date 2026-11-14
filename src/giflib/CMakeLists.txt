@@ -2,16 +2,11 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# giflib Copyright
-# Copyright (c) 1997 Eric S. Raymond
+# Upstream package: giflib-5.1.4
+# Archive: None
+# Upstream copyright and license notices: licenses/third-party/giflib/
 
-# libtiff from sourceforge.net/p/giflib 5.1.4 2020-10-25
-# https://sourceforge.net/projects/giflib/
-
-# History:
-# 5.1.4 Last version compatible with Apple
-
-build_info( " Adding gif project" )
+build_info( " Adding giflib project" )
 
 # project configuration
 
@@ -139,7 +134,7 @@ IF( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -150,7 +145,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}

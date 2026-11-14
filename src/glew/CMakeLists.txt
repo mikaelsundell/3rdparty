@@ -2,13 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# glew Copyright
-# Copyright (C) 2002-2007, Milan Ikits <milan ikits[]ieee org>
-# Copyright (C) 2002-2007, Marcelo E. Magallon <mmagallo[]debian org>
-# Copyright (C) 2002, Lev Povalahev
-
-# flew from sourceforge.net/projects/glew 2.2.0 2020-08-04
-# https://sourceforge.net/projects/glew/files/glew/2.2.0
+# Upstream package: glew-2.2.0
+# Archive: glew-2.2.0.tgz
+# Upstream copyright and license notices: licenses/third-party/glew/
 
 build_info( " Adding glew project" )
 
@@ -114,7 +110,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -125,7 +121,7 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}

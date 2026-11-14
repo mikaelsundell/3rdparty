@@ -2,12 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# Boost Copyright
-# Copyright Beman Dawes, David Abrahams, 1998-2005.
-# Copyright Rene Rivera 2004-2007.
-
-# boost from sourceforge.net 1.84.0 2024-03-10
-# https://www.boost.org/users/download/
+# Upstream package: boost_1_87_0
+# Archive: boost_1_87_0.tar.gz
+# Upstream copyright and license notices: licenses/third-party/boost/
 
 build_info( " Adding boost project" )
 
@@ -231,7 +228,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -243,11 +240,11 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} bzip2 zlib-ng )
+build_add_dependencies( ${project_name} bzip2 zlib-ng )

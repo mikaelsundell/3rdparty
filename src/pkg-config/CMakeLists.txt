@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# pkg-config Copyright
-# Copyright (C) 2001, 2002 Red Hat Inc.
-
-# pkg-config from pkgconfig.freedesktop.org 2014-02-04
-# http://pkgconfig.freedesktop.org/releases/
+# Upstream package: pkg-config-0.28
+# Archive: pkg-config-0.28.tar.gz
+# Upstream copyright and license notices: licenses/third-party/pkg-config/
 
 build_info( " Adding pkg-config project" )
 
@@ -132,7 +130,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -143,11 +141,11 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}
 )
 
 # dependencies
-add_dependencies( ${project_name} automake )
+build_add_dependencies( ${project_name} automake )

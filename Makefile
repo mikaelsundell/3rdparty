@@ -1,3 +1,7 @@
+# Copyright 2026-present Contributors to the 3rdparty project.
+# SPDX-License-Identifier: BSD-3-Clause
+# https://github.com/mikaelsundell/3rdparty
+
 #########################################################################
 #
 # This is the master makefile.
@@ -55,10 +59,6 @@ ifneq (${build_extras},)
 	MY_CMAKE_FLAGS += -Dbuild_extras:BOOL=${build_extras}
 endif
 
-ifneq (${build_autotools},)
-	MY_CMAKE_FLAGS += -Dbuild_autotools:BOOL=${build_autotools}
-endif
-
 ifneq (${build_media},)
 	MY_CMAKE_FLAGS += -Dbuild_media:BOOL=${build_media}
 endif
@@ -104,10 +104,10 @@ clean:
 # 'make help' prints important make targets
 help:
 	@echo "Targets:"
-	@echo "  make                        Build all projects for development and test in ${build_dir},"
-	@echo "  make debug                  Build all projects with debugging symbols when possible."
-	@echo "  make cmake                  Build all projects with cmake."
-	@echo "  make clean                  Get rid of all build files."
+	@echo "  make                        Build enabled dependency groups (base by default)."
+	@echo "  make debug                  Build enabled dependency groups in Debug."
+	@echo "  make cmakesetup             Configure the dependency build without compiling."
+	@echo "  make clean                  Remove ${build_dir}, including installed dependencies."
 	@echo "  make help                   Print all the make options"
 	@echo ""
 	@echo "Helpful modifiers:"

@@ -2,12 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# tclap Copyright
-# Copyright (c) 2018 Google LLC
-# All rights reserved.
-
-# tclap from ourceforge.net 2022-03-29
-# https://sourceforge.net/projects/tclap/
+# Upstream package: tclap-1.2.5
+# Archive: tclap-1.2.5.tar.gz
+# Upstream copyright and license notices: licenses/third-party/tclap/
 
 build_info( " Adding tclap project" )
 
@@ -84,7 +81,7 @@ IF( UNIX )
     endif()
     
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${include_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -93,7 +90,7 @@ IF( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${include_output}

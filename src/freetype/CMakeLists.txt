@@ -2,11 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# Copyright (C) 2006-2019 by
-# David Turner, Robert Wilhelm, and Werner Lemberg.
-
-# freetype from reetype.org 2020-10-25
-# https://www.freetype.org/download.html
+# Upstream package: freetype-2.10.0
+# Archive: freetype-2.10.0.tar.gz
+# Upstream copyright and license notices: licenses/third-party/freetype/
 
 build_info( " Adding freetype project" )
 
@@ -113,7 +111,7 @@ if( UNIX )
     )
 
     # run
-    add_custom_command( 
+    build_add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -124,7 +122,7 @@ if( UNIX )
 
 endif()
 
-# custom target, always build
+# Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}
