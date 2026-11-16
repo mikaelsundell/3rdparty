@@ -127,6 +127,7 @@ IF( UNIX )
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir}
               -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+              -DBUILD_TESTING=OFF
               ${build_options} &&
         make ${build_flags} &&
         make install

@@ -15,6 +15,12 @@ In progress notes
 
 Fixes:
 
+opentimelineio / rapidjson / minizip-ng
+---------------------------------
+* Fexternal dependencies, CMake 3.27 compatibility, safe std::any
+  conversion, macOS library paths, and installed C++ consumer checks.
+
+
 qt 6.10.1
 ---------------------------------
 * src/scripts/patch_qt.py adds <arm_acle.h> to qyieldcpu.h on ARM for

@@ -213,20 +213,13 @@ if( UNIX )
             export DYLD_FALLBACK_LIBRARY_PATH=${build_lib_dir} &&
             export CXXFLAGS=-stdlib=libc++
         )
-        execute_process(
-            COMMAND xcodebuild -version
-            OUTPUT_VARIABLE XCODE_VERSION_OUTPUT
-            ERROR_VARIABLE XCODE_VERSION_ERROR
-            RESULT_VARIABLE XCODE_VERSION_RESULT
-        )
-        if(XCODE_VERSION_RESULT EQUAL 0)
-            string(REGEX MATCH "[0-9]+\\.[0-9]+" XCODE_VERSION ${XCODE_VERSION_OUTPUT})
-            if(XCODE_VERSION VERSION_GREATER_EQUAL "15.0")
-                set( build_env 
-                    ${build_env} && 
-                    export LDFLAGS=-Wl,-ld_classic
-                )
-            endif()
+        # Recent Xcode toolchains no longer ship the classic linker.
+        get_filename_component( linker_dir "${CMAKE_LINKER}" DIRECTORY )
+        if( EXISTS "${linker_dir}/ld-classic" )
+            set( build_env
+                ${build_env} &&
+                export LDFLAGS=-Wl,-ld_classic
+            )
         endif()
     else()
         set( build_env
@@ -457,7 +450,6 @@ endif()
 # build extras
 if( build_extras )
     build_info( "Adding extras" )
-
     build_add_project(
               alembic
               DIR ${CMAKE_SOURCE_DIR}/src/alembic
@@ -513,6 +505,12 @@ if( build_extras )
               BUILD ON
     )
     build_add_project(
+              minizip-ng
+              DIR ${CMAKE_SOURCE_DIR}/src/minizip-ng
+              DESCRIPTION "minizip-ng"
+              BUILD ON
+    )
+    build_add_project(
               nanobind
               DIR ${CMAKE_SOURCE_DIR}/src/nanobind
               DESCRIPTION "nanobind"
@@ -537,9 +535,21 @@ if( build_extras )
               BUILD ON
     )
     build_add_project(
+              rapidjson
+              DIR ${CMAKE_SOURCE_DIR}/src/rapidjson
+              DESCRIPTION "RapidJSON"
+              BUILD ON
+    )
+    build_add_project(
               tclap
               DIR ${CMAKE_SOURCE_DIR}/src/tclap
               DESCRIPTION "tclap"
+              BUILD ON
+    )
+    build_add_project(
+              opentimelineio
+              DIR ${CMAKE_SOURCE_DIR}/src/opentimelineio
+              DESCRIPTION "OpenTimelineIO"
               BUILD ON
     )
     build_add_project(

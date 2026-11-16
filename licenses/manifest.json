@@ -554,6 +554,21 @@
       "status": "Copied from local extracted source"
     },
     {
+      "package": "minizip-ng",
+      "recipe": "src/minizip-ng/CMakeLists.txt",
+      "source_package": "minizip-ng-4.2.2",
+      "archive": "minizip-ng-4.2.2.tar.gz",
+      "archive_sha256": "71af7b9799856d8b03619df3949e9c1be9703f8de0795af71399ba283cb27aac",
+      "notices": [
+        {
+          "path": "licenses/third-party/minizip-ng/LICENSE",
+          "source": "build/macosx/arm64.release/src/minizip-ng/minizip-ng-4.2.2/LICENSE",
+          "sha256": "675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03"
+        }
+      ],
+      "status": "Copied from published source; fresh Debug and Release builds validated 2026-11-16"
+    },
+    {
       "package": "nanobind",
       "recipe": "src/nanobind/CMakeLists.txt",
       "source_package": "nanobind-master-251225",
@@ -755,6 +770,26 @@
       "status": "Copied from local extracted source"
     },
     {
+      "package": "opentimelineio",
+      "recipe": "src/opentimelineio/CMakeLists.txt",
+      "source_package": "opentimelineio-master-250205",
+      "archive": "opentimelineio-master-250205.tar.gz",
+      "archive_sha256": "b85296e0ac5e05c2fd3cf050e0c394b927961ce7360b5f2868cf6f001f788943",
+      "notices": [
+        {
+          "path": "licenses/third-party/opentimelineio/LICENSE.txt",
+          "source": "build/macosx/arm64.release/src/opentimelineio/OpenTimelineIO-system-dependencies-261115/LICENSE.txt",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        },
+        {
+          "path": "licenses/third-party/opentimelineio/NOTICE.txt",
+          "source": "build/macosx/arm64.release/src/opentimelineio/OpenTimelineIO-system-dependencies-261115/NOTICE.txt",
+          "sha256": "e5ca061ef053cb9fd1b7146da3b10d4e4f2ec218445c3ba7f7edb32ae9452543"
+        }
+      ],
+      "status": "Copied from published source; fresh Debug and Release builds validated 2026-11-16"
+    },
+    {
       "package": "openusd",
       "recipe": "src/openusd/CMakeLists.txt",
       "source_package": "OpenUSD-25.11",
@@ -887,6 +922,21 @@
         }
       ],
       "status": "Copied from local extracted source"
+    },
+    {
+      "package": "rapidjson",
+      "recipe": "src/rapidjson/CMakeLists.txt",
+      "source_package": "rapidjson-master-250205",
+      "archive": "rapidjson-master-250205.tar.gz",
+      "archive_sha256": "5a80f81940e37fcb0eb24e893bb5d4376820fffd91d3253391c243cac855b87a",
+      "notices": [
+        {
+          "path": "licenses/third-party/rapidjson/license.txt",
+          "source": "build/macosx/arm64.release/src/rapidjson/rapidjson-master-250205/license.txt",
+          "sha256": "a140e5d46fe734a1c78f1a3c3ef207871dd75648be71fdda8e309b23ab8b1f32"
+        }
+      ],
+      "status": "Copied from published source; fresh Debug and Release builds validated 2026-11-16"
     },
     {
       "package": "tclap",

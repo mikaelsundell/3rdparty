@@ -9,13 +9,27 @@ machine_arch=$(uname -m)
 # Initialize variables
 major_version=""
 build_type=""
+project_target=""
 
 # Parse arguments
 parse_args() {
     while [[ "$#" -gt 0 ]]; do
         case "$1" in
             --target=*) major_version="${1#*=}"; shift ;;
-            --target) shift; major_version="$1"; shift ;;
+            --target)
+                [[ "$#" -ge 2 ]] || { echo "Missing value for --target"; exit 1; }
+                major_version="$2"; shift 2 ;;
+            --project=*)
+                project_target="${1#*=}"
+                [[ -n "$project_target" ]] || { echo "Missing value for --project"; exit 1; }
+                shift ;;
+            --project)
+                [[ "$#" -ge 2 ]] || { echo "Missing value for --project"; exit 1; }
+                [[ -n "$2" && "$2" != --* ]] || { echo "Missing value for --project"; exit 1; }
+                project_target="$2"; shift 2 ;;
+            -h|--help)
+                echo "Usage: $0 debug|release|all [--target <macOS version>] [--project <CMake target>]"
+                exit 0 ;;
             debug|release|all) build_type="$1"; shift ;;
             *) echo "Unknown argument: $1"; exit 1 ;;
         esac
@@ -45,7 +59,9 @@ if [ "$build_type" != "debug" ] && [ "$build_type" != "release" ] && [ "$build_t
     exit 1
 fi
 
-clear
+if [[ -t 1 ]]; then
+    clear
+fi
 echo "Building 3rdparty for $build_type"
 echo "---------------------------------"
 echo "Deployment target: $major_version"
@@ -58,6 +74,24 @@ if ! command -v cmake &> /dev/null; then
         echo "cmake could not be found, please make sure it's installed"
         exit 1
     fi
+fi
+
+# Use the same Makefile entry point for a selected project and its dependencies.
+build_project() {
+    local variant="$1"
+    cd "$script_dir"
+    make verbose=1 build_base=1 build_libs=1 build_extras=1 build_media=0 \
+        MY_MAKE_FLAGS="$project_target" "$variant"
+}
+
+if [[ -n "$project_target" ]]; then
+    if [[ "$build_type" == "all" ]]; then
+        build_project debug
+        build_project release
+    else
+        build_project "$build_type"
+    fi
+    exit 0
 fi
 
 # check if numpy is installed
@@ -118,7 +152,7 @@ build_3rdparty() {
         qt_config=Debug
     fi
 
-    # cmake
+   # cmake
     export PATH=$PATH:/Applications/CMake.app/Contents/bin &&
 
     # set an alias for Python
@@ -143,54 +177,57 @@ build_3rdparty() {
     export MACOSX_DEPLOYMENT_TARGET=$major_version &&
     echo "Qt deployment target: $major_version"
       
-    mkdir -p "build.$build_type"
-    cd "build.$build_type"
+    if [ -d "build.$build_type" ]; then
+        # reuse existing build
+        echo "Qt build for type: $build_type exists, will reuse"
+        cd build.$build_type
+    else
+        # create new build
+        mkdir build.$build_type &&
+        cd build.$build_type &&
 
-    # build minimum Qt
-    # changing these will also change the output of PySide
-    qt_params=(
-        -DBUILD_qtactiveqt=OFF
-        -DBUILD_qtcharts=OFF
-        -DBUILD_qtcoap=OFF
-        -DBUILD_qtconnectivity=OFF
-        -DBUILD_qtdeclarative=OFF
-        -DBUILD_qtdoc=OFF
-        -DBUILD_qtgraphs=OFF
-        -DBUILD_qtharfbuzz=OFF
-        -DBUILD_qtlocation=OFF
-        -DBUILD_qtlottie=OFF
-        -DBUILD_qtmqtt=OFF
-        -DBUILD_qtopcua=OFF
-        -DBUILD_qtquick3d=OFF
-        -DBUILD_qtquick3dphysics=OFF
-        -DBUILD_qtquicktimeline=OFF
-        -DBUILD_qtquickeffectmaker=OFF
-        -DBUILD_qtremoteobjects=OFF
-        -DBUILD_qtsensors=OFF
-        -DBUILD_qtserialbus=OFF
-        -DBUILD_qtspeech=OFF
-        -DBUILD_qtvirtualkeyboard=OFF
-        -DBUILD_qtwayland=OFF
-        -DBUILD_qtwebchannel=OFF
-        -DBUILD_qtwebengine=OFF
-        -DBUILD_qtwebview=OFF
-        -DQT_FEATURE_system_freetype=ON
-        -DQT_FEATURE_system_zlib=ON
-        -DCMAKE_OSX_DEPLOYMENT_TARGET=$major_version
-        -DCMAKE_OSX_SYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
-    )
+        # build minimum Qt
+        # changing these will also change the output of PySide
+        qt_params=(
+            -DBUILD_qtactiveqt=OFF
+            -DBUILD_qtcharts=OFF
+            -DBUILD_qtcoap=OFF
+            -DBUILD_qtconnectivity=OFF
+            -DBUILD_qtdeclarative=OFF
+            -DBUILD_qtdoc=OFF
+            -DBUILD_qtgraphs=OFF
+            -DBUILD_qtharfbuzz=OFF
+            -DBUILD_qtlocation=OFF
+            -DBUILD_qtlottie=OFF
+            -DBUILD_qtmqtt=OFF
+            -DBUILD_qtmultimedia=OFF
+            -DBUILD_qtopcua=OFF
+            -DBUILD_qtquick3d=OFF
+            -DBUILD_qtquick3dphysics=OFF
+            -DBUILD_qtquicktimeline=OFF
+            -DBUILD_qtquickeffectmaker=OFF
+            -DBUILD_qtremoteobjects=OFF
+            -DBUILD_qtsensors=OFF
+            -DBUILD_qtserialbus=OFF
+            -DBUILD_qtspeech=OFF
+            -DBUILD_qtvirtualkeyboard=OFF
+            -DBUILD_qtwayland=OFF
+            -DBUILD_qtwebchannel=OFF
+            -DBUILD_qtwebengine=OFF
+            -DBUILD_qtwebview=OFF
+            -DQT_FEATURE_system_freetype=ON
+            -DQT_FEATURE_system_zlib=ON
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=$major_version
+            -DCMAKE_OSX_SYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+        )
 
-    # Clear the old exclusion and let Qt enable Multimedia by default.
-    # Reconfigure reused builds so changes to qt_params take effect.
-    cmake .. -U BUILD_qtmultimedia \
-        -DCMAKE_INSTALL_PREFIX="$script_dir/build/macosx/$machine_arch.$build_type" \
-        -DCMAKE_PREFIX_PATH="$script_dir/build/macosx/$machine_arch.$build_type" \
-        "${qt_params[@]}" -G"Ninja Multi-Config"
+        echo "Build Qt for type: $build_type"
+        cmake .. -DCMAKE_INSTALL_PREFIX="$script_dir/build/macosx/$machine_arch.$build_type" -DCMAKE_PREFIX_PATH="$script_dir/build/macosx/$machine_arch.$build_type" "${qt_params[@]}" -G"Ninja Multi-Config" &&
+        cmake --build . --parallel
+    fi
 
-    cmake --build . --config "$qt_config" --parallel
-
-    # Install the same Qt configuration that was requested for the build.
-    cmake --install . --config "$qt_config" &&
+    # ninja install Qt
+    ninja install  &&
 
     # make extras
     echo "Build 3rdparty libs and extras for type: $build_type"

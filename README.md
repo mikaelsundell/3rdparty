@@ -72,47 +72,24 @@ removes installed dependencies too; Qt source and build trees under `qt` remain.
 The install prefixes on Apple Silicon are `build/macosx/arm64.debug` and
 `build/macosx/arm64.release`.
 
-### Rebuild Qt or PySide separately ###
+### Build a selected library ###
 
-Qt uses Ninja Multi-Config. `cmake --build` invokes Ninja; `--config Release`
-or `--config Debug` selects the configuration independently of the directory name.
-Multimedia is enabled by default. `build.sh` clears the previous Multimedia
-exclusion and reconfigures existing Qt build directories on every run.
-
-To resume an already configured Release Qt build, run from the repository root:
+Use `--project` to build a library and its declared dependencies:
 
 ```shell
-export PATH="$PWD/build/macosx/arm64.release/ninja:$PATH"
-python3 src/scripts/patch_qt.py qt/qt-everywhere-src-6.10.1 &&
-cmake --build qt/qt-everywhere-src-6.10.1/build.release --config Release --parallel &&
-cmake --install qt/qt-everywhere-src-6.10.1/build.release --config Release
+./build.sh debug --project <library> --target 12
+./build.sh release --project <library> --target 12
+./build.sh all --project <library> --target 12
 ```
 
-If the existing Qt cache still excludes Multimedia, reconfigure it before the
-build, preserving its other cached settings:
+Replace `<library>` with its CMake target name, such as `openexr`, `ocio`, or
+`opentimelineio`. `all` builds both Debug and Release.
 
-```shell
-cmake -S qt/qt-everywhere-src-6.10.1 \
-  -B qt/qt-everywhere-src-6.10.1/build.release -U BUILD_qtmultimedia
-```
-
-Removing `build.release` requires a fresh Qt configuration before these resume
-commands can run.
-
-After installing Qt Multimedia, rebuild PySide to add `PySide6.QtMultimedia`
-and `PySide6.QtMultimediaWidgets`. For an existing dependency build configured
-with libraries and extras enabled:
-
-```shell
-cmake -S . -B build/macosx/arm64.release &&
-cmake --build build/macosx/arm64.release --target pyside
-```
-
-This selects PySide and its declared prerequisites instead of the default target
-for all dependencies. PySide tracks installed Qt module configurations and checks
-that its Multimedia bindings are installed. Installing a disabled Qt module does
-not happen until Qt is rebuilt; disabling a module also does not remove files
-left in an existing install prefix.
+Project selection uses the existing Makefile and `MY_MAKE_FLAGS`; CMake resolves
+the declared dependencies. This skips the Qt build and unrelated library targets
+and uses the normal `build/macosx/<architecture>.debug` and `.release` directories
+without the full-build clean prompt. Package versions and source-specific changes
+are documented in [packages.txt](packages.txt).
 
 ### Qt compiler compatibility ###
 
@@ -193,11 +170,6 @@ tracking. The top-level project and most dependency recipes still use Make;
 Qt and PySide use Ninja. Static-library builds have not been repaired or validated
 as part of these changes.
 
-Fast configuration regression checks (no dependency downloads or compilation):
-
-```shell
-python3 -m unittest discover -s tests -v
-```
 
 ## Current release ##
 

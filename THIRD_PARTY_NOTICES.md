@@ -45,6 +45,7 @@ copyright notices; their LICENSES directories list license texts, not every auth
 | libwebp | `libwebp-1.2.2` | [AUTHORS](licenses/third-party/libwebp/AUTHORS), [COPYING](licenses/third-party/libwebp/COPYING) |
 | llvm | `llvm-project-16.0.6.src` | [LICENSE.TXT](licenses/third-party/llvm/LICENSE.TXT) |
 | materialx | `MaterialX-1.39.4` | [LICENSE](licenses/third-party/materialx/LICENSE) |
+| minizip-ng | `minizip-ng-4.2.2` | [LICENSE](licenses/third-party/minizip-ng/LICENSE) |
 | nanobind | `nanobind-master-251225` | [LICENSE](licenses/third-party/nanobind/LICENSE) |
 | nanogui | `nanogui-master-240216` | [LICENSE.txt](licenses/third-party/nanogui/LICENSE.txt) |
 | nasm | `nasm-nasm-2.16.01` | [AUTHORS](licenses/third-party/nasm/AUTHORS), [LICENSE](licenses/third-party/nasm/LICENSE) |
@@ -59,6 +60,7 @@ copyright notices; their LICENSES directories list license texts, not every auth
 | openexr-images | `openexr-images-1.7.0` | Not verified: media archive unavailable locally |
 | openjpeg | `openjpeg-2.5.4` | [AUTHORS.md](licenses/third-party/openjpeg/AUTHORS.md), [LICENSE](licenses/third-party/openjpeg/LICENSE) |
 | opensubdiv | `OpenSubdiv-master-250306` | [LICENSE.txt](licenses/third-party/opensubdiv/LICENSE.txt), [NOTICE.txt](licenses/third-party/opensubdiv/NOTICE.txt) |
+| opentimelineio | `opentimelineio-master-250205` | [LICENSE.txt](licenses/third-party/opentimelineio/LICENSE.txt), [NOTICE.txt](licenses/third-party/opentimelineio/NOTICE.txt) |
 | openusd | `OpenUSD-25.11` | [LICENSE.txt](licenses/third-party/openusd/LICENSE.txt), [NOTICE.txt](licenses/third-party/openusd/NOTICE.txt) |
 | pcre2 | `pcre2-10.32` | [AUTHORS](licenses/third-party/pcre2/AUTHORS), [COPYING](licenses/third-party/pcre2/COPYING) |
 | pkg-config | `pkg-config-0.28` | [AUTHORS](licenses/third-party/pkg-config/AUTHORS), [COPYING](licenses/third-party/pkg-config/COPYING) |
@@ -66,6 +68,7 @@ copyright notices; their LICENSES directories list license texts, not every auth
 | pybind | `pybind11-2.9.1` | [LICENSE](licenses/third-party/pybind/LICENSE) |
 | pyside | `pyside-setup-6.10.1` | [LICENSES/Apache-2.0.txt](licenses/third-party/pyside/LICENSES/Apache-2.0.txt), [LICENSES/BSD-3-Clause.txt](licenses/third-party/pyside/LICENSES/BSD-3-Clause.txt), [LICENSES/GFDL-1.3-no-invariants-only.txt](licenses/third-party/pyside/LICENSES/GFDL-1.3-no-invariants-only.txt), [LICENSES/GPL-2.0-only.txt](licenses/third-party/pyside/LICENSES/GPL-2.0-only.txt), [LICENSES/GPL-3.0-only.txt](licenses/third-party/pyside/LICENSES/GPL-3.0-only.txt), [LICENSES/LGPL-3.0-only.txt](licenses/third-party/pyside/LICENSES/LGPL-3.0-only.txt), [LICENSES/LicenseRef-Qt-Commercial.txt](licenses/third-party/pyside/LICENSES/LicenseRef-Qt-Commercial.txt), [LICENSES/Qt-GPL-exception-1.0.txt](licenses/third-party/pyside/LICENSES/Qt-GPL-exception-1.0.txt) |
 | qt | `qt-everywhere-src-6.10.1` | [LICENSES/BSD-3-Clause.txt](licenses/third-party/qt/LICENSES/BSD-3-Clause.txt), [LICENSES/GFDL-1.3-no-invariants-only.txt](licenses/third-party/qt/LICENSES/GFDL-1.3-no-invariants-only.txt), [LICENSES/GPL-2.0-only.txt](licenses/third-party/qt/LICENSES/GPL-2.0-only.txt), [LICENSES/GPL-3.0-only.txt](licenses/third-party/qt/LICENSES/GPL-3.0-only.txt), [LICENSES/LGPL-3.0-only.txt](licenses/third-party/qt/LICENSES/LGPL-3.0-only.txt), [LICENSES/LicenseRef-Qt-Commercial.txt](licenses/third-party/qt/LICENSES/LicenseRef-Qt-Commercial.txt), [LICENSES/Qt-GPL-exception-1.0.txt](licenses/third-party/qt/LICENSES/Qt-GPL-exception-1.0.txt) |
+| rapidjson | `rapidjson-master-250205` | [license.txt](licenses/third-party/rapidjson/license.txt) |
 | tclap | `tclap-1.2.5` | [AUTHORS](licenses/third-party/tclap/AUTHORS), [COPYING](licenses/third-party/tclap/COPYING) |
 | tiff | `tiff-4.0.3` | [COPYRIGHT](licenses/third-party/tiff/COPYRIGHT) |
 | x264 | `x264-master` | [AUTHORS](licenses/third-party/x264/AUTHORS), [COPYING](licenses/third-party/x264/COPYING) |

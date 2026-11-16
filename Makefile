@@ -83,8 +83,8 @@ release:
 
 # 'make cmakesetup' constructs the build directory and runs 'cmake' there
 cmakesetup:  
-	@( cmake -E make_directory ${platform_dir} ; \
-		cd ${platform_dir} ; \
+	@( cmake -E make_directory ${platform_dir} && \
+		cd ${platform_dir} && \
 		cmake -DCMAKE_INSTALL_PREFIX=${base_dir}/${platform_dir} \
 			 ${MY_CMAKE_FLAGS} \
 			 ../../../ ; \
@@ -107,6 +107,7 @@ help:
 	@echo "  make                        Build enabled dependency groups (base by default)."
 	@echo "  make debug                  Build enabled dependency groups in Debug."
 	@echo "  make cmakesetup             Configure the dependency build without compiling."
+	@echo "  make debug MY_MAKE_FLAGS=opentimelineio  Build a selected target and dependencies."
 	@echo "  make clean                  Remove ${build_dir}, including installed dependencies."
 	@echo "  make help                   Print all the make options"
 	@echo ""

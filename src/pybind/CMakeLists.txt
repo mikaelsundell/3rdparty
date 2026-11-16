@@ -77,7 +77,8 @@ IF( UNIX )
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
-            -DCMAKE_INSTALL_PREFIX=${build_dir} ${build_options} 
+            -DCMAKE_INSTALL_PREFIX=${build_dir} ${build_options}
+            -DBUILD_TESTING=OFF
             -DPYTHON_EXECUTABLE=${build_python3}
             -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
             -DPYTHON_LIBRARY=${build_python3_library} &&
