@@ -15,8 +15,18 @@ In progress notes
 
 Fixes:
 
+llvm 20.1.3
+---------------------------------
+* LLVM 20.1.3 uses std::string for ClIgnorelist; the LLVM 16 sancov patch is
+  no longer needed.
+* rdf-comparators.patch backports LLVM commit 4bed796a5fea (PR #160804).
+  Replace stateful std::less/std::equal_to specializations with RDF comparators
+  for current libc++ compatibility; adjusted upstream unit-test context for 20.1.3.
+
 opentimelineio / rapidjson / minizip-ng
 ---------------------------------
+* minizip-ng enables Bzip2 compression using the existing bzip2 project,
+  alongside Store/Deflate through zlib-ng. No additional packages are required.
 * Fexternal dependencies, CMake 3.27 compatibility, safe std::any
   conversion, macOS library paths, and installed C++ consumer checks.
 
@@ -26,7 +36,9 @@ qt 6.10.1
 * src/scripts/patch_qt.py adds <arm_acle.h> to qyieldcpu.h on ARM for
   AppleClang 21's __yield declaration. build.sh applies this idempotently.
 * Multimedia is enabled; reused Qt build trees are reconfigured.
-* SDK 27 remains outside Qt 6.10.1's reported tested SDK range.
+* Disable dup3 for compatibility with macOS deployment targets before 27.
+* Use Qt's default multi-config build/install targets so Release tools such as
+  moc are installed alongside Debug frameworks.
 
 boost
 ---------------------------------

@@ -189,8 +189,8 @@ IF( UNIX )
     )
 
     # run
-    build_add_custom_command(
-        OUTPUT ${dir_output} ${build_output}
+    add_custom_command(
+        OUTPUT ${build_output} ${dir_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
         COMMAND ${build_make}
@@ -200,10 +200,10 @@ IF( UNIX )
 
 endif()
 
-# Custom target builds missing or outdated installed outputs.
+# Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${dir_output} ${build_output}
+    DEPENDS ${build_output} ${dir_output}
 )
 
 # dependencies

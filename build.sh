@@ -51,6 +51,7 @@ fi
 # exports
 export MACOSX_DEPLOYMENT_TARGET=$major_version
 export CMAKE_OSX_DEPLOYMENT_TARGET=$major_version
+export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
 
 # exit on error
 set -e 
@@ -147,10 +148,6 @@ python3 "$script_dir/src/scripts/patch_qt.py" "$script_dir/qt/$qt_name"
 # build 3rdparty
 build_3rdparty() {
     local build_type="$1"
-    local qt_config=Release
-    if [ "$build_type" = "debug" ]; then
-        qt_config=Debug
-    fi
 
    # cmake
     export PATH=$PATH:/Applications/CMake.app/Contents/bin &&
@@ -177,57 +174,50 @@ build_3rdparty() {
     export MACOSX_DEPLOYMENT_TARGET=$major_version &&
     echo "Qt deployment target: $major_version"
       
-    if [ -d "build.$build_type" ]; then
-        # reuse existing build
-        echo "Qt build for type: $build_type exists, will reuse"
-        cd build.$build_type
-    else
-        # create new build
-        mkdir build.$build_type &&
-        cd build.$build_type &&
+    mkdir -p "build.$build_type" &&
+    cd "build.$build_type" &&
 
-        # build minimum Qt
-        # changing these will also change the output of PySide
-        qt_params=(
-            -DBUILD_qtactiveqt=OFF
-            -DBUILD_qtcharts=OFF
-            -DBUILD_qtcoap=OFF
-            -DBUILD_qtconnectivity=OFF
-            -DBUILD_qtdeclarative=OFF
-            -DBUILD_qtdoc=OFF
-            -DBUILD_qtgraphs=OFF
-            -DBUILD_qtharfbuzz=OFF
-            -DBUILD_qtlocation=OFF
-            -DBUILD_qtlottie=OFF
-            -DBUILD_qtmqtt=OFF
-            -DBUILD_qtmultimedia=OFF
-            -DBUILD_qtopcua=OFF
-            -DBUILD_qtquick3d=OFF
-            -DBUILD_qtquick3dphysics=OFF
-            -DBUILD_qtquicktimeline=OFF
-            -DBUILD_qtquickeffectmaker=OFF
-            -DBUILD_qtremoteobjects=OFF
-            -DBUILD_qtsensors=OFF
-            -DBUILD_qtserialbus=OFF
-            -DBUILD_qtspeech=OFF
-            -DBUILD_qtvirtualkeyboard=OFF
-            -DBUILD_qtwayland=OFF
-            -DBUILD_qtwebchannel=OFF
-            -DBUILD_qtwebengine=OFF
-            -DBUILD_qtwebview=OFF
-            -DQT_FEATURE_system_freetype=ON
-            -DQT_FEATURE_system_zlib=ON
-            -DCMAKE_OSX_DEPLOYMENT_TARGET=$major_version
-            -DCMAKE_OSX_SYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
-        )
+    # build minimum Qt
+    # changing these will also change the output of PySide
+    qt_params=(
+        -DBUILD_qtactiveqt=OFF
+        -DBUILD_qtcharts=OFF
+        -DBUILD_qtcoap=OFF
+        -DBUILD_qtconnectivity=OFF
+        -DBUILD_qtdeclarative=OFF
+        -DBUILD_qtdoc=OFF
+        -DBUILD_qtgraphs=OFF
+        -DBUILD_qtharfbuzz=OFF
+        -DBUILD_qtlocation=OFF
+        -DBUILD_qtlottie=OFF
+        -DBUILD_qtmqtt=OFF
+        -DBUILD_qtopcua=OFF
+        -DBUILD_qtquick3d=OFF
+        -DBUILD_qtquick3dphysics=OFF
+        -DBUILD_qtquicktimeline=OFF
+        -DBUILD_qtquickeffectmaker=OFF
+        -DBUILD_qtremoteobjects=OFF
+        -DBUILD_qtsensors=OFF
+        -DBUILD_qtserialbus=OFF
+        -DBUILD_qtspeech=OFF
+        -DBUILD_qtvirtualkeyboard=OFF
+        -DBUILD_qtwayland=OFF
+        -DBUILD_qtwebchannel=OFF
+        -DBUILD_qtwebengine=OFF
+        -DBUILD_qtwebview=OFF
+        -DFEATURE_dup3=OFF
+        -DQT_FEATURE_system_freetype=ON
+        -DQT_FEATURE_system_zlib=ON
+        -DCMAKE_OSX_DEPLOYMENT_TARGET=$major_version
+        -DCMAKE_OSX_SYSROOT=$SDKROOT
+    )
 
-        echo "Build Qt for type: $build_type"
-        cmake .. -DCMAKE_INSTALL_PREFIX="$script_dir/build/macosx/$machine_arch.$build_type" -DCMAKE_PREFIX_PATH="$script_dir/build/macosx/$machine_arch.$build_type" "${qt_params[@]}" -G"Ninja Multi-Config" &&
-        cmake --build . --parallel
-    fi
+    echo "Build Qt for type: $build_type"
+    cmake .. -DCMAKE_INSTALL_PREFIX="$script_dir/build/macosx/$machine_arch.$build_type" -DCMAKE_PREFIX_PATH="$script_dir/build/macosx/$machine_arch.$build_type" "${qt_params[@]}" -G"Ninja Multi-Config" &&
+    cmake --build . --parallel &&
 
     # ninja install Qt
-    ninja install  &&
+    ninja install &&
 
     # make extras
     echo "Build 3rdparty libs and extras for type: $build_type"

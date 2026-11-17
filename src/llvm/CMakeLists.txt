@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 
-# Upstream package: llvm-project-16.0.6.src
-# Archive: llvm-project-16.0.6.src.tar.gz
+# Upstream package: llvm-project-20.1.3.src
+# Archive: llvm-project-20.1.3.src.tar.xz
 # Upstream copyright and license notices: licenses/third-party/llvm/
 
 build_info( " Adding llvm project" )
@@ -14,10 +14,10 @@ build_info( " Adding llvm project" )
 set( project_name "llvm" )
 
 # project pkg
-set( project_pkg ${project_name}-project-16.0.6.src )
+set( project_pkg ${project_name}-project-20.1.3.src )
 
 # project archive
-set( project_arc ${project_pkg}.tar.gz )
+set( project_arc ${project_pkg}.tar.xz )
 
 # project url
 set( project_url ${repo_url}/${project_arc} )
@@ -85,7 +85,6 @@ set( bin_files
     llvm-readelf
     llvm-readobj
     llvm-reduce
-    llvm-remark-size-diff
     llvm-remarkutil
     llvm-rtdyld
     llvm-sim
@@ -95,13 +94,13 @@ set( bin_files
     llvm-strings
     llvm-strip
     llvm-symbolizer
-    llvm-tapi-diff
     llvm-tblgen
     llvm-tli-checker
     llvm-undname
     llvm-windres
     llvm-xray    
-    clang-16
+    clang-20
+    clang++
     clang-check
     clang-cl
     clang-cpp
@@ -111,7 +110,6 @@ set( bin_files
     clang-offload-bundler
     clang-offload-packager
     clang-refactor
-    clang-rename
     clang-repl
     clang-scan-deps
     clang-tblgen
@@ -166,13 +164,17 @@ set( lib_files
     LLVMBitstreamReader
     LLVMCFGuard
     LLVMCFIVerify
+    LLVMCGData
     LLVMCodeGen
+    LLVMCodeGenTypes
     LLVMCore
     LLVMCoroutines
     LLVMCoverage
     LLVMDWARFLinker
+    LLVMDWARFLinkerClassic
     LLVMDWARFLinkerParallel
     LLVMDWP
+    LLVMDebugInfoBTF
     LLVMDebugInfoCodeView
     LLVMDebugInfoDWARF
     LLVMDebugInfoGSYM
@@ -182,15 +184,20 @@ set( lib_files
     LLVMDebuginfod
     LLVMDemangle
     LLVMDiff
+    LLVMDlltoolDriver
     LLVMExecutionEngine
     LLVMExegesis
     LLVMExegesisAArch64
     LLVMExegesisMips
     LLVMExegesisPowerPC
+    LLVMExegesisRISCV
     LLVMExegesisX86
     LLVMExtensions
     LLVMFileCheck
+    LLVMFrontendAtomic
+    LLVMFrontendDriver
     LLVMFrontendHLSL
+    LLVMFrontendOffloading
     LLVMFrontendOpenACC
     LLVMFrontendOpenMP
     LLVMFuzzMutate
@@ -201,6 +208,7 @@ set( lib_files
     LLVMHexagonDesc
     LLVMHexagonDisassembler
     LLVMHexagonInfo
+    LLVMHipStdPar
     LLVMIRPrinter
     LLVMIRReader
     LLVMInstCombine
@@ -245,7 +253,9 @@ set( lib_files
     LLVMObjCopy
     LLVMObject
     LLVMObjectYAML
+    LLVMOptDriver
     LLVMOption
+    LLVMOrcDebugging
     LLVMOrcJIT
     LLVMOrcShared
     LLVMOrcTargetProcess
@@ -264,6 +274,11 @@ set( lib_files
     LLVMRISCVTargetMCA
     LLVMRemarks
     LLVMRuntimeDyld
+    LLVMSPIRVAnalysis
+    LLVMSPIRVCodeGen
+    LLVMSPIRVDesc
+    LLVMSPIRVInfo
+    LLVMSandboxIR
     LLVMScalarOpts
     LLVMSelectionDAG
     LLVMSparcAsmParser
@@ -279,10 +294,13 @@ set( lib_files
     LLVMSystemZDisassembler
     LLVMSystemZInfo
     LLVMTableGen
-    LLVMTableGenGlobalISel
+    LLVMTableGenBasic
+    LLVMTableGenCommon
     LLVMTarget
     LLVMTargetParser
+    LLVMTelemetry
     LLVMTextAPI
+    LLVMTextAPIBinaryReader
     LLVMTransformUtils
     LLVMVEAsmParser
     LLVMVECodeGen
@@ -310,8 +328,10 @@ set( lib_files
     LLVMXCoreInfo
     LLVMXRay
     LLVMipo
-    clang-cpp
+    LTO
+    Remarks
     clang
+    clang-cpp
     clangAPINotes
     clangARCMigrate
     clangAST
@@ -335,6 +355,7 @@ set( lib_files
     clangHandleLLVM
     clangIndex
     clangIndexSerialization
+    clangInstallAPI
     clangInterpreter
     clangLex
     clangParse
@@ -350,6 +371,7 @@ set( lib_files
     clangToolingASTDiff
     clangToolingCore
     clangToolingInclusions
+    clangToolingInclusionsStdlib
     clangToolingRefactoring
     clangToolingSyntax
     clangTransformer
@@ -387,7 +409,13 @@ IF( UNIX )
 
     # tar uncompress
     set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
+        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
+    )
+
+    # patch
+    set( build_patch
+        patch -p1 -d ${project_bin_dir}/${project_pkg}
+              -i ${project_src_dir}/rdf-comparators.patch
     )
 
     # options
@@ -435,10 +463,11 @@ IF( UNIX )
     )
 
     # run
-    build_add_custom_command(
+    add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
+        COMMAND ${build_patch}
         COMMAND ${build_make}
         COMMAND ${build_script}
         COMMAND ${build_check}
@@ -446,8 +475,8 @@ IF( UNIX )
 
 endif()
 
-# Custom target builds missing or outdated installed outputs.
+# Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${lib_output}
+    DEPENDS ${bin_output} ${lib_output}
 )

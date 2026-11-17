@@ -133,7 +133,7 @@ if( UNIX )
     )
 
     # run
-    build_add_custom_command(
+    add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
@@ -144,7 +144,7 @@ if( UNIX )
 
 endif()
 
-# Custom target builds missing or outdated installed outputs.
+# Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}

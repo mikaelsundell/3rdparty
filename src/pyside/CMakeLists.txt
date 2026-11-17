@@ -171,6 +171,7 @@ IF( UNIX )
             -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
             -DPYTHON_LIBRARY=${build_python3_library}
             -DCMAKE_CXX_FLAGS=-stdlib=libc++
+            -DSHIBOKEN_GENERATOR_EXTRA_FLAGS=--compiler-path=${build_bin_dir}/clang++
             -DBUILD_TESTS=OFF 
             -DNO_QT_TOOLS=yes
             ${build_options}
@@ -202,7 +203,7 @@ IF( UNIX )
         "${build_lib_dir}/cmake/Qt6*/Qt6*Config.cmake")
 
     # run
-    build_add_custom_command(
+    add_custom_command(
         OUTPUT ${bin_output} ${lib_output}
         DEPENDS ${qt_module_configs}
         COMMAND ${build_download}
@@ -215,7 +216,7 @@ IF( UNIX )
 
 endif()
 
-# Custom target builds missing or outdated installed outputs.
+# Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${include_output} ${lib_output} 

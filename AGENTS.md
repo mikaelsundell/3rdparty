@@ -9,6 +9,9 @@
 - Use the normal `build/macosx/<architecture>.debug` and `.release` directories.
   Do not introduce an alternative permanent build layout for selected projects.
 - A selected library build must skip Qt and unrelated package targets.
+- Keep Qt's default Ninja Multi-Config build/install targets. Its Release tools,
+  including moc, must be installed even in the Debug prefix. Validate changes to
+  this flow with an AUTOMOC consumer of the installed Qt package.
 
 ## Adding or changing a library
 
@@ -36,17 +39,29 @@
    `build_add_libs` where appropriate. Match the upstream library version,
    Debug suffix, and Python ABI suffix. Track headers/directories, libraries,
    Python modules, pkg-config files, and CMake package files that consumers need.
+   Put a real installed file first in multi-output rules; a directory as the
+   primary output can hide missing secondary files with Unix Makefiles.
 6. Execute the actual configure, build, and install commands from the custom
    command. Defining an unused `build_configure` or `build_install` variable does
    not perform those steps. List the outputs in both the custom command and
-   the custom target's dependencies.
+   the custom target's dependencies. Use CMake's built-in `add_custom_command`
+   with output-based build decisions. Do not add automatic recipe/flag/script
+   invalidation, completion stamps, or timestamp-touch workarounds. Changes to
+   flags alone are intentionally not tracked. Preserve explicit dependencies
+   needed for specific functionality, such as installed Qt module configs.
 7. Reuse `build_install_script` for Mach-O path normalization and
    `build_install_check` for required files. Pass binary files to path rewriting
    and regular files to the existence check; do not pass directories as files.
 8. Register the package in the appropriate existing build group, then declare
    its prerequisites with `build_add_dependencies`.
-9. Prefer corrected, published source packages over local source patches.
-   Document the exact archive, extracted root, version/commit, and fork changes
+9. For new libraries and version updates, keep the original upstream source
+   archives unchanged in the Amazon S3 bucket. Store required patches alongside
+   the library's `CMakeLists.txt` in `src/<library>/`. Reuse `build_patch` and run
+   `COMMAND ${build_patch}` after extraction and before configuration/build,
+   following `src/llvm`. Prefer upstream fixes and record their commit or PR.
+   Validate patches against the original archive and compile the actual affected
+   source files for Debug and Release. Recheck each patch when upgrading versions.
+   Document the exact archive, extracted root, version/commit, and applied patches
    in `packages.txt`. Preserve upstream license notices and update
    `THIRD_PARTY_NOTICES.md` and `licenses/manifest.json` with provenance/checksums.
 

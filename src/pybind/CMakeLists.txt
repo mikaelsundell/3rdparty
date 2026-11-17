@@ -13,7 +13,7 @@ build_info( " Adding pybind project" )
 # project name
 set( project_name "pybind" )
 
-# lib pkg
+# project pkg
 set( project_pkg "pybind11-2.9.1" )
 
 # project archive
@@ -37,23 +37,35 @@ set( inc_dir
     pybind11
 )
 
-SET( inc_output
-    ${build_inc_dir}/${inc_dir}
+# inc files
+set( inc_files
+    pybind11/pybind11.h
 )
 
-IF( UNIX )
+# pkg files
+set( pkg_files
+    pybind11Config.cmake
+)
+
+if( UNIX )
 
     # inc dir
     build_add_dir( 
         "${inc_dir}" "${build_inc_dir}" dir_output
     )
-    
-ENDIF()
+
+    build_add_files(
+        "${inc_files}" "${build_inc_dir}" inc_output
+    )
+
+    build_add_files(
+        "${pkg_files}" "${build_dir}/share/cmake/pybind11" pkg_output
+    )
+endif()
 
 # build configuration
 
 # unix
-
 IF( UNIX )
 
     # download
@@ -67,37 +79,52 @@ IF( UNIX )
     )
 
     # options
-    set( build_options -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} )
-    set( build_options ${build_options} -DCMAKE_VERBOSE_MAKEFILE=true )
+    set( build_options -DCMAKE_VERBOSE_MAKEFILE=true )
 
+    # config
+    set( build_config
+        -DBUILD_TESTING=OFF
+        -DPYTHON_EXECUTABLE=${build_python3}
+        -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
+        -DPYTHON_LIBRARY=${build_python3_library}
+    )
+
+    # configure, make and install
     set( build_make
-        ${build_make}
-        export LLVM_INSTALL_DIR=${build_dir} &&
+        ${build_env} &&
         cd ${project_pkg} &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
-            -DCMAKE_INSTALL_PREFIX=${build_dir} ${build_options}
-            -DBUILD_TESTING=OFF
-            -DPYTHON_EXECUTABLE=${build_python3}
-            -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
-            -DPYTHON_LIBRARY=${build_python3_library} &&
+            -DCMAKE_INSTALL_PREFIX=${build_dir}
+            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            ${build_options}
+            ${build_config} &&
         make ${build_flags} &&
         make install
     )
 
+    # scripts
+    set( build_output ${inc_output} ${pkg_output} )
+
+    build_install_check(
+        "${build_output}"
+        build_check
+    )
+
     # run
-    build_add_custom_command(
-        OUTPUT ${inc_output}
+    add_custom_command(
+        OUTPUT ${build_output} ${dir_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
         COMMAND ${build_make}
-    )   
+        COMMAND ${build_check}
+    )
 
 endif()
 
-# Custom target builds missing or outdated installed outputs.
+# Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${inc_output}
+    DEPENDS ${build_output} ${dir_output}
 )

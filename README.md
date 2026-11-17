@@ -98,6 +98,12 @@ trees. The patch includes `<arm_acle.h>` on ARM so AppleClang 21 can compile Qt'
 `__yield()` intrinsic. It can also be run manually as shown above and is safe to
 repeat.
 
+Qt is configured with `FEATURE_dup3=OFF` so its child processes work on macOS
+versions before 27. Reused Qt build trees are reconfigured. Qt's Ninja defaults
+build and install both framework configurations, including its Release tools,
+into the selected prefix. PySide uses the installed
+Clang for header discovery; `build.sh` exports the active SDK as `SDKROOT`.
+
 Qt 6.10.1 reports that SDK 27 exceeds its tested SDK version. The header patch
 fixes the observed compiler error; it does not establish compatibility with the
 entire SDK. The full Qt build with this toolchain still needs validation.
@@ -164,9 +170,11 @@ corresponding groups (`build_base`, `build_libs`, `build_extras`) and package
 options, or disable the dependent package. Configuration reports missing targets.
 The Eigen package option is named `eigen3`.
 
-Dependency recipes rebuild their installed outputs when their commands, flags,
-or support files change. Existing builds may rebuild once after adopting this
-tracking. The top-level project and most dependency recipes still use Make;
+Dependency recipes normally build when their declared installed outputs are
+missing; specific recipes may also declare explicit file dependencies.
+Changing flags or recipe commands alone does not force a reinstall; rebuild
+those outputs manually when required. The top-level project and most dependency
+recipes still use Make;
 Qt and PySide use Ninja. Static-library builds have not been repaired or validated
 as part of these changes.
 

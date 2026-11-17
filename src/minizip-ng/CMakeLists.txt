@@ -116,7 +116,7 @@ IF( UNIX )
         -DMZ_COMPAT=OFF
         -DMZ_ZLIB=ON
         -DMZ_ZLIB_FLAVOR=zlib
-        -DMZ_BZIP2=OFF
+        -DMZ_BZIP2=ON
         -DMZ_LZMA=OFF
         -DMZ_PPMD=OFF
         -DMZ_ZSTD=OFF
@@ -163,8 +163,8 @@ IF( UNIX )
     )
 
     # run
-    build_add_custom_command(
-        OUTPUT ${dir_output} ${build_output}
+    add_custom_command(
+        OUTPUT ${build_output} ${dir_output}
         COMMAND ${build_download}
         COMMAND ${build_uncompress}
         COMMAND ${build_make}
@@ -174,11 +174,11 @@ IF( UNIX )
 
 endif()
 
-# Custom target builds missing or outdated installed outputs.
+# Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${dir_output} ${build_output}
+    DEPENDS ${build_output} ${dir_output}
 )
 
 # dependencies
-build_add_dependencies( ${project_name} zlib-ng )
+build_add_dependencies( ${project_name} bzip2 zlib-ng )

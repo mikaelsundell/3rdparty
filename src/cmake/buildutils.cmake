@@ -146,23 +146,3 @@ function(build_validate_dependencies)
         add_dependencies("${target}" "${dependency}")
     endforeach()
 endfunction()
-
-# Installed outputs are rebuilt when the recipe, flags, or support files change.
-# file(CONFIGURE) preserves the timestamp when command arguments are unchanged.
-function(build_add_custom_command)
-    string(SHA256 recipe_hash "${ARGN}")
-    list(FIND ARGN OUTPUT output_index)
-    math(EXPR output_index "${output_index} + 1")
-    list(GET ARGN ${output_index} first_output)
-    string(SHA256 output_hash "${first_output}")
-    set(recipe_file "${CMAKE_CURRENT_BINARY_DIR}/build-recipe-${output_hash}.txt")
-    file(CONFIGURE OUTPUT "${recipe_file}" CONTENT "${recipe_hash}\n" @ONLY)
-    file(GLOB support_files CONFIGURE_DEPENDS LIST_DIRECTORIES false
-        "${CMAKE_CURRENT_SOURCE_DIR}/*"
-        "${PROJECT_SOURCE_DIR}/src/scripts/*")
-    add_custom_command(${ARGN}
-        DEPENDS "${recipe_file}"
-            "${PROJECT_SOURCE_DIR}/CMakeLists.txt"
-            "${PROJECT_SOURCE_DIR}/src/cmake/buildutils.cmake"
-            ${support_files})
-endfunction()

@@ -43,7 +43,7 @@ copyright notices; their LICENSES directories list license texts, not every auth
 | libraw | `libraw-0.21.1` | [COPYRIGHT](licenses/third-party/libraw/COPYRIGHT), [LICENSE.CDDL](licenses/third-party/libraw/LICENSE.CDDL), [LICENSE.LGPL](licenses/third-party/libraw/LICENSE.LGPL) |
 | libtool | `libtool-2.4` | [AUTHORS](licenses/third-party/libtool/AUTHORS), [COPYING](licenses/third-party/libtool/COPYING) |
 | libwebp | `libwebp-1.2.2` | [AUTHORS](licenses/third-party/libwebp/AUTHORS), [COPYING](licenses/third-party/libwebp/COPYING) |
-| llvm | `llvm-project-16.0.6.src` | [LICENSE.TXT](licenses/third-party/llvm/LICENSE.TXT) |
+| llvm | `llvm-project-20.1.3.src` | [LICENSE.TXT](licenses/third-party/llvm/LICENSE.TXT) |
 | materialx | `MaterialX-1.39.4` | [LICENSE](licenses/third-party/materialx/LICENSE) |
 | minizip-ng | `minizip-ng-4.2.2` | [LICENSE](licenses/third-party/minizip-ng/LICENSE) |
 | nanobind | `nanobind-master-251225` | [LICENSE](licenses/third-party/nanobind/LICENSE) |

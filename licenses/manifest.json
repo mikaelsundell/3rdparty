@@ -528,16 +528,16 @@
     {
       "package": "llvm",
       "recipe": "src/llvm/CMakeLists.txt",
-      "source_package": "llvm-project-16.0.6.src",
-      "archive": "llvm-project-16.0.6.src.tar.gz",
+      "source_package": "llvm-project-20.1.3.src",
+      "archive": "llvm-project-20.1.3.src.tar.xz",
       "notices": [
         {
           "path": "licenses/third-party/llvm/LICENSE.TXT",
-          "source": "build/macosx/arm64.release/src/llvm/llvm-project-16.0.6.src/LICENSE.TXT",
+          "source": "llvm-project-20.1.3.src/LICENSE.TXT",
           "sha256": "8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee"
         }
       ],
-      "status": "Copied from local extracted source"
+      "status": "Copied from verified AWS source archive"
     },
     {
       "package": "materialx",
