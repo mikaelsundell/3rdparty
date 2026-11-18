@@ -163,7 +163,9 @@ IF( UNIX )
         cd ${project_pkg} &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
+        test -f ${build_lib_dir}/cmake/Qt6/Qt6Config.cmake &&
         cmake ../ -DCMAKE_PREFIX_PATH=${build_dir} 
+            -DQt6_DIR=${build_lib_dir}/cmake/Qt6
             -DCMAKE_INSTALL_PREFIX=${build_dir} 
             -DCMAKE_BUILD_RPATH=${build_lib_dir} 
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}

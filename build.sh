@@ -161,7 +161,7 @@ build_3rdparty() {
     # make base
     echo "Build 3rdparty base for type: $build_type"
     echo "MacOS target: $major_version"
-    make verbose=1 build_base=1 build_libs=0 build_extras=0 $build_type &&
+    make verbose=1 build_base=1 build_libs=0 build_extras=0 $build_type || return $?
 
     # path
     export PATH=$PATH:"$script_dir/build/macosx/$machine_arch.$build_type/ninja" &&
@@ -172,7 +172,7 @@ build_3rdparty() {
 
     # deployment target
     export MACOSX_DEPLOYMENT_TARGET=$major_version &&
-    echo "Qt deployment target: $major_version"
+    echo "Qt deployment target: $major_version" || return $?
       
     mkdir -p "build.$build_type" &&
     cd "build.$build_type" &&
@@ -210,14 +210,14 @@ build_3rdparty() {
         -DQT_FEATURE_system_zlib=ON
         -DCMAKE_OSX_DEPLOYMENT_TARGET=$major_version
         -DCMAKE_OSX_SYSROOT=$SDKROOT
-    )
+    ) || return $?
 
     echo "Build Qt for type: $build_type"
     cmake .. -DCMAKE_INSTALL_PREFIX="$script_dir/build/macosx/$machine_arch.$build_type" -DCMAKE_PREFIX_PATH="$script_dir/build/macosx/$machine_arch.$build_type" "${qt_params[@]}" -G"Ninja Multi-Config" &&
     cmake --build . --parallel &&
 
     # ninja install Qt
-    ninja install &&
+    ninja install || return $?
 
     # make extras
     echo "Build 3rdparty libs and extras for type: $build_type"

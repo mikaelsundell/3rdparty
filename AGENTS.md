@@ -12,6 +12,9 @@
 - Keep Qt's default Ninja Multi-Config build/install targets. Its Release tools,
   including moc, must be installed even in the Debug prefix. Validate changes to
   this flow with an AUTOMOC consumer of the installed Qt package.
+- Stop the full build if Qt configuration, compilation, or installation fails.
+  PySide must use Qt installed in its selected Debug or Release prefix; do not
+  allow a missing installation to fall back to the other prefix.
 
 ## Adding or changing a library
 

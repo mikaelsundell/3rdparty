@@ -3,6 +3,8 @@
 ##  SPDX-License-Identifier: BSD-3-Clause
 ##  https://github.com/mikaelsundell/3rdparty
 
+set -e
+
 # usage
 
 usage()

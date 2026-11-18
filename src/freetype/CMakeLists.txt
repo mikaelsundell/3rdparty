@@ -82,9 +82,14 @@ if( UNIX )
     # configure, make and install
     SET( build_make
         ${build_env} &&
+        export PATH=${build_bin_dir}:$$PATH &&
+        export PKG_CONFIG_PATH=${build_pkgconfig_dir}:${build_lib_dir}/pkgconfig &&
+        export PKG_CONFIG_LIBDIR=${build_pkgconfig_dir}:${build_lib_dir}/pkgconfig &&
     	cd ${project_pkg} &&
         ./configure 
             --prefix=${build_dir}
+            CPPFLAGS=-I${build_inc_dir}
+            LDFLAGS=-L${build_lib_dir}
             ${build_options} &&
         make ${build_flags} &&
         make install
@@ -127,3 +132,6 @@ add_custom_target(
     ${project_name} ALL
     DEPENDS ${bin_output} ${lib_output}
 )
+
+# dependencies
+build_add_dependencies( ${project_name} bzip2 libpng zlib-ng )

@@ -18,6 +18,7 @@ SHELL=/bin/sh
 CC=gcc
 BIGFILES=-D_FILE_OFFSET_BITS=64
 CFLAGS=-fpic -fPIC -Wall -Winline -O2 -g $(BIGFILES)
+LDFLAGS+=-Wl,-headerpad_max_install_names
 
 # Where you want it installed when you do 'make install'
 PREFIX=/usr/local
@@ -39,8 +40,8 @@ bzip2recover: bzip2recover.o
 	$(CC) $(CFLAGS) $(LDFLAGS) -o bzip2recover bzip2recover.o
 
 libbz2.dylib: $(OBJS)
-	$(CC) -dynamiclib -o libbz2.1.0.6.dylib -dylib $(OBJS)
-	$(CC) $(CFLAGS) -o bzip2-shared bzip2.c libbz2.1.0.6.dylib
+	$(CC) $(LDFLAGS) -dynamiclib -install_name $(PREFIX)/lib/libbz2.1.0.6.dylib -o libbz2.1.0.6.dylib -dylib $(OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o bzip2-shared bzip2.c libbz2.1.0.6.dylib
 	rm -f libbz2.dylib libbz2.1.0.dylib
 	ln -s libbz2.1.0.6.dylib libbz2.1.0.dylib
 	ln -s libbz2.1.0.dylib libbz2.dylib

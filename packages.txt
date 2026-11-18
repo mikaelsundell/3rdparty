@@ -15,6 +15,13 @@ In progress notes
 
 Fixes:
 
+bzip2 / freetype
+---------------------------------
+* Build Bzip2 dylibs with the selected prefix as their install name and reserve
+  header space for post-install path updates. Stop if install_name.sh fails.
+* Build FreeType after Bzip2, PNG, and zlib-ng; use the selected prefix's headers,
+  libraries, and pkg-config metadata to avoid mixing Debug and Release libraries.
+
 llvm 20.1.3
 ---------------------------------
 * LLVM 20.1.3 uses std::string for ClIgnorelist; the LLVM 16 sancov patch is
@@ -39,6 +46,8 @@ qt 6.10.1
 * Disable dup3 for compatibility with macOS deployment targets before 27.
 * Use Qt's default multi-config build/install targets so Release tools such as
   moc are installed alongside Debug frameworks.
+* Stop on Qt build/install failures and require PySide's Qt package from the
+  selected prefix to avoid mixing Debug and Release Qt/LLVM libraries.
 
 boost
 ---------------------------------
