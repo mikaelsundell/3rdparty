@@ -46,165 +46,124 @@ SET( inc_dir
     opencv4
 )
 
-# lib files
-set( lib_files
-    opencv_calib3d
-    opencv_core
-    opencv_dnn
-    opencv_features2d
-    opencv_flann
-    opencv_gapi
-    opencv_highgui
-    opencv_imgcodecs
-    opencv_imgproc
-    opencv_ml
-    opencv_objdetect
-    opencv_photo
-    opencv_stitching
-    opencv_ts
-    opencv_video
-    opencv_videoio
-)
+include( "${CMAKE_CURRENT_LIST_DIR}/outputs-unix.cmake" )
 
 # site-packages
 set( sitepackages_files
     cv2
 )
 
-if( UNIX )
+# bin files
+build_add_files(
+    "${bin_files}" "${build_bin_dir}" bin_output
+)
 
-    # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
-    )
+# inc dir
+build_add_dir(
+    "${inc_dir}" "${build_inc_dir}" include_output
+)
 
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" include_output
-    )
+# lib files
+set( lib_version "4.9.0" )
 
-    # lib files
-    set( lib_version "4.9.0" )
-    
-    foreach( lib_file ${lib_files} )
-    
-        if ( APPLE )
-            # opencv_ts is static
-            if( NOT ${lib_file} STREQUAL "opencv_ts" )
+foreach( lib_file ${lib_files} )
 
-                list( APPEND lib_output 
-                    ${build_lib_dir}/${lib_prefix}${lib_file}.${lib_version}${lib_suffix}
-                )
-            endif()
-        endif()
-    endforeach()
+    if ( APPLE )
+        # opencv_ts is static
+        if( NOT ${lib_file} STREQUAL "opencv_ts" )
 
-    # site packages files
-    foreach( sitepackages_file ${sitepackages_files} )
-    
-        if ( APPLE )
-            list( APPEND lib_output 
-                ${build_sitepackages_dir}/cv2/python-${build_python3_version}/${sitepackages_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
+            list( APPEND lib_output
+                ${build_lib_dir}/${lib_prefix}${lib_file}.${lib_version}${lib_suffix}
             )
-        endif()    
-    endforeach()
-endif()
+        endif()
+    endif()
+endforeach()
+
+# site packages files
+foreach( sitepackages_file ${sitepackages_files} )
+
+    if ( APPLE )
+        list( APPEND lib_output
+            ${build_sitepackages_dir}/cv2/python-${build_python3_version}/${sitepackages_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
+        )
+    endif()
+endforeach()
 
 # build configuration
 
-# unix
-
-IF( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
-
-    # options
-    if( CMAKE_SHARED_LIBS )
-        set( build_options -DBUILD_SHARED_LIBS=true )
-    else()
-        set( build_options -DBUILD_SHARED_LIBS=false )
-    endif()
-
-    # dependencies
-    set( build_config ${build_config} -DBUILD_JPEG=OFF )
-    set( build_config ${build_config} -DWITH_JPEG=ON )
-    set( build_config ${build_config} -DBUILD_OPENEXR=OFF )
-    set( build_config ${build_config} -DWITH_OPENEXR=ON )
-    set( build_config ${build_config} -DBUILD_PNG=OFF )
-    set( build_config ${build_config} -DWITH_PNG=ON )
-    set( build_config ${build_config} -DBUILD_TIFF=OFF )
-    set( build_config ${build_config} -DWITH_TIFF=ON )
-    set( build_config ${build_config} -DBUILD_WEBP=OFF )
-    set( build_config ${build_config} -DWITH_WEBP=ON )
-    set( build_config ${build_config} -DBUILD_ZLIB=OFF )
-    set( build_config ${build_config} -DWITH_ZLIB=ON )
-    set( build_config ${build_config} -DBUILD_TESTS=OFF )
-    set( build_config ${build_config} -DBUILD_PERF_TESTS=OFF )
-
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-        cd ${project_pkg} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_PREFIX_PATH=${build_dir} 
-            -DCMAKE_INSTALL_PREFIX=${build_dir} 
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            -DPYTHON_EXECUTABLE=${build_python3}
-            -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
-            -DPYTHON_LIBRARY=${build_python3_library}
-            -DPYTHON3_PACKAGES_PATH=${build_sitepackages_dir}
-            -DCMAKE_CXX_FLAGS=-stdlib=libc++
-            -DCMAKE_CXX_STANDARD=17
-            ${build_options}
-            ${build_config} &&
-        cmake --build . --parallel &&
-        make install
-    )
-
-    # scripts
-    if ( CMAKE_SHARED_LIBS )
-        set( build_output ${build_output} ${lib_output} )
-    endif()
-
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
-        build_script
-    )
-
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-    
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-        COMMAND ${sitepackage_script}
-    )
-
+# options
+if( CMAKE_SHARED_LIBS )
+    set( build_options -DBUILD_SHARED_LIBS=true )
+else()
+    set( build_options -DBUILD_SHARED_LIBS=false )
 endif()
+
+# dependencies
+set( build_config ${build_config} -DBUILD_JPEG=OFF )
+set( build_config ${build_config} -DWITH_JPEG=ON )
+set( build_config ${build_config} -DBUILD_OPENEXR=OFF )
+set( build_config ${build_config} -DWITH_OPENEXR=ON )
+set( build_config ${build_config} -DBUILD_PNG=OFF )
+set( build_config ${build_config} -DWITH_PNG=ON )
+set( build_config ${build_config} -DBUILD_TIFF=OFF )
+set( build_config ${build_config} -DWITH_TIFF=ON )
+set( build_config ${build_config} -DBUILD_WEBP=OFF )
+set( build_config ${build_config} -DWITH_WEBP=ON )
+set( build_config ${build_config} -DBUILD_ZLIB=OFF )
+set( build_config ${build_config} -DWITH_ZLIB=ON )
+set( build_config ${build_config} -DBUILD_TESTS=OFF )
+set( build_config ${build_config} -DBUILD_PERF_TESTS=OFF )
+
+# configure, make and install
+set( build_make
+    ${build_env} &&
+    cd ${project_pkg} &&
+    mkdir -p ${build_cmake} &&
+    cd ${build_cmake} &&
+    cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
+        -DCMAKE_INSTALL_PREFIX=${build_dir}
+        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+        -DPYTHON_EXECUTABLE=${build_python3}
+        -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
+        -DPYTHON_LIBRARY=${build_python3_library}
+        -DPYTHON3_PACKAGES_PATH=${build_sitepackages_dir}
+        -DCMAKE_CXX_FLAGS=-stdlib=libc++
+        -DCMAKE_CXX_STANDARD=17
+        ${build_options}
+        ${build_config} &&
+    cmake --build . --parallel &&
+    make install
+)
+
+string( JOIN " " build_make ${build_make} )
+set( build_make COMMAND sh -c "${build_make}" )
+
+# scripts
+if ( CMAKE_SHARED_LIBS )
+    set( build_output ${build_output} ${lib_output} )
+endif()
+
+build_install_script(
+    "${build_output}"
+    ${build_dir}
+    ${build_prefix_lib}
+    ${build_prefix_framework}
+    build_script
+)
+
+build_install_check(
+    "${build_output}"
+    build_check
+)
+
+# run
+set( build_output ${bin_output} ${lib_output} )
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${include_output} ${lib_output} 
+    DEPENDS ${build_output} ${include_output}
 )
 
 # dependencies

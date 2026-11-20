@@ -364,15 +364,6 @@
       "status": "Copied from local extracted source"
     },
     {
-      "package": "jpeg2000_images",
-      "recipe": "src/jpeg2000_images/CMakeLists.txt",
-      "source_package": "jpeg2000_images",
-      "archive": null,
-      "notices": [],
-      "status": "Unverified: media archive not available locally",
-      "archive_expression": "${project_pkg}.tar.gz"
-    },
-    {
       "package": "json",
       "recipe": "src/json/CMakeLists.txt",
       "source_package": "json-master-231214",
@@ -644,15 +635,6 @@
       "status": "Copied from local extracted source"
     },
     {
-      "package": "ocio-images",
-      "recipe": "src/ocio-images/CMakeLists.txt",
-      "source_package": "ocio-images.1.0v1",
-      "archive": null,
-      "notices": [],
-      "status": "Unverified: media archive not available locally",
-      "archive_expression": "${project_pkg}.tgz"
-    },
-    {
       "package": "oiio",
       "recipe": "src/oiio/CMakeLists.txt",
       "source_package": "OpenImageIO-3.1.8.0",
@@ -665,15 +647,6 @@
         }
       ],
       "status": "Copied from local extracted source"
-    },
-    {
-      "package": "oiio-images",
-      "recipe": "src/oiio-images/CMakeLists.txt",
-      "source_package": "OpenImageIO-oiio-images-3819677",
-      "archive": null,
-      "notices": [],
-      "status": "Unverified: media archive not available locally",
-      "archive_expression": "${project_pkg}.tgz"
     },
     {
       "package": "onetbb",
@@ -721,15 +694,6 @@
         }
       ],
       "status": "Copied from local extracted source"
-    },
-    {
-      "package": "openexr-images",
-      "recipe": "src/openexr-images/CMakeLists.txt",
-      "source_package": "openexr-images-1.7.0",
-      "archive": null,
-      "notices": [],
-      "status": "Unverified: media archive not available locally",
-      "archive_expression": "${project_pkg}.tar.gz"
     },
     {
       "package": "openjpeg",

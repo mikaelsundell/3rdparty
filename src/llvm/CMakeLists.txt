@@ -32,397 +32,68 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# bin files
-set( bin_files
-    llvm-as
-    llvm-bcanalyzer
-    llvm-bitcode-strip
-    llvm-c-test
-    llvm-cat
-    llvm-cfi-verify
-    llvm-config
-    llvm-cov
-    llvm-cvtres
-    llvm-cxxdump
-    llvm-cxxfilt
-    llvm-cxxmap
-    llvm-debuginfo-analyzer
-    llvm-debuginfod
-    llvm-debuginfod-find
-    llvm-diff
-    llvm-dis
-    llvm-dlltool
-    llvm-dwarfdump
-    llvm-dwarfutil
-    llvm-dwp
-    llvm-exegesis
-    llvm-extract
-    llvm-gsymutil
-    llvm-ifs
-    llvm-install-name-tool
-    llvm-jitlink
-    llvm-lib
-    llvm-libtool-darwin
-    llvm-link
-    llvm-lipo
-    llvm-lto
-    llvm-lto2
-    llvm-mc
-    llvm-mca
-    llvm-ml
-    llvm-modextract
-    llvm-mt
-    llvm-nm
-    llvm-objcopy
-    llvm-objdump
-    llvm-opt-report
-    llvm-otool
-    llvm-pdbutil
-    llvm-profdata
-    llvm-profgen
-    llvm-ranlib
-    llvm-rc
-    llvm-readelf
-    llvm-readobj
-    llvm-reduce
-    llvm-remarkutil
-    llvm-rtdyld
-    llvm-sim
-    llvm-size
-    llvm-split
-    llvm-stress
-    llvm-strings
-    llvm-strip
-    llvm-symbolizer
-    llvm-tblgen
-    llvm-tli-checker
-    llvm-undname
-    llvm-windres
-    llvm-xray    
-    clang-20
-    clang++
-    clang-check
-    clang-cl
-    clang-cpp
-    clang-extdef-mapping
-    clang-format
-    clang-linker-wrapper
-    clang-offload-bundler
-    clang-offload-packager
-    clang-refactor
-    clang-repl
-    clang-scan-deps
-    clang-tblgen
-)
-
-# inc dir
-SET( inc_dir
-    llvm
-    llvm-c
-    clang
-    clang-c
-)
-
-# lib files
-set( lib_files
-    LLVMAArch64AsmParser
-    LLVMAArch64CodeGen
-    LLVMAArch64Desc
-    LLVMAArch64Disassembler
-    LLVMAArch64Info
-    LLVMAArch64Utils
-    LLVMAMDGPUAsmParser
-    LLVMAMDGPUCodeGen
-    LLVMAMDGPUDesc
-    LLVMAMDGPUDisassembler
-    LLVMAMDGPUInfo
-    LLVMAMDGPUTargetMCA
-    LLVMAMDGPUUtils
-    LLVMARMAsmParser
-    LLVMARMCodeGen
-    LLVMARMDesc
-    LLVMARMDisassembler
-    LLVMARMInfo
-    LLVMARMUtils
-    LLVMAVRAsmParser
-    LLVMAVRCodeGen
-    LLVMAVRDesc
-    LLVMAVRDisassembler
-    LLVMAVRInfo
-    LLVMAggressiveInstCombine
-    LLVMAnalysis
-    LLVMAsmParser
-    LLVMAsmPrinter
-    LLVMBPFAsmParser
-    LLVMBPFCodeGen
-    LLVMBPFDesc
-    LLVMBPFDisassembler
-    LLVMBPFInfo
-    LLVMBinaryFormat
-    LLVMBitReader
-    LLVMBitWriter
-    LLVMBitstreamReader
-    LLVMCFGuard
-    LLVMCFIVerify
-    LLVMCGData
-    LLVMCodeGen
-    LLVMCodeGenTypes
-    LLVMCore
-    LLVMCoroutines
-    LLVMCoverage
-    LLVMDWARFLinker
-    LLVMDWARFLinkerClassic
-    LLVMDWARFLinkerParallel
-    LLVMDWP
-    LLVMDebugInfoBTF
-    LLVMDebugInfoCodeView
-    LLVMDebugInfoDWARF
-    LLVMDebugInfoGSYM
-    LLVMDebugInfoLogicalView
-    LLVMDebugInfoMSF
-    LLVMDebugInfoPDB
-    LLVMDebuginfod
-    LLVMDemangle
-    LLVMDiff
-    LLVMDlltoolDriver
-    LLVMExecutionEngine
-    LLVMExegesis
-    LLVMExegesisAArch64
-    LLVMExegesisMips
-    LLVMExegesisPowerPC
-    LLVMExegesisRISCV
-    LLVMExegesisX86
-    LLVMExtensions
-    LLVMFileCheck
-    LLVMFrontendAtomic
-    LLVMFrontendDriver
-    LLVMFrontendHLSL
-    LLVMFrontendOffloading
-    LLVMFrontendOpenACC
-    LLVMFrontendOpenMP
-    LLVMFuzzMutate
-    LLVMFuzzerCLI
-    LLVMGlobalISel
-    LLVMHexagonAsmParser
-    LLVMHexagonCodeGen
-    LLVMHexagonDesc
-    LLVMHexagonDisassembler
-    LLVMHexagonInfo
-    LLVMHipStdPar
-    LLVMIRPrinter
-    LLVMIRReader
-    LLVMInstCombine
-    LLVMInstrumentation
-    LLVMInterfaceStub
-    LLVMInterpreter
-    LLVMJITLink
-    LLVMLTO
-    LLVMLanaiAsmParser
-    LLVMLanaiCodeGen
-    LLVMLanaiDesc
-    LLVMLanaiDisassembler
-    LLVMLanaiInfo
-    LLVMLibDriver
-    LLVMLineEditor
-    LLVMLinker
-    LLVMLoongArchAsmParser
-    LLVMLoongArchCodeGen
-    LLVMLoongArchDesc
-    LLVMLoongArchDisassembler
-    LLVMLoongArchInfo
-    LLVMMC
-    LLVMMCA
-    LLVMMCDisassembler
-    LLVMMCJIT
-    LLVMMCParser
-    LLVMMIRParser
-    LLVMMSP430AsmParser
-    LLVMMSP430CodeGen
-    LLVMMSP430Desc
-    LLVMMSP430Disassembler
-    LLVMMSP430Info
-    LLVMMipsAsmParser
-    LLVMMipsCodeGen
-    LLVMMipsDesc
-    LLVMMipsDisassembler
-    LLVMMipsInfo
-    LLVMNVPTXCodeGen
-    LLVMNVPTXDesc
-    LLVMNVPTXInfo
-    LLVMObjCARCOpts
-    LLVMObjCopy
-    LLVMObject
-    LLVMObjectYAML
-    LLVMOptDriver
-    LLVMOption
-    LLVMOrcDebugging
-    LLVMOrcJIT
-    LLVMOrcShared
-    LLVMOrcTargetProcess
-    LLVMPasses
-    LLVMPowerPCAsmParser
-    LLVMPowerPCCodeGen
-    LLVMPowerPCDesc
-    LLVMPowerPCDisassembler
-    LLVMPowerPCInfo
-    LLVMProfileData
-    LLVMRISCVAsmParser
-    LLVMRISCVCodeGen
-    LLVMRISCVDesc
-    LLVMRISCVDisassembler
-    LLVMRISCVInfo
-    LLVMRISCVTargetMCA
-    LLVMRemarks
-    LLVMRuntimeDyld
-    LLVMSPIRVAnalysis
-    LLVMSPIRVCodeGen
-    LLVMSPIRVDesc
-    LLVMSPIRVInfo
-    LLVMSandboxIR
-    LLVMScalarOpts
-    LLVMSelectionDAG
-    LLVMSparcAsmParser
-    LLVMSparcCodeGen
-    LLVMSparcDesc
-    LLVMSparcDisassembler
-    LLVMSparcInfo
-    LLVMSupport
-    LLVMSymbolize
-    LLVMSystemZAsmParser
-    LLVMSystemZCodeGen
-    LLVMSystemZDesc
-    LLVMSystemZDisassembler
-    LLVMSystemZInfo
-    LLVMTableGen
-    LLVMTableGenBasic
-    LLVMTableGenCommon
-    LLVMTarget
-    LLVMTargetParser
-    LLVMTelemetry
-    LLVMTextAPI
-    LLVMTextAPIBinaryReader
-    LLVMTransformUtils
-    LLVMVEAsmParser
-    LLVMVECodeGen
-    LLVMVEDesc
-    LLVMVEDisassembler
-    LLVMVEInfo
-    LLVMVectorize
-    LLVMWebAssemblyAsmParser
-    LLVMWebAssemblyCodeGen
-    LLVMWebAssemblyDesc
-    LLVMWebAssemblyDisassembler
-    LLVMWebAssemblyInfo
-    LLVMWebAssemblyUtils
-    LLVMWindowsDriver
-    LLVMWindowsManifest
-    LLVMX86AsmParser
-    LLVMX86CodeGen
-    LLVMX86Desc
-    LLVMX86Disassembler
-    LLVMX86Info
-    LLVMX86TargetMCA
-    LLVMXCoreCodeGen
-    LLVMXCoreDesc
-    LLVMXCoreDisassembler
-    LLVMXCoreInfo
-    LLVMXRay
-    LLVMipo
-    LTO
-    Remarks
-    clang
-    clang-cpp
-    clangAPINotes
-    clangARCMigrate
-    clangAST
-    clangASTMatchers
-    clangAnalysis
-    clangAnalysisFlowSensitive
-    clangAnalysisFlowSensitiveModels
-    clangBasic
-    clangCodeGen
-    clangCrossTU
-    clangDependencyScanning
-    clangDirectoryWatcher
-    clangDriver
-    clangDynamicASTMatchers
-    clangEdit
-    clangExtractAPI
-    clangFormat
-    clangFrontend
-    clangFrontendTool
-    clangHandleCXX
-    clangHandleLLVM
-    clangIndex
-    clangIndexSerialization
-    clangInstallAPI
-    clangInterpreter
-    clangLex
-    clangParse
-    clangRewrite
-    clangRewriteFrontend
-    clangSema
-    clangSerialization
-    clangStaticAnalyzerCheckers
-    clangStaticAnalyzerCore
-    clangStaticAnalyzerFrontend
-    clangSupport
-    clangTooling
-    clangToolingASTDiff
-    clangToolingCore
-    clangToolingInclusions
-    clangToolingInclusionsStdlib
-    clangToolingRefactoring
-    clangToolingSyntax
-    clangTransformer
-)
-
-if( UNIX )
-
-    # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
-    )
-
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
-    )
+# platform-specific outputs
+if( WIN32 )
+    set( bin_files libclang.dll )
+    set( inc_files clang-c/Index.h )
+    build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
+    build_add_files( "stddef.h" "${build_lib_dir}/clang/20/include" resource_output )
+    build_add_files( "libclang.lib" "${build_lib_dir}" lib_output )
+    build_add_files( "LLVMConfig.cmake" "${build_lib_dir}/cmake/llvm" cmake_output )
+    build_add_files( "ClangConfig.cmake" "${build_lib_dir}/cmake/clang" clang_output )
+else()
+    include( "${CMAKE_CURRENT_LIST_DIR}/outputs-unix.cmake" )
 
     # lib files
-    build_add_libs( 
+    build_add_libs(
         "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
     )
-    
-ENDIF()
+endif()
+
+build_add_files( "${bin_files}" "${build_bin_dir}" bin_output )
 
 # build configuration
 
-# unix
-
-IF( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
+if( WIN32 )
+    # patches
+    build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch
+        "${project_src_dir}/rdf-comparators.patch"
+    )
+    # options
+    set( build_options
+        -DBUILD_SHARED_LIBS=OFF
+        -DLLVM_ENABLE_PROJECTS=clang
+        -DLLVM_TARGETS_TO_BUILD=X86
+        -DLLVM_PARALLEL_COMPILE_JOBS=4
+        -DLLVM_PARALLEL_LINK_JOBS=1
+        -DLLVM_INCLUDE_TESTS=OFF
+        -DLLVM_INCLUDE_BENCHMARKS=OFF
+        -DLLVM_INCLUDE_EXAMPLES=OFF
+        -DCLANG_INCLUDE_TESTS=OFF
+        -DLLVM_BUILD_TOOLS=OFF
+        -DCLANG_BUILD_TOOLS=OFF
+        -DLLVM_ENABLE_ZLIB=OFF
+        -DLLVM_ENABLE_ZSTD=OFF
+        -DLLVM_ENABLE_LIBXML2=OFF
+        -DLIBCLANG_BUILD_STATIC=OFF
     )
 
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
+    # configure, make and install
+    build_cmake_commands( "${project_bin_dir}/${project_pkg}/llvm" build_make ${build_options} )
 
+    set( build_output ${bin_output} ${lib_output} ${inc_output} ${cmake_output} ${clang_output} ${resource_output} )
+else()
     # patch
     set( build_patch
-        patch -p1 -d ${project_bin_dir}/${project_pkg}
+        COMMAND patch -p1 -d ${project_bin_dir}/${project_pkg}
               -i ${project_src_dir}/rdf-comparators.patch
     )
 
     # options
     if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=true )
+        set( build_options -DBUILD_SHARED_LIBS=true )
     else()
-        SET( build_options -DBUILD_SHARED_LIBS=false )
+        set( build_options -DBUILD_SHARED_LIBS=false )
     endif()
 
     # config
@@ -434,7 +105,7 @@ IF( UNIX )
         cd ${project_pkg} &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
-        cmake ../llvm -DCMAKE_INSTALL_PREFIX=${build_dir} 
+        cmake ../llvm -DCMAKE_INSTALL_PREFIX=${build_dir}
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
             ${build_options}
             ${build_config} &&
@@ -442,41 +113,37 @@ IF( UNIX )
         make install
     )
 
+    string( JOIN " " build_make ${build_make} )
+    set( build_make COMMAND sh -c "${build_make}" )
+
     # scripts
     set( build_output ${bin_output} )
-    
+
     if ( CMAKE_SHARED_LIBS )
         set( build_output ${build_output} ${lib_output} )
     endif()
-    
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+
+    build_install_script(
+        "${build_output}"
+        ${build_dir}
+        ${build_prefix_lib}
+        ${build_prefix_framework}
         build_script
     )
 
-    build_install_check( 
-        "${build_output}" 
+    build_install_check(
+        "${build_output}"
         build_check
     )
 
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_patch}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
+    set( build_output ${bin_output} ${lib_output} )
 endif()
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )

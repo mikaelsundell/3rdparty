@@ -54,98 +54,75 @@ set( lib_files
 set( pkg_files
 )
 
-if( UNIX )
+# bin files
+build_add_files(
+    "${bin_files}" "${build_bin_dir}" bin_output
+)
 
-    # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
-    )
+# inc files
+build_add_files(
+    "${inc_files}" "${build_inc_dir}" inc_output
+)
 
-    # inc files
-    build_add_files( 
-        "${inc_files}" "${build_inc_dir}" inc_output
-    )
+# lib files
+build_add_libs(
+    "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
+)
 
-    # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
-    )
-
-    # pkg files
-    build_add_files( 
-        "${pkg_files}" "${build_lib_dir}/pkgconfig" pkg_output
-    )
-    
-endif()
+# pkg files
+build_add_files(
+    "${pkg_files}" "${build_lib_dir}/pkgconfig" pkg_output
+)
 
 # build configuration
 
-# unix
-
-if( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
-
-    # options
-    if( CMAKE_SHARED_LIBS )
-        set( build_options --enable-shared --disable-static )
-    else()
-        set( build_options --enable-static --disable-shared )
-    endif()
-
-    # configure, make and install
-    SET( build_make
-        ${build_env} &&
-        cd ${project_pkg} &&
-        ./configure 
-            --prefix=${build_dir}
-            ${build_options} &&
-        make ${build_flags} &&
-        make install
-    )
-
-    # scripts
-    set( build_output ${bin_output} )
-
-    if ( CMAKE_SHARED_LIBS )
-        set( build_output ${build_output} ${lib_output} )
-    endif()
-
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
-        build_script
-    )
-
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )     
-
+# options
+if( CMAKE_SHARED_LIBS )
+    set( build_options --enable-shared --disable-static )
+else()
+    set( build_options --enable-static --disable-shared )
 endif()
+
+# configure, make and install
+SET( build_make
+    ${build_env} &&
+    cd ${project_pkg} &&
+    ./configure
+        --prefix=${build_dir}
+        ${build_options} &&
+    make ${build_flags} &&
+    make install
+)
+
+string( JOIN " " build_make ${build_make} )
+set( build_make COMMAND sh -c "${build_make}" )
+
+# scripts
+set( build_output ${bin_output} )
+
+if ( CMAKE_SHARED_LIBS )
+    set( build_output ${build_output} ${lib_output} )
+endif()
+
+build_install_script(
+    "${build_output}"
+    ${build_dir}
+    ${build_prefix_lib}
+    ${build_prefix_framework}
+    build_script
+)
+
+build_install_check(
+    "${build_output}"
+    build_check
+)
+
+# run
+set( build_output ${bin_output} ${lib_output} )
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${lib_output}
+    DEPENDS ${build_output}
 )

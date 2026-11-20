@@ -32,130 +32,94 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# bin files
-set( bin_files
-    sdfdump
-    sdffilter
-    usdtree
-    usdcat
-)
+# platform-specific outputs
+if( WIN32 )
+    set( lib_files usd_tf usd_sdf usd_usd usd_usdGeom usd_hd )
+    set( import_files ${lib_files} )
+    list( TRANSFORM import_files APPEND ".lib" )
+    build_add_files( "${import_files}" "${build_lib_dir}" lib_output )
+    if( CMAKE_SHARED_LIBS )
+        list( TRANSFORM lib_files APPEND ".dll" )
+        build_add_files( "${lib_files}" "${build_lib_dir}" runtime_output )
+    endif()
+    build_add_files( "usdcat.exe" "${build_dir}/bin" bin_output )
+    build_add_files( "pxr/usd/usd/stage.h" "${build_inc_dir}" inc_output )
+    build_add_files( "pxrConfig.cmake" "${build_dir}" cmake_output )
+    build_add_files(
+        "pxr/__init__.py;pxr/Tf/_tf${build_python3_postfix}.pyd;pxr/Usd/_usd${build_python3_postfix}.pyd"
+        "${build_lib_dir}/python" sitepackages_output
+    )
+else()
+    # bin files
+    set( bin_files
+        sdfdump
+        sdffilter
+        usdtree
+        usdcat
+    )
 
-# inc dir
-set( inc_dir
-    pxr
-)
+    # inc dir
+    set( inc_dir
+        pxr
+    )
 
-# lib files
-set( lib_files
-    usd_ar
-    usd_arch
-    usd_boost
-    usd_cameraUtil
-    usd_garch
-    usd_geomUtil
-    usd_gf
-    usd_glf
-    usd_hd
-    usd_hdGp
-    usd_hdSt
-    usd_hdar
-    usd_hdsi
-    usd_hdx
-    usd_hf
-    usd_hgi
-    usd_hgiGL
-    usd_hgiInterop
-    usd_hgiMetal
-    usd_hio
-    usd_js
-    usd_kind
-    usd_pcp
-    usd_pegtl
-    usd_plug
-    usd_pxOsd
-    usd_python
-    usd_sdf
-    usd_sdr
-    usd_tf
-    usd_trace
-    usd_ts
-    usd_usd
-    usd_usdAppUtils
-    usd_usdGeom
-    usd_usdGeomValidators
-    usd_usdHydra
-    usd_usdImaging
-    usd_usdImagingGL
-    usd_usdLux
-    usd_usdMedia
-    usd_usdPhysics
-    usd_usdProc
-    usd_usdProcImaging
-    usd_usdRender
-    usd_usdRi
-    usd_usdRiPxrImaging
-    usd_usdSemantics
-    usd_usdShade
-    usd_usdShadeValidators
-    usd_usdSkel
-    usd_usdSkelImaging
-    usd_usdSkelValidators
-    usd_usdUI
-    usd_usdUtils
-    usd_usdUtilsValidators
-    usd_usdValidation
-    usd_usdVol
-    usd_usdVolImaging
-    usd_usdviewq
-    usd_vt
-    usd_work
-)
-
-# pkgfiles
-set( pkg_files
-)
-
-IF( UNIX )
+    include( "${CMAKE_CURRENT_LIST_DIR}/outputs-unix.cmake" )
 
     # bin files
-    build_add_files( 
+    build_add_files(
         "${bin_files}" "${build_bin_dir}" bin_output
     )
 
     # inc dir
-    build_add_dir( 
+    build_add_dir(
         "${inc_dir}" "${build_inc_dir}" include_output
     )
 
     # lib files
-    build_add_libs( 
+    build_add_libs(
         "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
     )
-    
 endif()
 
 # build configuration
 
-# unix
-
-IF( UNIX )
-
-    # download
-    SET( build_download 
-        ${download} ${project_url}
+if( WIN32 )
+    set( build_prepare
+        ${build_python_check}
+        COMMAND "${build_python3}" -B "${build_scripts_dir}/check_openusd_python.py"
+            "${build_sitepackages_dir}"
+    )
+    # patches
+    build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch
+        "${project_src_dir}/msvc/contain-python-copysign-macro.patch"
+        "${project_src_dir}/msvc/sort-hydra-repr-selectors.patch"
+    )
+    set( build_runtime_path "${build_dir}/bin" "${build_lib_dir}" )
+    set( build_python_path "${build_sitepackages_dir}" )
+    # options
+    set( build_options
+        -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+        "-DCMAKE_PREFIX_PATH=${build_dir}"
+        -DPXR_ENABLE_PYTHON_SUPPORT=ON
+        "-DPXR_USE_DEBUG_PYTHON=${build_python3_debugging}"
+        "-DPYSIDEUICBINARY=${build_dir}/bin/uic.exe"
+        -DPXR_ENABLE_MATERIALX_SUPPORT=ON
+        -DPXR_BUILD_ALEMBIC_PLUGIN=ON
+        -DPXR_BUILD_DRACO_PLUGIN=ON
+        -DPXR_BUILD_TESTS=OFF
+        -DPXR_BUILD_EXAMPLES=OFF
+        -DPXR_BUILD_TUTORIALS=OFF
+        ${build_python_options}
     )
 
-    # tar uncompress
-    SET( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
-
+    set( build_output ${lib_output} ${runtime_output} ${bin_output} ${inc_output} ${cmake_output} ${sitepackages_output} )
+else()
     # options
     if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=TRUE )
-    ELSE()
-        SET( build_options -DBUILD_SHARED_LIBS=FALSE )
-    ENDIF()
+        set( build_options -DBUILD_SHARED_LIBS=TRUE )
+    else()
+        set( build_options -DBUILD_SHARED_LIBS=FALSE )
+    endif()
 
     # config
     set( build_config ${build_config} -DCMAKE_CXX_STANDARD=14 )
@@ -168,22 +132,12 @@ IF( UNIX )
         set( build_config ${build_config} -DPXR_USE_DEBUG_PYTHON=ON )
     endif()
 
-    # configure, make and install
-    SET( build_make
-        ${build_env} &&
-        cd ${project_pkg} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
-              -DCMAKE_INSTALL_PREFIX=${build_dir}
-              -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-              -DPYTHON_EXECUTABLE=${build_python3}
-              -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
-              -DPYTHON_LIBRARY=${build_python3_library}
-              ${build_options}
-              ${build_config} &&
-        make ${build_flags} &&
-        make install
+    list( APPEND build_options
+        "-DCMAKE_PREFIX_PATH=${build_dir}"
+        "-DPYTHON_EXECUTABLE=${build_python3}"
+        "-DPYTHON_INCLUDE_DIR=${build_python3_include_dir}"
+        "-DPYTHON_LIBRARY=${build_python3_library}"
+        ${build_config}
     )
 
     # scripts
@@ -193,36 +147,36 @@ IF( UNIX )
         set( build_output ${build_output} ${lib_output} )
     endif()
 
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+    build_install_script(
+        "${build_output}"
+        ${build_dir}
+        ${build_prefix_lib}
+        ${build_prefix_framework}
         build_script
     )
 
-    build_install_check( 
-        "${build_output}" 
+    build_install_check(
+        "${build_output}"
         build_check
     )
 
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )     
-
+    set( build_output ${bin_output} ${lib_output} )
 endif()
+
+# configure, make and install
+build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options} )
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${include_output} ${lib_output}
+    DEPENDS ${build_output} ${dir_output} ${include_output}
 )
 
-# dependencies
-build_add_dependencies( ${project_name} alembic draco materialx onetbb opensubdiv ptex pybind pyside )
+build_add_dependencies( ${project_name} alembic draco materialx onetbb opensubdiv ptex pyside )
+
+if( UNIX )
+    build_add_dependencies( ${project_name} pybind )
+endif()

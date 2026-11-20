@@ -1,0 +1,15 @@
+--- a/src/bindings/python/CMakeLists.txt
++++ b/src/bindings/python/CMakeLists.txt
+@@ -130,4 +130,6 @@ if(WIN32)
+ 	set_target_properties(PyOpenColorIO PROPERTIES
+ 		SUFFIX ".pyd"
++		DEBUG_POSTFIX "_d"
+ 	)
++	target_compile_definitions(PyOpenColorIO PRIVATE "$<$<CONFIG:Debug>:Py_DEBUG>")
+ endif()
+@@ -243,3 +245,4 @@
+ if(WIN32)
+-    set(_Python_VARIANT_PATH "${CMAKE_INSTALL_LIBDIR}/site-packages")
++    set(OCIO_PYTHON_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/site-packages" CACHE STRING "Python package installation directory")
++    set(_Python_VARIANT_PATH "${OCIO_PYTHON_INSTALL_DIR}")
+ else()

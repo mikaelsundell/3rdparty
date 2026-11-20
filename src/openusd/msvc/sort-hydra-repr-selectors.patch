@@ -1,0 +1,12 @@
+--- a/pxr/imaging/hd/renderIndex.cpp
++++ b/pxr/imaging/hd/renderIndex.cpp
+@@ -1531,7 +1531,9 @@
+                 reprs.push_back(repr);
+             }
+         }
+ 
++        // HdDirtyList combines the selectors with std::set_union.
++        std::sort(reprs.begin(), reprs.end());
+         return reprs;
+     }
+ };

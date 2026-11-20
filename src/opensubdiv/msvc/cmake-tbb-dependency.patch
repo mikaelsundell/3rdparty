@@ -1,0 +1,12 @@
+--- a/opensubdiv-config.cmake.in
++++ b/opensubdiv-config.cmake.in
+@@ -3,4 +3,9 @@
+ set_and_check(OpenSubdiv_INCLUDE_DIR "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_INCLUDEDIR@")
+ set_and_check(OpenSubdiv_LIB_DIR "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_LIBDIR@")
+ 
++if(@TBB_FOUND@)
++    include(CMakeFindDependencyMacro)
++    find_dependency(TBB CONFIG)
++endif()
++
+ include("${CMAKE_CURRENT_LIST_DIR}/OpenSubdivTargets.cmake")

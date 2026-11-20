@@ -32,115 +32,97 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# bin files
-set( bin_files
-    draco_encoder-1.5.2
-    draco_decoder-1.5.2  
-)
-
-# inc dir
-SET( inc_dir
-    draco
-)
-
-# lib files
-set( lib_files
-    draco
-)
-
-if( UNIX )
-
+# platform-specific outputs
+if( WIN32 )
+    build_add_files( "draco${CMAKE_STATIC_LIBRARY_SUFFIX}" "${build_lib_dir}" lib_output )
+    if( CMAKE_SHARED_LIBS )
+        build_add_files( "draco${CMAKE_SHARED_LIBRARY_SUFFIX}" "${build_lib_dir}" runtime_output )
+    endif()
+    set( bin_files draco_encoder draco_decoder )
+    list( TRANSFORM bin_files APPEND "${CMAKE_EXECUTABLE_SUFFIX}" )
+    set( inc_files draco/compression/decode.h )
+    build_add_files( "${inc_files}" "${build_dir}/include" inc_output )
+else()
     # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
-    )
-
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
+    set( bin_files
+        draco_encoder-1.5.2
+        draco_decoder-1.5.2
     )
 
     # lib files
-    build_add_libs( 
+    set( lib_files
+        draco
+    )
+
+    # lib files
+    build_add_libs(
         "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
     )
-    
-ENDIF()
+endif()
+
+build_add_files( "${bin_files}" "${build_bin_dir}" bin_output )
 
 # build configuration
 
-# unix
-
-IF( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
+if( WIN32 )
+    # options
+    set( build_options
+        -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+        "-DCMAKE_PREFIX_PATH=${build_dir}"
+        -DDRACO_TESTS=OFF
+        -DDRACO_WASM=OFF
+        -DDRACO_UNITY_PLUGIN=OFF
+        -DDRACO_MAYA_PLUGIN=OFF
     )
 
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
-    )
-
+    set( build_output ${lib_output} ${runtime_output} ${bin_output} ${inc_output} ${cmake_output} )
+else()
     # options
     if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=true )
+        set( build_options -DBUILD_SHARED_LIBS=true )
     else()
-        SET( build_options -DBUILD_SHARED_LIBS=false )
+        set( build_options -DBUILD_SHARED_LIBS=false )
     endif()
 
      # config
     set( build_config ${build_config} -DCMAKE_MODULE_PATH=${build_dir}/share/cmake/pybind11 )
 
-    # configure, make and install
-    set( build_make
+    set( build_env
         ${build_env} &&
-        cd ${project_pkg} &&
         export CPLUS_INCLUDE_PATH=${build_inc_dir} &&
-        export LD_LIBRARY_PATH=${build_lib_dir} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            ${build_options}
-            ${build_config} &&
-        make ${build_flags} &&
-        make install
+        export LD_LIBRARY_PATH=${build_lib_dir}
     )
+    list( APPEND build_options ${build_config} )
 
     # scripts
     if ( CMAKE_SHARED_LIBS )
         set( build_output ${build_output} ${lib_output} )
     endif()
-    
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+
+    build_install_script(
+        "${build_output}"
+        ${build_dir}
+        ${build_prefix_lib}
+        ${build_prefix_framework}
         build_script
     )
 
-    build_install_check( 
-        "${build_output}" 
+    build_install_check(
+        "${build_output}"
         build_check
     )
 
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
+    set( build_output ${bin_output} ${lib_output} )
 endif()
+
+# configure, make and install
+build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options} )
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )

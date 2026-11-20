@@ -1,0 +1,11 @@
+--- a/sources/shiboken6/cmake/ShibokenSetup.cmake
++++ b/sources/shiboken6/cmake/ShibokenSetup.cmake
+@@ -123,7 +123,7 @@
+         import sys
+         import sysconfig
+         config_py_debug = sysconfig.get_config_var('Py_DEBUG')
+-        print(bool(config_py_debug))
++        print(bool(config_py_debug) or hasattr(sys, 'gettotalrefcount'))
+         "
+     OUTPUT_VARIABLE PYTHON_WITH_DEBUG
+     OUTPUT_STRIP_TRAILING_WHITESPACE)

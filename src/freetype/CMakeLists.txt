@@ -32,46 +32,44 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# inc dir
-set( inc_dir
-    freetype2
-)
-
-# lib files
-set( lib_files
-    freetype.6
-)
-
-if( UNIX )
-
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
-    )
-
+# platform-specific outputs
+if( WIN32 )
+    set( lib_files freetype )
+    if( CMAKE_BUILD_TYPE STREQUAL Debug )
+        list( TRANSFORM lib_files APPEND "d" )
+    endif()
+    set( inc_files freetype2/ft2build.h freetype2/freetype/freetype.h freetype2/freetype/config/ftoption.h )
+    build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
+    set( cmake_files freetype-config.cmake )
+    build_add_files( "${cmake_files}" "${build_dir}/lib/cmake/freetype" cmake_output )
+else()
     # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
+    set( lib_files
+        freetype.6
     )
-
 endif()
+
+build_add_libs( "${lib_files}" "${build_lib_dir}" "${lib_prefix}" "${lib_suffix}" lib_output )
 
 # build configuration
 
-# unix
-
-if( UNIX )
-
-    # download
-    SET( build_download 
-        ${download} ${project_url}
+if( WIN32 )
+    # options
+    set( build_options
+        -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+        "-DCMAKE_PREFIX_PATH=${build_dir}"
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+        -DFT_WITH_ZLIB=ON
+        -DFT_WITH_BZIP2=ON
+        -DFT_WITH_PNG=ON
+        -DCMAKE_DISABLE_FIND_PACKAGE_HarfBuzz=ON
     )
 
-    # tar uncompress
-    SET( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
+    # configure, make and install
+    build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options} )
 
+    set( build_output ${lib_output} ${bin_output} ${inc_output} ${pkg_output} ${cmake_output} )
+else()
     # options
     if( CMAKE_SHARED_LIBS )
         set( build_options --enable-shared --disable-static )
@@ -80,13 +78,13 @@ if( UNIX )
     endif()
 
     # configure, make and install
-    SET( build_make
+    set( build_make
         ${build_env} &&
-        export PATH=${build_bin_dir}:$$PATH &&
+        export PATH=${build_bin_dir}:$PATH &&
         export PKG_CONFIG_PATH=${build_pkgconfig_dir}:${build_lib_dir}/pkgconfig &&
         export PKG_CONFIG_LIBDIR=${build_pkgconfig_dir}:${build_lib_dir}/pkgconfig &&
     	cd ${project_pkg} &&
-        ./configure 
+        ./configure
             --prefix=${build_dir}
             CPPFLAGS=-I${build_inc_dir}
             LDFLAGS=-L${build_lib_dir}
@@ -94,7 +92,10 @@ if( UNIX )
         make ${build_flags} &&
         make install
     )
-    
+
+    string( JOIN " " build_make ${build_make} )
+    set( build_make COMMAND sh -c "${build_make}" )
+
     # scripts
     set( build_output ${bin_output} )
 
@@ -102,35 +103,29 @@ if( UNIX )
         set( build_output ${build_output} ${lib_output} )
     endif()
 
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+    build_install_script(
+        "${build_output}"
+        ${build_dir}
+        ${build_prefix_lib}
+        ${build_prefix_framework}
         build_script
     )
 
-    build_install_check( 
-        "${build_output}" 
+    build_install_check(
+        "${build_output}"
         build_check
     )
 
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
+    set( build_output ${bin_output} ${lib_output} )
 endif()
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )
 
 # dependencies

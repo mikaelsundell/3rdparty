@@ -6,3 +6,4 @@ settings.json
 # build
 build*/
 qt/
+**/__pycache__/

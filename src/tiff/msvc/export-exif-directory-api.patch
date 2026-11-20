@@ -1,0 +1,10 @@
+--- a/libtiff/libtiff.def
++++ b/libtiff/libtiff.def
+@@ -116,5 +116,7 @@
+ 	_TIFFmemcmp
+ 	_TIFFCheckMalloc
+ 	TIFFCreateDirectory
++	TIFFCreateEXIFDirectory
++	TIFFWriteCustomDirectory
+ 	TIFFSetTagExtender
+ 	TIFFFieldWithName

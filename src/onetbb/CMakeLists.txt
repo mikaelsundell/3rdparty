@@ -32,28 +32,28 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# inc dir
-set( inc_dir
-    tbb
-)
-
-# lib files
-set( lib_files
-    tbb
-    tbbmalloc
-    tbbmalloc_proxy
-)
-
-if( UNIX )
-
-    # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
+# platform-specific outputs
+if( WIN32 )
+    set( lib_files tbb12 tbbmalloc tbbmalloc_proxy )
+    if( CMAKE_BUILD_TYPE STREQUAL Debug )
+        list( TRANSFORM lib_files APPEND "_debug" )
+    endif()
+    build_add_libs( "${lib_files}" "${build_lib_dir}" "${lib_prefix}" "${lib_suffix}" lib_output )
+    set( inc_files oneapi/tbb.h )
+    build_add_files( "${inc_files}" "${build_dir}/include" inc_output )
+    set( cmake_files TBBConfig.cmake TBBConfigVersion.cmake TBBTargets.cmake )
+    build_add_files( "${cmake_files}" "${build_dir}/lib/cmake/TBB" cmake_output )
+else()
+    # lib files
+    set( lib_files
+        tbb
+        tbbmalloc
+        tbbmalloc_proxy
     )
 
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
+    # bin files
+    build_add_files(
+        "${bin_files}" "${build_bin_dir}" bin_output
     )
 
     # lib files
@@ -63,59 +63,31 @@ if( UNIX )
 
     set( default_version "12.17" )
     set( tbb_version "2.17" )
-    
+
     foreach( lib_file ${lib_files} )
         if( lib_file MATCHES "malloc|proxy" )
             set( lib_version "${tbb_version}" )
         else()
             set( lib_version "${default_version}" )
         endif()
-        
-        list( APPEND lib_output 
+
+        list( APPEND lib_output
             ${build_lib_dir}/${lib_prefix}${lib_file}${lib_dtag}.${lib_version}${lib_suffix}
         )
     endforeach()
-
 endif()
 
 # build configuration
 
-# unix
-
-IF( UNIX )
-
-    # download
-    SET( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    SET( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
-
+if( WIN32 )
     # options
-    if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=TRUE )
-    ELSE()
-        SET( build_options -DBUILD_SHARED_LIBS=FALSE )
-    ENDIF()
-
-     # configure, make and install
-     SET( build_make
-        ${build_env} &&
-        cd ${project_pkg} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
-            -DCMAKE_INSTALL_PREFIX=${build_dir}
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            ${build_options}
-            ${build_config} &&
-        make ${build_flags} &&
-        make install
+    set( build_options
+        -DTBB_TEST=OFF
+        -DTBB_STRICT=OFF
     )
 
+    set( build_output ${lib_output} ${runtime_output} ${bin_output} ${inc_output} ${cmake_output} )
+else()
     # scripts
     set( build_output ${bin_output} )
 
@@ -123,33 +95,30 @@ IF( UNIX )
         set( build_output ${build_output} ${lib_output} )
     endif()
 
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+    build_install_script(
+        "${build_output}"
+        ${build_dir}
+        ${build_prefix_lib}
+        ${build_prefix_framework}
         build_script
     )
 
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
+    set( build_output ${bin_output} ${lib_output} )
 
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )     
-
+    set( build_options ${build_config} )
 endif()
+
+# configure, make and install
+build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options}
+    -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+    "-DCMAKE_PREFIX_PATH=${build_dir}"
+)
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )

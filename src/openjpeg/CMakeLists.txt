@@ -32,107 +32,45 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# bin files
-set( bin_files
-    opj_compress
-    opj_decompress
+# installed files
+set( bin_files opj_compress opj_decompress opj_dump )
+list( TRANSFORM bin_files APPEND "${CMAKE_EXECUTABLE_SUFFIX}" )
+set( inc_files OPENJPEG-2.5/openjpeg.h OPENJPEG-2.5/opj_config.h )
+string( TOLOWER "${CMAKE_BUILD_TYPE}" build_variant )
+set( cmake_files
+    OpenJPEGConfig.cmake OpenJPEGConfigVersion.cmake
+    OpenJPEGTargets.cmake "OpenJPEGTargets-${build_variant}.cmake"
 )
+build_add_files( "${bin_files}" "${build_bin_dir}" bin_output )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
+build_add_versioned_lib( openjp2 2.5.4 7 lib_output shared_output )
+build_add_files( libopenjp2.pc "${build_lib_dir}/pkgconfig" pkg_output )
+build_add_files( "${cmake_files}" "${build_lib_dir}/cmake/OPENJPEG-2.5" cmake_output )
 
-# inc dir
-set( inc_dir
-    openjpeg-2.2
+# configure, make and install
+set( build_static_libs ON )
+if( WIN32 AND CMAKE_SHARED_LIBS )
+    set( build_static_libs OFF )
+endif()
+set( build_options
+    -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+    "-DCMAKE_PREFIX_PATH=${build_dir}"
+    -DBUILD_TESTING=OFF -DBUILD_STATIC_LIBS=${build_static_libs}
 )
+build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options} )
 
-# lib files
-set( lib_files
-    openjp2.2.5.4
-)
-
-if( UNIX )
-
-    # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
+# scripts
+if( shared_output )
+    build_install_script(
+        "${shared_output}" "${build_dir}" "${build_prefix_lib}" "${build_prefix_framework}" build_script
     )
-
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
-    )
-
-    # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
-    )
-    
-ENDIF()
-
-# build configuration
-
-# unix
-
-if( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
-
-    # options
-    set( build_options -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} )
-    set( build_options ${build_options} -DCMAKE_VERBOSE_MAKEFILE=true )
-
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-    	cd ${project_pkg} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
-              -DCMAKE_INSTALL_PREFIX=${build_dir} ${build_options} &&
-        make ${build_flags} &&
-        make install
-    )
-
-    # scripts
-    set( build_output ${bin_output} )
-
-    if ( CMAKE_SHARED_LIBS )
-        set( build_output ${build_output} ${lib_output} )
-    endif()
-
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
-        build_script
-    )
-
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
 endif()
 
-# Custom target builds missing installed outputs.
-add_custom_target(
-    ${project_name} ALL
-    DEPENDS ${bin_output} ${lib_output}
-)
+# run
+set( build_output ${lib_output} ${bin_output} ${inc_output} ${pkg_output} ${cmake_output} )
+build_add_archive_rule()
+add_custom_target( ${project_name} ALL DEPENDS ${build_output} )
+
+if( WIN32 )
+    build_add_dependencies( ${project_name} libpng tiff )
+endif()

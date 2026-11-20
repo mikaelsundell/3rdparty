@@ -1,0 +1,14 @@
+--- a/sources/shiboken6/shibokenmodule/__init__.py.in
++++ b/sources/shiboken6/shibokenmodule/__init__.py.in
+@@ -24,4 +24,11 @@
+ import functools
+ import typing
+ 
++if sys.platform == "win32":
++    from pathlib import Path
++
++    _sdk_bin = Path(__file__).resolve().parents[2] / "bin"
++    if (_sdk_bin / "shiboken6@PYTHON_SHARED_LIBRARY_SUFFIX@.dll").is_file():
++        _sdk_dll_directory = os.add_dll_directory(_sdk_bin)
++
+ from shiboken6.Shiboken import *

@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: BSD-3-Clause
+
+using msvc : @build_msvc_version@ : "@CMAKE_CXX_COMPILER@" : <setup>"@build_vcvars@" ;
+using python : @build_python3_version@ : "@build_python3@" : "@build_python3_include_dir@"
+    : "@build_python3_library_dir@" : <address-model>64 <python-debugging>@build_python3_debugging@ ;
+
+import option ;
+option.set keep-going : false ;

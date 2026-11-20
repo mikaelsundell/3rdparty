@@ -32,40 +32,55 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# inc dir
-set( inc_dir
-    opentime
-    opentimelineio
-)
+# platform-specific outputs
+if( WIN32 )
+    set( package_dir "${build_sitepackages_dir}/opentimelineio" )
+    build_add_files( "opentime.lib;opentimelineio.lib" "${package_dir}" lib_output )
+    if( CMAKE_SHARED_LIBS )
+        build_add_files( "opentime.dll;opentimelineio.dll" "${package_dir}" runtime_output )
+    endif()
+    build_add_files( "opentime/rationalTime.h;opentimelineio/timeline.h" "${build_inc_dir}" inc_output )
+    build_add_files(
+        "cmake/opentime/OpenTimeConfig.cmake;cmake/opentimelineio/OpenTimelineIOConfig.cmake"
+        "${build_lib_dir}" cmake_output
+    )
+    build_add_files(
+        "_opentime${build_python3_extension}.pyd;_otio${build_python3_extension}.pyd;__init__.py"
+        "${package_dir}" sitepackages_output
+    )
+else()
+    # inc dir
+    set( inc_dir
+        opentime
+        opentimelineio
+    )
 
-# lib files
-set( lib_files
-    opentime
-    opentimelineio
-)
+    # lib files
+    set( lib_files
+        opentime
+        opentimelineio
+    )
 
-# site-packages
-set( sitepackages_files
-    _opentime
-    _otio
-)
+    # site-packages
+    set( sitepackages_files
+        _opentime
+        _otio
+    )
 
-# inc files
-set( inc_files
-    opentime/rationalTime.h
-    opentimelineio/timeline.h
-)
+    # inc files
+    set( inc_files
+        opentime/rationalTime.h
+        opentimelineio/timeline.h
+    )
 
-# pkg files
-set( pkg_files
-    cmake/opentime/OpenTimeConfig.cmake
-    cmake/opentimelineio/OpenTimelineIOConfig.cmake
-)
-
-if( UNIX )
+    # pkg files
+    set( pkg_files
+        cmake/opentime/OpenTimeConfig.cmake
+        cmake/opentimelineio/OpenTimelineIOConfig.cmake
+    )
 
     # inc dir
-    build_add_dir( 
+    build_add_dir(
         "${inc_dir}" "${build_inc_dir}" dir_output
     )
 
@@ -98,29 +113,46 @@ if( UNIX )
     # site packages files
     foreach( lib_file ${sitepackages_files} )
         if ( APPLE )
-            list( APPEND lib_output 
+            list( APPEND lib_output
                 ${build_sitepackages_dir}/opentimelineio/${lib_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
             )
-        endif()    
+        endif()
     endforeach()
-
 endif()
 
 # build configuration
 
-# unix
-IF( UNIX )
+# options shared by the Windows and Unix build passes
+set( build_config
+    -DOTIO_FIND_IMATH=ON
+    -DOTIO_FIND_PYBIND11=ON
+    -DOTIO_FIND_RAPIDJSON=ON
+    -DOTIO_FIND_MINIZIP_NG=ON
+    -DOTIO_AUTOMATIC_SUBMODULES=OFF
+    -DOTIO_DEPENDENCIES_INSTALL=OFF
+    -DOTIO_PYTHON_INSTALL=ON
+    -DBUILD_TESTING=OFF
+)
 
-    # download
-    set( build_download 
-        ${download} ${project_url}
+if( WIN32 )
+    set( build_prepare ${build_python_check} )
+    set( build_runtime_path "${build_dir}/bin" "${build_lib_dir}" )
+    set( build_options
+        ${build_config}
+        "-DCMAKE_PREFIX_PATH=${build_dir}"
+        -DOTIO_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+
+        -DOTIO_CXX_INSTALL=ON
+        -DOTIO_DEBUG_POSTFIX=
+        "-DOTIO_PYTHON_INSTALL_DIR=${build_sitepackages_dir}"
+        -DPYBIND11_FINDPYTHON=ON
+        ${build_python_find_options}
+        ${build_python_options}
     )
+    build_cmake_commands( "${project_bin_dir}/OpenTimelineIO-system-dependencies-261115" build_make ${build_options} )
 
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
-
+    set( build_output ${lib_output} ${runtime_output} ${inc_output} ${cmake_output} ${sitepackages_output} )
+else()
     # options
     if( CMAKE_SHARED_LIBS )
         set( build_options -DOTIO_SHARED_LIBS=true )
@@ -129,18 +161,13 @@ IF( UNIX )
     endif()
 
     # config
-    set( build_config
-        -DOTIO_FIND_IMATH=ON
-        -DOTIO_FIND_PYBIND11=ON
-        -DOTIO_FIND_RAPIDJSON=ON
-        -DOTIO_FIND_MINIZIP_NG=ON
-        -DOTIO_AUTOMATIC_SUBMODULES=OFF
-        -DOTIO_DEPENDENCIES_INSTALL=OFF
+    list( APPEND build_config
+
         -DOTIO_CXX_INSTALL=OFF
-        -DOTIO_PYTHON_INSTALL=ON
+
         -DOTIO_PYTHON_INSTALL_DIR=${build_sitepackages_dir}
         -DPython_EXECUTABLE=${build_python3}
-        -DBUILD_TESTING=OFF
+
     )
 
     # configure, make and install
@@ -167,6 +194,9 @@ IF( UNIX )
         make install
     )
 
+    string( JOIN " " build_make ${build_make} )
+    set( build_make COMMAND sh -c "${build_make}" )
+
     # scripts
     set( build_output
         ${inc_output}
@@ -187,18 +217,10 @@ IF( UNIX )
         "${build_output}"
         build_check
     )
-
-    # run
-    add_custom_command(
-        OUTPUT ${build_output} ${dir_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
 endif()
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(

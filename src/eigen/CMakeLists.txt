@@ -33,98 +33,43 @@ set( project_bin_dir
 )
 
 # inc dir
-set( inc_dir
-    eigen3
-)
+set( inc_dir eigen3 )
+set( inc_files eigen3/Eigen/Core )
 
-# pkgfiles
-set( pkg_files
-    eigen3.pc
-)
+# cmake files
+set( cmake_files Eigen3Config.cmake Eigen3ConfigVersion.cmake Eigen3Targets.cmake )
 
-IF( UNIX )
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
-    )
-
-    # pkg files
-    build_add_files( 
-        "${pkg_files}" "${build_lib_dir}/share/pkgconfig" pkg_output
-    )
-    
+build_add_dir( "${inc_dir}" "${build_inc_dir}" dir_output )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
+build_add_files( "${cmake_files}" "${build_dir}/share/eigen3/cmake" cmake_output )
+if( UNIX )
+    build_add_files( "eigen3.pc" "${build_dir}/share/pkgconfig" pkg_output )
 endif()
 
 # build configuration
 
-# unix
-
-IF( UNIX )
-
-    # download
-    SET( build_download 
-        ${download} ${project_url}
+# options
+set( build_options -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS} )
+if( WIN32 )
+    list( APPEND build_options
+        "-DCMAKE_PREFIX_PATH=${build_dir}"
+        -DBUILD_TESTING=OFF
+        -DEIGEN_BUILD_TESTING=OFF
+        -DEIGEN_BUILD_DOC=OFF
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     )
-
-    # tar uncompress
-    SET( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
-
-    # options
-    set( build_options ${build_options} -DCMAKE_CXX_STANDARD=14 )
-
-    # options
-    if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=TRUE )
-    ELSE()
-        SET( build_options -DBUILD_SHARED_LIBS=FALSE )
-    ENDIF()
-
-    # configure, make and install
-    SET( build_make
-        ${build_env} &&
-        cd ${project_pkg} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir}
-              -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-              ${build_options} &&
-        make ${build_flags} &&
-        make install
-    )
-
-    # scripts
-    set( build_output ${bin_output} )
-
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
-        build_script
-    )
-
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-
-    # run
-    add_custom_command(
-        OUTPUT ${dir_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_patch}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )     
-
 endif()
+
+set( build_output ${inc_output} ${cmake_output} ${pkg_output} )
+
+# configure, make and install
+build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options} )
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${dir_output}
+    DEPENDS ${build_output} ${dir_output}
 )
