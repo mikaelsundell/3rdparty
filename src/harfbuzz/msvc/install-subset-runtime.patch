@@ -1,0 +1,20 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -716,14 +716,11 @@
+   if (HB_BUILD_SUBSET)
+     install(TARGETS harfbuzz-subset
+       ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-  )
++      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++    )
+   endif ()
+   if (HB_BUILD_UTILS)
+-    if (WIN32 AND BUILD_SHARED_LIBS)
+-      install(TARGETS harfbuzz-subset
+-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+-      )
+-    endif ()
+     install(TARGETS hb-view
+       RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+     )

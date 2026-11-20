@@ -1,0 +1,12 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -181,5 +181,9 @@
+   add_library(pybind11_headers INTERFACE)
+   add_library(pybind11::pybind11_headers ALIAS pybind11_headers) # to match exported target
+   add_library(pybind11::headers ALIAS pybind11_headers) # easier to use/remember
++  if(WIN32)
++    # Use the full CPython Debug ABI with the Debug SDK.
++    target_compile_definitions(pybind11_headers INTERFACE "$<$<CONFIG:Debug>:Py_DEBUG>")
++  endif()
+ 
+   target_include_directories(

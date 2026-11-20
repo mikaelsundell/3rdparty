@@ -1,0 +1,57 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -85,11 +85,7 @@
+ 
+ PROJECT(PCRE2 C)
+ 
+-# Increased minimum to 2.8.0 to support newer add_test features. Set policy
+-# CMP0026 to avoid warnings for the use of LOCATION in GET_TARGET_PROPERTY.
+-
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0)
+-CMAKE_POLICY(SET CMP0026 OLD)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
+ 
+ SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake) # for FindReadline.cmake
+ 
+@@ -644,15 +640,6 @@
+     TARGET_LINK_LIBRARIES(pcre2_jit_test ${PCRE2_JIT_TEST_LIBS})
+   ENDIF(PCRE2_SUPPORT_JIT)
+ 
+-  # exes in Debug location tested by the RunTest shell script
+-  # via "make test"
+-
+-  IF(PCRE2_BUILD_PCRE2GREP)
+-    GET_TARGET_PROPERTY(PCRE2GREP_EXE pcre2grep DEBUG_LOCATION)
+-  ENDIF(PCRE2_BUILD_PCRE2GREP)
+-
+-  GET_TARGET_PROPERTY(PCRE2TEST_EXE pcre2test DEBUG_LOCATION)
+-
+ # =================================================
+   # Write out a CTest configuration file
+   #
+@@ -693,14 +680,12 @@
+     # Provide environment for executing the bat file version of RunTest
+     FILE(TO_NATIVE_PATH ${PROJECT_SOURCE_DIR} winsrc)
+     FILE(TO_NATIVE_PATH ${PROJECT_BINARY_DIR} winbin)
+-    FILE(TO_NATIVE_PATH ${PCRE2TEST_EXE} winexe)
+-
+-    FILE(WRITE ${PROJECT_BINARY_DIR}/pcre2_test.bat
++    FILE(GENERATE OUTPUT "${PROJECT_BINARY_DIR}/pcre2_test-$<CONFIG>.bat" CONTENT
+     "\@REM This is a generated file.
+ \@echo off
+ setlocal
+ SET srcdir=\"${winsrc}\"
+-SET pcre2test=\"${winexe}\"
++SET pcre2test=\"$<TARGET_FILE:pcre2test>\"
+ if not [%CMAKE_CONFIG_TYPE%]==[] SET pcre2test=\"${winbin}\\%CMAKE_CONFIG_TYPE%\\pcre2test.exe\"
+ call %srcdir%\\RunTest.Bat
+ if errorlevel 1 exit /b 1
+@@ -708,7 +693,7 @@
+ ")
+ 
+   ADD_TEST(NAME pcre2_test_bat
+-  COMMAND pcre2_test.bat)
++  COMMAND "${PROJECT_BINARY_DIR}/pcre2_test-$<CONFIG>.bat")
+   SET_TESTS_PROPERTIES(pcre2_test_bat PROPERTIES
+   PASS_REGULAR_EXPRESSION "RunTest\\.bat tests successfully completed")
+ 

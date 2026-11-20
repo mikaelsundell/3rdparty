@@ -1,0 +1,25 @@
+--- a/pxr/external/boost/python/detail/wrap_python.hpp
++++ b/pxr/external/boost/python/detail/wrap_python.hpp
+@@ -59,6 +59,11 @@
+ # include <math.h>
+ #endif
+ 
++#if defined(_MSC_VER)
++// Python 3.9 defines copysign as a macro even in C++.
++# pragma push_macro("copysign")
++#endif
++
+ # include <pyconfig.h>
+ # if defined(_SGI_COMPILER_VERSION) && _SGI_COMPILER_VERSION >= 740
+ #  undef _POSIX_C_SOURCE
+@@ -182,6 +187,10 @@
+ #else
+ # include <Python.h>
+ #endif
+ 
++#if defined(_MSC_VER)
++# pragma pop_macro("copysign")
++#endif
++
+ #if PXR_BOOST_PYTHON_GCC_HAS_WREGISTER
+ # pragma GCC diagnostic pop

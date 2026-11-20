@@ -8,7 +8,7 @@
 
 3rdparty is a collection of scripts, configurations, and reference builds designed to simplify compiling third-party libraries on macOS from scratch. It focuses on providing:
 
-* A curated set of libraries, tools, and media assets commonly used in film, color science, and image processing.
+* A curated set of libraries and tools commonly used in film, color science, and image processing.
 
 * Build scripts and configuration presets that remove the need to understand each individual library’s build system in depth.
 
@@ -49,7 +49,7 @@ uses `FindPython3` to select a matching interpreter and development files;
 `-DPython3_EXECUTABLE=/path/to/python3` can select an interpreter when configuring
 the dependency project directly.
 
-### Build 3rdparty ###
+### Build 3rdparty on macOS ###
   
 3rdparty is built using the ```build.sh``` script, which automates the compilation of all supported dependencies from source, including qt-everywhere-src-6.10.1 for UI/Toolkit support.
 
@@ -85,11 +85,102 @@ Use `--project` to build a library and its declared dependencies:
 Replace `<library>` with its CMake target name, such as `openexr`, `ocio`, or
 `opentimelineio`. `all` builds both Debug and Release.
 
-Project selection uses the existing Makefile and `MY_MAKE_FLAGS`; CMake resolves
-the declared dependencies. This skips the Qt build and unrelated library targets
-and uses the normal `build/macosx/<architecture>.debug` and `.release` directories
-without the full-build clean prompt. Package versions and source-specific changes
-are documented in [packages.txt](packages.txt).
+`build.sh` starts the shared `build.py` driver. On macOS, the driver passes the
+selected target to the Makefile through `MY_MAKE_FLAGS`. CMake resolves the
+declared dependencies. Selected builds skip Qt, unrelated library targets, and
+the full-build clean prompt. They use the normal
+`build/macosx/<architecture>.debug` and `.release` directories. Pass
+`--build-dir` to use a different build root for a selected build.
+Package versions and source-specific changes are documented in [packages.txt](packages.txt).
+
+### Build on Windows ###
+
+The Windows driver builds the base dependencies, Qt 6.10.1, and the Windows
+libraries and extras for x64 MSVC. The autotools projects are only built on
+Unix.
+
+Download the **Windows x86-64 executable installer** from the
+[Python 3.9.0 release page](https://www.python.org/downloads/release/python-390/).
+Choose **Customize installation**, then enable **Download debugging symbols**
+and **Download debug binaries (requires VS 2017 or later)** under
+**Advanced Options**. Keep the developer headers and libraries enabled. The
+debug binaries include `python_d.exe`, `python39_d.dll`, and the
+`libs\python39_d.lib` import library needed for native Debug Python builds.
+
+Run `build.bat` from a regular Command Prompt. It finds Visual Studio or
+Visual Studio Build Tools with the MSVC x64 C++ tools installed and sets up
+the x64 build environment before starting `build.py`. An existing x64
+developer prompt also works.
+The build needs CMake 3.27 or newer, Ninja, Git, and `curl.exe` on `PATH` after setup.
+The launcher selects Python 3.9 through `py.exe -3.9`, the standard
+per-user installation, or a Python 3.9 interpreter on `PATH`.
+
+A full Windows build or an OpenUSD-only build checks for PyOpenGL (imported
+as `OpenGL`) and Jinja2 (imported as `jinja2`) before starting. OpenUSD uses
+PyOpenGL for `usdview` and Jinja2 for schema generation tools. Install the
+packages with the interpreter for each configuration you plan to build. To
+prepare both configurations in PowerShell, run these commands:
+
+```powershell
+$python39 = py.exe -3.9 -c "import sys; print(sys.base_prefix)"
+& (Join-Path $python39 'python.exe') -m pip install PyOpenGL Jinja2
+& (Join-Path $python39 'python_d.exe') -m pip install PyOpenGL Jinja2
+```
+
+If you use a Python installation without `py.exe`, set `$python39` to its
+installation directory. Qt-only, base-only, and other selected library builds
+can run without these two packages.
+
+```bat
+build.bat all
+build.bat debug
+build.bat release
+build.bat all --base-only
+build.bat debug --project qt
+build.bat debug --project boost
+```
+
+The common SDK root is `build\win`, with separate `x64.debug` and
+`x64.release` prefixes. `--project qt` builds the Qt prerequisites and Qt.
+Other selected targets build only their CMake prerequisites. For PySide or
+OpenUSD, install Qt with the same configuration and build root first.
+The Debug Qt prefix includes the Release Qt tools, including `moc.exe`.
+Windows Qt Multimedia uses the native Windows backend.
+The Windows ports of FFmpeg, x264, OpenCV, and NanoGUI are pending.
+
+The Windows LLVM build caps Ninja at four concurrent compile jobs and one
+link job to limit memory pressure. To resume an interrupted Debug LLVM build
+in the existing prefix, run `build.bat debug --project llvm`.
+
+Use the selected prefix as `CMAKE_PREFIX_PATH` for consumers of
+`find_package(Imath CONFIG REQUIRED)`, and add its `bin` directory to
+`PATH` when running programs linked to the Imath DLL. Each prefix also
+contains the headers, import libraries, and CMake and pkg-config metadata.
+Boost, Ptex, and OpenUSD install DLLs under `lib`. Add that directory to
+`PATH` when running programs linked to those DLLs. Use `python_d.exe` with extensions
+from the Debug prefix and `python.exe` with extensions from the Release
+prefix. OpenEXR's Python module requires NumPy for the selected interpreter.
+When importing extensions directly from the prefix, use
+`os.add_dll_directory()` with the absolute paths of the prefix's runtime DLL directories.
+Use `--build-dir` to choose a different build root for a fresh build.
+
+#### Windows SDK shell ####
+
+Double-click `tools\3rdparty-shell.bat` to open a new Command Prompt for the
+Debug SDK. For the Release SDK, run `tools\3rdparty-shell.bat release`.
+The shell opens at the repository root with the selected prefix's executables
+and DLLs on `PATH` and its Python modules registered. `python` starts the
+matching Python 3.9 interpreter. For example:
+
+```bat
+python -c "from pxr import Tf; print(Tf.__file__)"
+usdcat --help
+ninja --version
+```
+
+Use `call python` inside batch files, or invoke `"%THIRDPARTY_PYTHON%"`
+directly to use the selected Python executable. Commands and modules are
+available once their packages have been built into that prefix.
 
 ### Qt compiler compatibility ###
 
@@ -161,7 +252,6 @@ make verbose=1 ...        Enable verbose CMake makefiles
 make build_base=1 ...     Enable base dependencies
 make build_libs=1 ...     Enable libraries
 make build_extras=1 ...   Enable extras (also requires base and libraries)
-make build_media=1 ...    Build media
 ```
 
 Individual packages can be disabled with CMake cache options, for example
@@ -216,7 +306,7 @@ Mikael Sundell - mikael.sundell@gmail.com
 ## License ##
 
 The build scripts and configuration files in this repository are licensed under
-[BSD-3-Clause](LICENSE). Third-party dependencies, media, and artwork retain their
+[BSD-3-Clause](LICENSE). Third-party dependencies and artwork retain their
 own licenses and copyright notices.
 
 See [Third-party notices](THIRD_PARTY_NOTICES.md) for the dependency source

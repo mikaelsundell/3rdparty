@@ -33,49 +33,24 @@ set( project_bin_dir
 )
 
 # inc dir
-SET( inc_dir
-    glm
+set( inc_dir glm )
+set( inc_files glm/glm.hpp )
+
+build_add_dir( "${inc_dir}" "${build_inc_dir}" dir_output )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
+
+# copy include
+set( build_make
+    COMMAND ${copy_dir} "${project_bin_dir}/${project_pkg}/${inc_dir}" "${build_inc_dir}/${inc_dir}"
 )
 
-SET( inc_output
-    ${build_inc_dir}/${inc_dir}
-)
+set( build_output ${inc_output} )
 
-# build configuration
-
-# unix
-
-if( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
-
-    # copy include
-    set( build_include
-        cd ${project_pkg} &&
-        ${make_dir} ${build_dir}/include &&
-        ${copy_dir} ./glm ${build_dir}/include/glm
-    )
-	
-    # run
-    add_custom_command(
-        OUTPUT ${inc_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_include}
-    )
-
-endif()
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${inc_output}
+    DEPENDS ${build_output} ${dir_output}
 )

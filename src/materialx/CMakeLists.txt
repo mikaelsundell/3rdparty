@@ -32,77 +32,34 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# bin files
-set( bin_files
-    MaterialXView
-)
-
-# inc dir
-SET( inc_dir
-    MaterialXCore
-    MaterialXFormat
-    MaterialXGenGlsl
-    MaterialXGenMdl
-    MaterialXGenMsl
-    MaterialXGenOsl
-    MaterialXGenShader
-    MaterialXRender
-    MaterialXRenderGlsl
-    MaterialXRenderHw
-    MaterialXRenderMsl
-    MaterialXRenderOsl
-)
-
-# lib files
-set( lib_files
-    MaterialXCore
-    MaterialXFormat
-    MaterialXGenGlsl
-    MaterialXGenMdl
-    MaterialXGenMsl
-    MaterialXGenOsl
-    MaterialXGenShader
-    MaterialXRender
-    MaterialXRenderGlsl
-    MaterialXRenderHw
-    MaterialXRenderMsl
-    MaterialXRenderOsl
-)
-
-# site-packages
-set( sitepackages_files
-    MaterialXCore
-    MaterialXFormat
-    MaterialXGenGlsl
-    MaterialXGenMdl
-    MaterialXGenMsl
-    MaterialXGenOsl
-    MaterialXGenShader
-    MaterialXRender
-    MaterialXRenderGlsl
-    MaterialXRenderMsl
-    MaterialXRenderOsl
-)
-
-if( UNIX )
-
+# platform-specific outputs
+if( WIN32 )
+    set( lib_files MaterialXCore MaterialXFormat MaterialXGenShader MaterialXGenGlsl MaterialXRender )
+    list( TRANSFORM lib_files APPEND "${build_python3_postfix}" )
+    build_add_libs( "${lib_files}" "${build_lib_dir}" "${lib_prefix}" "${lib_suffix}" lib_output )
+    build_add_files( "MaterialXCore/Document.h" "${build_inc_dir}" inc_output )
+    build_add_files( "MaterialXConfig.cmake" "${build_lib_dir}/cmake/MaterialX" cmake_output )
+    build_add_files( "PyMaterialXCore${build_python3_extension}.pyd;__init__.py" "${build_dir}/python/MaterialX" sitepackages_output )
+else()
     # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
+    set( bin_files
+        MaterialXView
     )
 
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
+    include( "${CMAKE_CURRENT_LIST_DIR}/outputs-unix.cmake" )
+
+    # bin files
+    build_add_files(
+        "${bin_files}" "${build_bin_dir}" bin_output
     )
 
     # lib files
     set( lib_version "1.39.4" )
-        
+
     foreach( lib_file ${lib_files} )
 
         if ( APPLE )
-            list( APPEND lib_output 
+            list( APPEND lib_output
                 ${build_lib_dir}/${lib_prefix}${lib_file}.${lib_version}${lib_suffix}
             )
         endif()
@@ -110,38 +67,40 @@ if( UNIX )
 
     # site packages files
     foreach( sitepackages_file ${sitepackages_files} )
-    
+
         if ( APPLE )
-            list( APPEND lib_output 
+            list( APPEND lib_output
                 ${build_sitepackages_dir}/MaterialX/Py${sitepackages_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
             )
-        endif()    
-    endforeach()    
+        endif()
+    endforeach()
 endif()
 
 # build configuration
 
-# unix
-
-IF( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
-    )
-
+if( WIN32 )
+    set( build_prepare ${build_python_check} )
+    set( build_runtime_path "${build_dir}/bin" "${build_lib_dir}" )
     # options
-    if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=true )
-    else()
-        SET( build_options -DBUILD_SHARED_LIBS=false )
-    endif()
+    set( build_options
+        "-DCMAKE_PREFIX_PATH=${build_dir}"
+        "-DCMAKE_DEBUG_POSTFIX=${build_python3_postfix}"
+        -DMATERIALX_BUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+        -DMATERIALX_BUILD_TESTS=OFF
+        -DMATERIALX_BUILD_VIEWER=OFF
+        -DMATERIALX_BUILD_PYTHON=ON
+        -DMATERIALX_PYTHON_LTO=OFF
+        "-DMATERIALX_PYTHON_EXECUTABLE=${build_python3}"
+        "-DMATERIALX_PYTHON_VERSION=${build_python3_version}"
+        -DPYBIND11_FINDPYTHON=ON
+        ${build_python_options}
+        ${build_python_find_options}
+    )
 
+    set( build_output ${lib_output} ${runtime_output} ${inc_output} ${cmake_output} ${sitepackages_output} )
+
+    build_add_dependencies( ${project_name} pybind )
+else()
     # config
     set( build_config ${build_config} -DMATERIALX_BUILD_VIEWER=true )
     set( build_config ${build_config} -DMATERIALX_BUILD_SHARED_LIBS=true )
@@ -153,62 +112,46 @@ IF( UNIX )
     set( build_config ${build_config} -DNANOGUI_EXTRA_DEFS="-DNANOGUI_USE_METAL=1" )
     set( build_config ${build_config} -DCMAKE_CXX_FLAGS="-I${build_inc_dir}/eigen3" )
 
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-        cd ${project_pkg} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
-            -DMATERIALX_PYTHON_FOLDER_NAME=${build_sitepackages_dir}/MaterialX
-            -DMATERIALX_BUILD_PYTHON=ON 
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            -DPYTHON_EXECUTABLE=${build_python3}
-            -DPYTHON_INCLUDE_DIR=${build_python3_include_dir}
-            -DPYTHON_LIBRARY=${build_python3_library}
-            ${build_options}
-            ${build_config} &&
-        make ${build_flags} &&
-        make install
-    )
-
     # scripts
     set( build_output ${bin_output} )
 
     if ( CMAKE_SHARED_LIBS )
         set( build_output ${build_output} ${lib_output} )
     endif()
-    
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+
+    build_install_script(
+        "${build_output}"
+        ${build_dir}
+        ${build_prefix_lib}
+        ${build_prefix_framework}
         build_script
     )
 
-    build_install_check( 
-        "${build_output}" 
-        build_check
+    set( build_output ${bin_output} ${lib_output} )
+
+    set( build_options
+        "-DMATERIALX_PYTHON_FOLDER_NAME=${build_sitepackages_dir}/MaterialX"
+        -DMATERIALX_BUILD_PYTHON=ON
+        "-DPYTHON_EXECUTABLE=${build_python3}"
+        "-DPYTHON_INCLUDE_DIR=${build_python3_include_dir}"
+        "-DPYTHON_LIBRARY=${build_python3_library}"
+        ${build_options}
+        ${build_config}
     )
 
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
+    build_add_dependencies( ${project_name} nanogui oiio )
 endif()
+
+# configure, make and install
+build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options}
+    -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+)
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )
-
-# dependencies
-build_add_dependencies( ${project_name} nanogui oiio )

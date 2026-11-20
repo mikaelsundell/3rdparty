@@ -3,7 +3,7 @@
 # https://github.com/mikaelsundell/3rdparty
 
 # Upstream package: giflib-5.1.4
-# Archive: None
+# Archive: giflib-5.1.4.tar.gz
 # Upstream copyright and license notices: licenses/third-party/giflib/
 
 build_info( " Adding giflib project" )
@@ -16,8 +16,11 @@ set( project_name "giflib" )
 # project pkg
 set( project_pkg ${project_name}-5.1.4 )
 
+# project archive
+set( project_arc ${project_pkg}.tar.gz )
+
 # project url
-set( project_url ${repo_url}/${project_pkg}.tar.gz )
+set( project_url ${repo_url}/${project_arc} )
 
 # project src dir
 set( project_src_dir
@@ -28,6 +31,9 @@ set( project_src_dir
 set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
+
+# inc files
+set( inc_files gif_lib.h )
 
 # bin files
 set( bin_files
@@ -41,77 +47,74 @@ set( bin_files
     giftool
 )
 
-# inc files
-set( inc_files
-    gif_lib.h
-)
-
-# lib files
-set( lib_files
-    gif.7
-)
-
-IF( UNIX )
-
-    # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
-    )
-
-    # inc files
-    build_add_files( 
-        "${inc_files}" "${build_inc_dir}" inc_output
-    )
-
+# platform-specific outputs
+if( WIN32 )
+    set( lib_files gif )
+    list( TRANSFORM bin_files APPEND "${CMAKE_EXECUTABLE_SUFFIX}" )
+else()
     # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
+    set( lib_files
+        gif.7
     )
 
     # pkg files
-    build_add_files( 
+    build_add_files(
         "${pkg_files}" "${build_lib_dir}/pkgconfig" pkg_output
     )
-    
 endif()
+
+build_add_libs( "${lib_files}" "${build_lib_dir}" "${lib_prefix}" "${lib_suffix}" lib_output )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
+build_add_files( "${bin_files}" "${build_bin_dir}" bin_output )
 
 # build configuration
 
-# unix
-
-IF( UNIX )
-
-    # download
-    SET( build_download 
-        ${download} ${project_url}
+if( WIN32 )
+    # patches
+    build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch
+        "${project_src_dir}/msvc/windows-exports.patch"
     )
-
-    # tar uncompress
-    SET( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
+    list( APPEND build_patch
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${project_src_dir}/msvc/CMakeLists.txt"
+            "${project_bin_dir}/${project_pkg}/CMakeLists.txt"
     )
-
     # options
-    IF( CMAKE_BUILD_TYPE STREQUAL Debug )
-        SET( build_options --enable-debug )
-    ENDIF()
-
-    IF( CMAKE_SHARED_LIBS )
-        SET( build_options ${build_options} --enable-shared --disable-static )
-    ELSE()
-        SET( build_options ${build_options} --enable-static --disable-shared )
-    ENDIF()
+    set( build_options
+        -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+        "-DCMAKE_PREFIX_PATH=${build_dir}"
+        "-DGIFLIB_COMPAT_DIR=${project_src_dir}/msvc"
+    )
 
     # configure, make and install
-    SET( build_make
+    build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options} )
+
+    set( build_output ${lib_output} ${bin_output} ${inc_output} )
+else()
+    # options
+    if( CMAKE_BUILD_TYPE STREQUAL Debug )
+        set( build_options --enable-debug )
+    endif()
+
+    if( CMAKE_SHARED_LIBS )
+        set( build_options ${build_options} --enable-shared --disable-static )
+    else()
+        set( build_options ${build_options} --enable-static --disable-shared )
+    endif()
+
+    # configure, make and install
+    set( build_make
         ${build_env} &&
     	cd ${project_pkg} &&
-        ./configure 
+        ./configure
             --prefix=${build_dir}
             ${build_options} &&
         make ${build_flags} &&
         make install
     )
+
+    string( JOIN " " build_make ${build_make} )
+    set( build_make COMMAND sh -c "${build_make}" )
 
     # scripts
     set( build_output ${bin_output} )
@@ -120,33 +123,27 @@ IF( UNIX )
         set( build_output ${build_output} ${lib_output} )
     endif()
 
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+    build_install_script(
+        "${build_output}"
+        ${build_dir}
+        ${build_prefix_lib}
+        ${build_prefix_framework}
         build_script
     )
 
-    build_install_check( 
-        "${build_output}" 
+    build_install_check(
+        "${build_output}"
         build_check
     )
 
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    ) 
-
+    set( build_output ${bin_output} ${lib_output} )
 endif()
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )

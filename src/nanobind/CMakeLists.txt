@@ -19,8 +19,11 @@ set( project_pkg "nanobind-master-251225" )
 # project archive
 set( project_arc ${project_pkg}.tar.gz )
 
+# project archive
+set( project_arc ${project_pkg}.tar.gz )
+
 # project url
-set( project_url ${repo_url}/${project_pkg}.tar.gz )
+set( project_url ${repo_url}/${project_arc} )
 
 # project src dir
 set( project_src_dir
@@ -33,85 +36,34 @@ set( project_bin_dir
 )
 
 # inc dir
-set( inc_dir
-    nanobind
-)
+set( inc_dir nanobind )
+set( inc_files nanobind/nanobind.h )
 
-if( UNIX )
+# cmake files
+set( cmake_files nanobind-config.cmake nanobind-config-version.cmake )
 
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_dir}/nanobind/include" include_output
-    )
-    
+build_add_dir( "${inc_dir}" "${build_dir}/nanobind/include" dir_output )
+build_add_files( "${inc_files}" "${build_dir}/nanobind/include" inc_output )
+build_add_files( "${cmake_files}" "${build_dir}/nanobind/cmake" cmake_output )
+
+# options
+set( build_options "-DCMAKE_PREFIX_PATH=${build_dir}" )
+if( WIN32 )
+    list( APPEND build_options -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS} -DNB_TEST=OFF )
+else()
+    list( APPEND build_options -DCMAKE_VERBOSE_MAKEFILE=true )
 endif()
 
-# build configuration
+# configure, make and install
+build_cmake_commands( "${project_bin_dir}/${project_name}" build_make ${build_options} )
 
-# unix
-if( UNIX )
+set( build_output ${inc_output} ${cmake_output} )
 
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
-
-    # options
-    set( build_options -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} )
-    set( build_options ${build_options} -DCMAKE_VERBOSE_MAKEFILE=true )
-
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-    	cd ${project_name} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
-              -DCMAKE_INSTALL_PREFIX=${build_dir} ${build_options} &&
-        make ${build_flags} &&
-        make install
-    )
-
-    # scripts
-    set( build_output ${bin_output} )
-
-    if ( CMAKE_SHARED_LIBS )
-        set( build_output ${build_output} ${lib_output} )
-    endif()
-
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
-        build_script
-    )
-
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-
-    # run
-
-    add_custom_command(
-        OUTPUT ${include_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
-endif()
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${include_output}
+    DEPENDS ${build_output} ${dir_output}
 )

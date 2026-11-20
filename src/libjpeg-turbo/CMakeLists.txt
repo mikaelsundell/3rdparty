@@ -32,103 +32,87 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# include files
-set( inc_files
-    jconfig.h
-    jerror.h
-    jmorecfg.h
-    jpeglib.h
-)
+# platform-specific outputs
+if( WIN32 )
+    build_add_files( "turbojpeg-static${CMAKE_STATIC_LIBRARY_SUFFIX}" "${build_dir}/libjpeg-turbo/lib" lib_output )
+    if( CMAKE_SHARED_LIBS )
+        build_add_files( "turbojpeg${CMAKE_SHARED_LIBRARY_SUFFIX}" "${build_dir}/libjpeg-turbo/bin" runtime_output )
+    endif()
+    set( bin_files tjbench )
+    list( TRANSFORM bin_files APPEND "${CMAKE_EXECUTABLE_SUFFIX}" )
+    build_add_files( "${bin_files}" "${build_dir}/libjpeg-turbo/bin" bin_output )
+    set( inc_files turbojpeg.h )
+    build_add_files( "${inc_files}" "${build_dir}/libjpeg-turbo/include" inc_output )
+    set( cmake_files libjpeg-turboConfig.cmake libjpeg-turboConfigVersion.cmake )
+    build_add_files( "${cmake_files}" "${build_dir}/libjpeg-turbo/lib/cmake/libjpeg-turbo" cmake_output )
+else()
+    # include files
+    set( inc_files
+        jconfig.h
+        jerror.h
+        jmorecfg.h
+        jpeglib.h
+    )
 
-# lib files
-set( lib_files
-    jpeg.62.3.0
-    turbojpeg.0.2.0
-)
-
-if( UNIX )
+    # lib files
+    set( lib_files
+        jpeg.62.3.0
+        turbojpeg.0.2.0
+    )
 
     # inc files
-    build_add_files( 
+    build_add_files(
         "${inc_files}" "${build_inc_dir}" inc_output
     )
 
     # lib files
-    build_add_libs( 
+    build_add_libs(
         "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
     )
-    
-ENDIF()
+endif()
 
 # build configuration
 
-# unix
-
-IF( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
-    )
-
+if( WIN32 )
     # options
-    if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=true )
-    else()
-        SET( build_options -DBUILD_SHARED_LIBS=false )
-    endif()
-
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-        cd ${project_pkg} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            ${build_options} &&
-        make ${build_flags} &&
-        make install
+    set( build_options
+        "-DCMAKE_PREFIX_PATH=${build_dir}"
+        "-DCMAKE_INSTALL_PREFIX=${build_dir}/libjpeg-turbo"
+        -DENABLE_SHARED=${CMAKE_SHARED_LIBS}
+        -DENABLE_STATIC=ON
+        -DWITH_TESTS=OFF
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     )
 
+    set( build_output ${lib_output} ${runtime_output} ${bin_output} ${inc_output} ${cmake_output} ${sitepackages_output} )
+else()
     # scripts
 
     if ( CMAKE_SHARED_LIBS )
         set( build_output ${build_output} ${lib_output} )
     endif()
-    
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+
+    build_install_script(
+        "${build_output}"
+        ${build_dir}
+        ${build_prefix_lib}
+        ${build_prefix_framework}
         build_script
     )
 
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
+    set( build_output ${bin_output} ${lib_output} )
 endif()
+
+# configure, make and install
+build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options}
+    -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+)
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )

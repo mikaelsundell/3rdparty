@@ -1,0 +1,37 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -667,6 +667,14 @@
+   target_include_directories(anim_dump PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src)
+ endif()
+ 
++if(MSVC AND BUILD_SHARED_LIBS)
++  foreach(tool cwebp dwebp)
++    if(TARGET ${tool})
++      target_compile_definitions(${tool} PRIVATE WEBP_DLL)
++    endif()
++  endforeach()
++endif()
++
+ # Install the different headers and libraries.
+ install(TARGETS ${INSTALLED_LIBRARIES}
+         EXPORT ${PROJECT_NAME}Targets
+--- a/extras/extras.c
++++ b/extras/extras.c
+@@ -147,15 +147,10 @@
+ //------------------------------------------------------------------------------
+ 
+ int WebPUnmultiplyARGB(WebPPicture* pic) {
+-  int y;
+-  uint32_t* dst;
+   if (pic == NULL || pic->use_argb != 1 || pic->argb == NULL) return 0;
+   WebPInitAlphaProcessing();
+-  dst = pic->argb;
+-  for (y = 0; y < pic->height; ++y) {
+-    WebPMultARGBRow(dst, pic->width, /*inverse=*/1);
+-    dst += pic->argb_stride;
+-  }
++  WebPMultARGBRows((uint8_t*)pic->argb, pic->argb_stride * (int)sizeof(*pic->argb),
++                  pic->width, pic->height, /*inverse=*/1);
+   return 1;
+ }
+ 

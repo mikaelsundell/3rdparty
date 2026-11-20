@@ -33,95 +33,44 @@ set( project_bin_dir
 )
 
 # inc dir
-set( inc_dir
-    rapidjson
-)
+set( inc_dir rapidjson )
+set( inc_files rapidjson/document.h rapidjson/cursorstreamwrapper.h )
 
-# inc files
-set( inc_files
-    rapidjson/cursorstreamwrapper.h
-)
+build_add_dir( "${inc_dir}" "${build_inc_dir}" dir_output )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
 
 # pkg files
-set( pkg_files
-    cmake/RapidJSON/RapidJSONConfig.cmake
-    pkgconfig/RapidJSON.pc
+if( WIN32 )
+    set( cmake_files RapidJSONConfig.cmake RapidJSONConfigVersion.cmake )
+    build_add_files( "${cmake_files}" "${build_cmake_dir}" pkg_output )
+else()
+    set( pkg_files cmake/RapidJSON/RapidJSONConfig.cmake pkgconfig/RapidJSON.pc )
+    build_add_files( "${pkg_files}" "${build_lib_dir}" pkg_output )
+endif()
+
+# options
+set( build_options
+    "-DCMAKE_PREFIX_PATH=${build_dir}"
+    -DRAPIDJSON_BUILD_DOC=OFF
+    -DRAPIDJSON_BUILD_EXAMPLES=OFF
+    -DRAPIDJSON_BUILD_TESTS=OFF
 )
-
-if( UNIX )
-
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
+if( WIN32 )
+    list( APPEND build_options
+        -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     )
-
-    build_add_files(
-        "${inc_files}" "${build_inc_dir}" inc_output
-    )
-
-    build_add_files(
-        "${pkg_files}" "${build_lib_dir}" pkg_output
-    )
+else()
+    list( APPEND build_options -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON )
 endif()
 
-# build configuration
+# configure, make and install
+build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options} )
 
-# unix
-IF( UNIX )
+set( build_output ${inc_output} ${pkg_output} )
 
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
-    )
-
-    # options
-    set( build_options -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON )
-
-    # config
-    set( build_config
-        -DRAPIDJSON_BUILD_DOC=OFF
-        -DRAPIDJSON_BUILD_EXAMPLES=OFF
-        -DRAPIDJSON_BUILD_TESTS=OFF
-    )
-
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-        cd ${project_pkg} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
-            -DCMAKE_INSTALL_PREFIX=${build_dir}
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            ${build_options}
-            ${build_config} &&
-        make ${build_flags} &&
-        make install
-    )
-
-    # scripts
-    set( build_output ${inc_output} ${pkg_output} )
-
-    build_install_check(
-        "${build_output}"
-        build_check
-    )
-
-    # run
-    add_custom_command(
-        OUTPUT ${build_output} ${dir_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_check}
-    )
-
-endif()
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(

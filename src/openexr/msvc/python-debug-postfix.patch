@@ -1,0 +1,20 @@
+--- a/src/wrappers/python/CMakeLists.txt
++++ b/src/wrappers/python/CMakeLists.txt
+@@ -14,5 +14,5 @@
+ 
+ Python3_add_library (PyOpenEXR MODULE WITH_SOABI PyOpenEXR.cpp PyOpenEXR_old.cpp)
+-target_link_libraries (PyOpenEXR PRIVATE "${Python3_LIBRARIES}" OpenEXR::OpenEXR pybind11::headers)
++target_link_libraries (PyOpenEXR PRIVATE OpenEXR::OpenEXR pybind11::headers)
+ 
+ # The python module should be called "OpenEXR.x", not "PyOpenEXR.x".
+@@ -22,6 +22,10 @@
+     POSITION_INDEPENDENT_CODE ON
+ )
+ 
++if(WIN32)
++  set_target_properties(PyOpenEXR PROPERTIES DEBUG_POSTFIX "_d" SUFFIX ".pyd")
++endif()
++
+ configure_file(Imath.py ${CMAKE_CURRENT_BINARY_DIR}/Imath.py COPYONLY)
+ 
+ set(PYTHON_INSTALL_DIR "python/OpenEXR")

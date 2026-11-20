@@ -32,114 +32,42 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# bin files
-set( bin_files
-    pcre2grep
-    pcre2test
+# installed files
+set( bin_files "pcre2grep${CMAKE_EXECUTABLE_SUFFIX}" "pcre2test${CMAKE_EXECUTABLE_SUFFIX}" )
+set( inc_files pcre2.h pcre2posix.h )
+set( lib_files pcre2-8 pcre2-16 pcre2-posix )
+if( WIN32 AND CMAKE_BUILD_TYPE STREQUAL Debug )
+    list( TRANSFORM lib_files APPEND "d" )
+endif()
+build_add_files( "${bin_files}" "${build_bin_dir}" bin_output )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
+build_add_libs( "${lib_files}" "${build_lib_dir}" "${lib_prefix}" "${lib_suffix}" lib_output )
+
+# patch
+build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch
+    "${project_src_dir}/msvc/modern-cmake-tests.patch"
 )
 
-# include files
-set( inc_files
-    pcre2.h
-    pcre2posix.h
+# configure, make and install
+set( build_options
+    -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+    "-DCMAKE_PREFIX_PATH=${build_dir}"
+    -DPCRE2_BUILD_PCRE2_16=ON
 )
+build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options} )
 
-# lib files
-set( lib_files
-    pcre2-8
-    pcre2-16
-    pcre2-posix
-)
-
-if( UNIX )
-
-    # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
+# scripts
+if( CMAKE_SHARED_LIBS )
+    build_install_script(
+        "${lib_output}" "${build_dir}" "${build_prefix_lib}" "${build_prefix_framework}" build_script
     )
-
-    # inc files
-    build_add_files( 
-        "${inc_files}" "${build_inc_dir}" inc_output
-    )
-
-    # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
-    )
-    
-ENDIF()
-
-# build configuration
-
-# unix
-
-IF( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
-    )
-
-    # options
-    if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=true )
-    else()
-        SET( build_options -DBUILD_SHARED_LIBS=false )
-    endif()
-
-    # config
-    set( build_config ${build_config} -DPCRE2_BUILD_PCRE2_16=true )
-    
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-        cd ${project_pkg} &&
-        cmake -DCMAKE_INSTALL_PREFIX=${build_dir} 
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            ${build_options}
-            ${build_config} &&
-        make ${build_flags} &&
-        make install
-    )
-
-    # scripts
-    if ( CMAKE_SHARED_LIBS )
-        set( build_output ${build_output} ${lib_output} )
-    endif()
-    
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
-        build_script
-    )
-
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
 endif()
 
-# Custom target builds missing installed outputs.
-add_custom_target(
-    ${project_name} ALL
-    DEPENDS ${lib_output}
-)
+# run
+set( build_output ${lib_output} ${bin_output} ${inc_output} )
+build_add_archive_rule()
+add_custom_target( ${project_name} ALL DEPENDS ${build_output} )
+
+if( WIN32 )
+    build_add_dependencies( ${project_name} bzip2 zlib-ng )
+endif()

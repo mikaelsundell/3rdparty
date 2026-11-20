@@ -32,147 +32,68 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# inc files
-set( inc_output
-    ${build_inc_dir}/minizip-ng/mz.h
-)
-
 # inc dir
-set( inc_dir
-    minizip-ng
-)
+set( inc_dir minizip-ng )
+set( inc_files minizip-ng/mz.h minizip-ng/mz_zip.h )
 
 # lib files
-set( lib_files
-    minizip-ng
-)
+set( lib_files minizip-ng )
 
-# pkgfiles
-set( pkg_files
-    pkgconfig/minizip-ng.pc
-    cmake/minizip-ng/minizip-ng-config.cmake
-)
-
-if( UNIX )
-
-    # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
-    )
-
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
-    )
-
-    # lib files
-    set( lib_version "4.2.2" )
-
-    foreach( lib_file ${lib_files} )
-
-        if ( APPLE )
-            if( CMAKE_SHARED_LIBS )
-                list( APPEND lib_output
-                    ${build_lib_dir}/${lib_prefix}${lib_file}.${lib_version}${lib_suffix}
-                )
-            else()
-                list( APPEND lib_output
-                    ${build_lib_dir}/${lib_prefix}${lib_file}${lib_suffix}
-                )
-            endif()
-        endif()
-    endforeach()
-
-    # pkg files
-    build_add_files( 
-        "${pkg_files}" "${build_lib_dir}" pkg_output
-    )
+# pkg files
+set( cmake_files minizip-ng-config.cmake )
+if( WIN32 )
+    list( APPEND cmake_files minizip-ng-config-version.cmake minizip-ng-targets.cmake )
+else()
+    build_add_files( "minizip-ng.pc" "${build_lib_dir}/pkgconfig" pkg_output )
 endif()
+
+build_add_dir( "${inc_dir}" "${build_inc_dir}" dir_output )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
+build_add_versioned_lib( "${lib_files}" 4.2.2 4 lib_output shared_output )
+build_add_files( "${cmake_files}" "${build_lib_dir}/cmake/minizip-ng" cmake_output )
 
 # build configuration
 
-# unix
-IF( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
-    )
-
-    # options
-    if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=true )
-    else()
-        SET( build_options -DBUILD_SHARED_LIBS=false )
-    endif()
-
-    # config
-    set( build_config
-        -DMZ_COMPAT=OFF
-        -DMZ_ZLIB=ON
-        -DMZ_ZLIB_FLAVOR=zlib
-        -DMZ_BZIP2=ON
-        -DMZ_LZMA=OFF
-        -DMZ_PPMD=OFF
-        -DMZ_ZSTD=OFF
-        -DMZ_LIBCOMP=OFF
-        -DMZ_PKCRYPT=OFF
-        -DMZ_WZAES=OFF
-        -DMZ_OPENSSL=OFF
-        -DMZ_LIBBSD=OFF
-        -DMZ_ICONV=OFF
-        -DMZ_FETCH_LIBS=OFF
-        -DMZ_BUILD_TESTS=OFF
-        -DMZ_BUILD_UNIT_TESTS=OFF
-    )
-
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-        cd ${project_pkg} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
-            -DCMAKE_INSTALL_PREFIX=${build_dir}
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            ${build_options}
-            ${build_config} &&
-        make ${build_flags} &&
-        make install
-    )
-
-    # scripts
-    set( build_output ${inc_output} ${lib_output} ${pkg_output} )
-    
-    build_install_script( 
-        "${lib_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
-        build_script
-    )
-
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-
-    # run
-    add_custom_command(
-        OUTPUT ${build_output} ${dir_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
+# options
+set( build_options
+    -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+    "-DCMAKE_PREFIX_PATH=${build_dir}"
+    -DMZ_COMPAT=OFF
+    -DMZ_ZLIB=ON
+    -DMZ_ZLIB_FLAVOR=zlib
+    -DMZ_BZIP2=ON
+    -DMZ_LZMA=OFF
+    -DMZ_PPMD=OFF
+    -DMZ_ZSTD=OFF
+    -DMZ_LIBCOMP=OFF
+    -DMZ_PKCRYPT=OFF
+    -DMZ_WZAES=OFF
+    -DMZ_OPENSSL=OFF
+    -DMZ_ICONV=OFF
+    -DMZ_FETCH_LIBS=OFF
+    -DMZ_BUILD_TESTS=OFF
+    -DMZ_BUILD_UNIT_TESTS=OFF
+)
+if( WIN32 )
+    list( APPEND build_options -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON )
+else()
+    list( APPEND build_options -DMZ_LIBBSD=OFF )
 endif()
+
+# scripts
+if( shared_output )
+    build_install_script(
+        "${shared_output}" "${build_dir}" "${build_prefix_lib}" "${build_prefix_framework}" build_script
+    )
+endif()
+
+set( build_output ${lib_output} ${inc_output} ${pkg_output} ${cmake_output} )
+
+# configure, make and install
+build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options} )
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
@@ -180,5 +101,4 @@ add_custom_target(
     DEPENDS ${build_output} ${dir_output}
 )
 
-# dependencies
 build_add_dependencies( ${project_name} bzip2 zlib-ng )

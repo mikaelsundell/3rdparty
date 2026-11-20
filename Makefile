@@ -59,10 +59,6 @@ ifneq (${build_extras},)
 	MY_CMAKE_FLAGS += -Dbuild_extras:BOOL=${build_extras}
 endif
 
-ifneq (${build_media},)
-	MY_CMAKE_FLAGS += -Dbuild_media:BOOL=${build_media}
-endif
-
 ifdef DEBUG
 	MY_CMAKE_FLAGS += -DCMAKE_BUILD_TYPE:STRING=Debug
 else
@@ -82,18 +78,17 @@ release:
 	@( ${MAKE} --no-print-directory )
 
 # 'make cmakesetup' constructs the build directory and runs 'cmake' there
-cmakesetup:  
-	@( cmake -E make_directory ${platform_dir} && \
-		cd ${platform_dir} && \
-		cmake -DCMAKE_INSTALL_PREFIX=${base_dir}/${platform_dir} \
-			 ${MY_CMAKE_FLAGS} \
-			 ../../../ ; \
+cmakesetup:
+	@( cmake -E make_directory "${platform_dir}" && \
+		cd "${platform_dir}" && \
+		cmake -S "${base_dir}" -B . -DCMAKE_INSTALL_PREFIX="$$PWD" \
+			 ${MY_CMAKE_FLAGS} ; \
 	 )
 
 # 'make cmakeinstall' builds everthing and installs it in 'dist'.
 # Suppress pointless output from docs installation.
 cmakeinstall: cmakesetup
-	@( cd ${platform_dir} ; time ${MAKE} ${MY_MAKE_FLAGS} )
+	@( cd "${platform_dir}" && time ${MAKE} ${MY_MAKE_FLAGS} )
 
 # 'make clean' clears out the build directory for this platform
 clean:
@@ -116,6 +111,5 @@ help:
 	@echo "  make build_base=1 ...       Build base."
 	@echo "  make build_libs=1 ...       Build libraries."
 	@echo "  make build_extras=1 ...     Build extras."
-	@echo "  make build_media=1 ...      Build media."
 	@echo ""
 

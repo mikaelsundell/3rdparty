@@ -32,83 +32,69 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# bin files
-set( bin_files
-    ptxinfo
-)
-
-# include files
-set( inc_files
-    PtexExports.h
-    PtexHalf.h
-    PtexInt.h
-    PtexPlatform.h
-    Ptexture.h
-    PtexUtils.h
-    PtexVersion.h
-)
-
-# lib files
-set( lib_files
-    Ptex.2.4
-)
-
-if( UNIX )
-
+# platform-specific outputs
+if( WIN32 )
+    build_add_files( "Ptex${CMAKE_STATIC_LIBRARY_SUFFIX}" "${build_lib_dir}" lib_output )
+    if( CMAKE_SHARED_LIBS )
+        build_add_files( "Ptex${CMAKE_SHARED_LIBRARY_SUFFIX}" "${build_lib_dir}" runtime_output )
+    endif()
+    set( inc_files Ptexture.h PtexVersion.h )
+    set( cmake_files ptex-config.cmake ptex-config-version.cmake ptex-exports.cmake )
+    build_add_files( "${cmake_files}" "${build_dir}/share/cmake/Ptex" cmake_output )
+else()
     # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
+    set( bin_files
+        ptxinfo
     )
 
-    # inc files
-    build_add_files( 
-        "${inc_files}" "${build_inc_dir}" inc_output
+    # include files
+    set( inc_files
+        PtexExports.h
+        PtexHalf.h
+        PtexInt.h
+        PtexPlatform.h
+        Ptexture.h
+        PtexUtils.h
+        PtexVersion.h
     )
 
     # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
+    set( lib_files
+        Ptex.2.4
     )
 
+    # bin files
+    build_add_files(
+        "${bin_files}" "${build_bin_dir}" bin_output
+    )
+
+    # lib files
+    build_add_libs(
+        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
+    )
 endif()
+
+build_add_files( "${inc_files}" "${build_dir}/include" inc_output )
 
 # build configuration
 
-# unix
-
-IF( UNIX )
-
-    # download
-    SET( build_download 
-        ${download} ${project_url}
+if( WIN32 )
+    # patches
+    build_patch_commands( "${project_bin_dir}/ptex" build_patch
+        "${project_src_dir}/msvc/cmake-zlib-dependency.patch"
     )
-
-    # tar uncompress
-    SET( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
-
-    # options
+    set( build_static_libs ON )
     if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=TRUE )
-    ELSE()
-        SET( build_options -DBUILD_SHARED_LIBS=FALSE )
-    ENDIF()
-
-    # configure, make and install
-    SET( build_make
-        ${build_env} &&
-        cd ${project_name} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
-              -DCMAKE_INSTALL_PREFIX=${build_dir}
-              -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-              ${build_options} &&
-        make ${build_flags} &&
-        make install
+        set( build_static_libs OFF )
+    endif()
+    # options
+    set( build_options
+        -DPTEX_BUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+        -DPTEX_BUILD_STATIC_LIBS=${build_static_libs}
     )
 
+    set( build_output ${lib_output} ${runtime_output} ${bin_output} ${inc_output} ${cmake_output} )
+else()
     # scripts
     set( build_output ${bin_output} )
 
@@ -116,36 +102,34 @@ IF( UNIX )
         set( build_output ${build_output} ${lib_output} )
     endif()
 
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+    build_install_script(
+        "${build_output}"
+        ${build_dir}
+        ${build_prefix_lib}
+        ${build_prefix_framework}
         build_script
     )
 
-    build_install_check( 
-        "${build_output}" 
-        build_check
+    set( build_output ${bin_output} ${lib_output} )
+
+    set( build_options
+        ${build_options}
     )
-
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )     
-
 endif()
+
+# configure, make and install
+build_cmake_commands( "${project_bin_dir}/ptex" build_make ${build_options}
+    -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+    "-DCMAKE_PREFIX_PATH=${build_dir}"
+)
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )
 
-# dependencies
 build_add_dependencies( ${project_name} zlib-ng )

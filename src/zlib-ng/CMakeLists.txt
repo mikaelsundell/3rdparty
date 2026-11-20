@@ -33,102 +33,61 @@ set( project_bin_dir
 )
 
 # include files
-set( inc_files
-    zconf.h
-    zlib.h
-)
+set( inc_files zconf.h zlib.h zlib_name_mangling.h )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
 
 # lib files
-set( lib_files
-    z.1.3.1.zlib-ng
-)
-
-if( UNIX )
-
-    # inc files
-    build_add_files( 
-        "${inc_files}" "${build_inc_dir}" inc_output
-    )
-
-    # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
-    )
-    
-endif()
-
-# build configuration
-
-# unix
-
-IF( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
-
-    # options
+if( WIN32 )
+    set( lib_files zlib )
+    if( NOT CMAKE_SHARED_LIBS )
+        set( lib_files zlibstatic )
+    endif()
+    if( CMAKE_BUILD_TYPE STREQUAL Debug )
+        string( APPEND lib_files "d" )
+    endif()
     if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=true )
-    else()
-        SET( build_options -DBUILD_SHARED_LIBS=false )
+        build_add_files( "${lib_files}1${CMAKE_SHARED_LIBRARY_SUFFIX}" "${build_bin_dir}" bin_output )
+        build_add_files( "${lib_files}${CMAKE_IMPORT_LIBRARY_SUFFIX}" "${build_lib_dir}" lib_output )
     endif()
-
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-        cd ${project_pkg} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
-            -DZLIB_COMPAT=ON 
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            -DBUILD_TESTING=OFF
-            ${build_options} &&
-        make ${build_flags} &&
-        make install
-    )
-
-    # scripts
-    set( build_output ${bin_output} )
-
-    if ( CMAKE_SHARED_LIBS )
-        set( build_output ${build_output} ${lib_output} )
-    endif()
-    
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
-        build_script
-    )
-
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
+elseif( CMAKE_SHARED_LIBS )
+    set( lib_files z.1.3.1.zlib-ng )
+else()
+    set( lib_files z )
+endif()
+if( NOT lib_output )
+    build_add_libs( "${lib_files}" "${build_lib_dir}" "${lib_prefix}" "${lib_suffix}" lib_output )
 endif()
 
-# Custom target builds missing installed outputs.
-add_custom_target(
-    ${project_name} ALL
-    DEPENDS ${lib_output}
+# package files
+string( TOLOWER "${CMAKE_BUILD_TYPE}" build_variant )
+set( cmake_files
+    zlib-config.cmake zlib-config-version.cmake ZLIB-targets.cmake "ZLIB-targets-${build_variant}.cmake"
 )
+build_add_files( zlib.pc "${build_lib_dir}/pkgconfig" pkg_output )
+build_add_files( "${cmake_files}" "${build_lib_dir}/cmake/ZLIB" cmake_output )
+
+# patch
+if( WIN32 )
+    build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch
+        "${project_src_dir}/msvc/windows-pkg-config-library.patch"
+    )
+endif()
+
+# configure, make and install
+set( build_options
+    -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+    -DZLIB_COMPAT=ON -DBUILD_TESTING=OFF
+)
+build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options} )
+
+# scripts
+if( CMAKE_SHARED_LIBS )
+    build_install_script(
+        "${lib_output}" "${build_dir}" "${build_prefix_lib}" "${build_prefix_framework}" build_script
+    )
+endif()
+
+# run
+set( build_output ${lib_output} ${bin_output} ${inc_output} ${pkg_output} ${cmake_output} )
+build_add_archive_rule()
+add_custom_target( ${project_name} ALL DEPENDS ${build_output} )

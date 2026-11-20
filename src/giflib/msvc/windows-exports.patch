@@ -1,0 +1,16 @@
+--- a/lib/gif_lib.h
++++ b/lib/gif_lib.h
+@@ -285,6 +285,13 @@
+ 
+ #define GIF_FONT_WIDTH  8
+ #define GIF_FONT_HEIGHT 8
++#if defined(_WIN32) && defined(GIFLIB_SHARED)
++# ifdef gif_EXPORTS
++__declspec(dllexport)
++# else
++__declspec(dllimport)
++# endif
++#endif
+ extern const unsigned char GifAsciiTable8x8[][GIF_FONT_WIDTH];
+ 
+ extern void GifDrawText8x8(SavedImage *Image,

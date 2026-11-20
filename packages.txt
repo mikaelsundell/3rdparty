@@ -15,6 +15,71 @@ In progress notes
 
 Fixes:
 
+Windows base dependencies
+---------------------------------
+* The MSVC recipes use the existing S3 source archives.
+* Windows port patches live in the corresponding src/<package>/msvc directory.
+* giflib-5.1.4.tar.gz extracts as giflib-5.1.4. windows-exports.patch adds
+  Windows DLL import/export declarations for the font array.
+* harfbuzz-4.3.0.tar.gz extracts as harfbuzz-4.3.0. install-subset-runtime.patch
+  installs the subset DLL even when building without the CLI tools.
+* libwebp-1.2.2.tar.gz extracts as libwebp-1.2.2. msvc-tool-data-imports.patch
+  selects the upstream DLL mode for the command-line tools and uses a DSP
+  function to avoid linking a data symbol from the extras tool.
+* pcre2-10.32.tar.gz extracts as pcre2-10.32. modern-cmake-tests.patch replaces
+  the removed CMake LOCATION policy with a configuration-specific test script.
+* tiff-4.0.3.tar.gz extracts as tiff-4.0.3. modern-msvc-stdio.patch retains the
+  snprintf compatibility macro for older toolchains.
+  export-exif-directory-api.patch exports the two EXIF directory functions
+  used by OpenImageIO.
+* zlib-ng-2.3.3.tar.gz extracts as zlib-ng-2.3.3.
+  windows-pkg-config-library.patch records the MSVC library name in zlib.pc.
+* The MSVC recipes in src/bzip2/msvc, src/giflib/msvc, src/jpeg/msvc, and
+  src/tiff/msvc supply build entry points for archives without upstream CMake
+  projects. jpegsrc.v9f.tar.gz extracts as jpeg-9f.
+
+Windows libraries and extras
+---------------------------------
+* lcms2-master.tar.gz and libraw-0.21.1.tar.gz use native MSVC CMake entry
+  points in their recipe's msvc directory.
+* ceres-solver-master.tar.gz extracts as ceres-solver-master.
+  ignore-appledouble-sources.patch excludes the macOS resource metadata
+  entries accompanying generated C++ sources in the archive.
+* ptex-master-220319.tar.gz extracts as ptex. cmake-zlib-dependency.patch
+  resolves the exported Ptex target's ZLIB::ZLIB dependency through CMake.
+* OpenSubdiv-master-250306.tar.gz extracts as OpenSubdiv.
+  cmake-tbb-dependency.patch resolves oneTBB for the exported static targets.
+* boost_1_87_0.tar.gz extracts as boost_1_87_0. The MSVC recipe selects the
+  Python Debug ABI in B2. cmake-debug-python-definition.patch exports the
+  matching BOOST_DEBUG_PYTHON definition on the installed Boost targets.
+* OpenColorIO-2.5.0.tar.gz extracts as OpenColorIO-2.5.0 and
+  OpenImageIO-3.1.8.0.tar.gz extracts as OpenImageIO-3.1.8.0. Their respective
+  msvc/python-debug-postfix.patch files install Debug extensions with the
+  _d.pyd postfix expected by Windows Debug CPython.
+* pybind11-2.9.1.tar.gz extracts as pybind11-2.9.1. debug-python-abi.patch
+  exports Py_DEBUG for MSVC Debug consumers, including OpenEXR, MaterialX
+  and OpenTimelineIO. dependent-rvalue-cast.patch selects the intended
+  conversion for rvalue string casters under MSVC.
+* openexr-3.4.6.tar.gz extracts as openexr-3.4.6.
+  Its python-debug-postfix.patch gives the Debug module a stable _d.pyd name
+  and uses the Python3::Module linkage from Python3_add_library.
+  export-keycode-comparison.patch exports KeyCode::operator== for the Python
+  bindings on Windows (OpenEXR PR #2594, commit 964631f85b4e).
+* pyside-setup-6.10.1.tar.gz extracts as pyside-setup-6.10.1.
+  designer-python-api.patch keeps the Qt
+  Designer bindings on the same full Python API as the rest of PySide.
+  detect-debug-python.patch detects Windows Debug CPython when sysconfig
+  does not expose Py_DEBUG. load-sdk-dlls.patch lets Shiboken and PySide
+  load the runtime DLLs from their own install prefix.
+  python39-callable-annotations.patch normalizes Callable annotations from
+  Python 3.9.0 so QtCore type stubs can be generated.
+* OpenUSD-25.11.tar.gz extracts as OpenUSD-25.11.
+  contain-python-copysign-macro.patch keeps the Windows CPython macro from
+  rewriting C++ calls to std::copysign.
+  sort-hydra-repr-selectors.patch orders the Hydra render index's representation
+  selectors before the dirty list merges them. An unordered list can trigger
+  MSVC's Debug STL assertion during viewport startup.
+
 bzip2 / freetype
 ---------------------------------
 * Build Bzip2 dylibs with the selected prefix as their install name and reserve
@@ -46,6 +111,9 @@ qt 6.10.1
 * Disable dup3 for compatibility with macOS deployment targets before 27.
 * Use Qt's default multi-config build/install targets so Release tools such as
   moc are installed alongside Debug frameworks.
+* qt-everywhere-src-6.10.1.tar.xz extracts as qt-everywhere-src-6.10.1 on
+  Windows. The MSVC build uses Qt Multimedia's native Windows backend.
+  SHA256: 0ed08b079719394303cd2054b66b2dc0c5895ceeb88fb6131c18991c980bf00f
 * Stop on Qt build/install failures and require PySide's Qt package from the
   selected prefix to avoid mixing Debug and Release Qt/LLVM libraries.
 

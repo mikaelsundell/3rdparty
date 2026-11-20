@@ -1,0 +1,26 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1510,6 +1510,14 @@
+     SET(ZCONF_PTRDIFF_LINE "#ifdef NEED_PTRDIFF_T    /* may be set to #if 1 by configure/cmake/etc */")
+ endif()
+ 
++set(PKG_CONFIG_LIBNAME z${SUFFIX})
++if(MSVC)
++    get_target_property(PKG_CONFIG_LIBNAME zlib-ng OUTPUT_NAME)
++    if(CMAKE_BUILD_TYPE MATCHES "^[Dd][Ee][Bb][Uu][Gg]$")
++        get_target_property(PKG_CONFIG_DEBUG_POSTFIX zlib-ng DEBUG_POSTFIX)
++        string(APPEND PKG_CONFIG_LIBNAME "${PKG_CONFIG_DEBUG_POSTFIX}")
++    endif()
++endif()
+ set(ZLIB_PC ${CMAKE_CURRENT_BINARY_DIR}/zlib${SUFFIX}.pc)
+ if(WITH_GZFILEOP)
+     set(PKG_CONFIG_CFLAGS "-DWITH_GZFILEOP")
+--- a/zlib.pc.cmakein
++++ b/zlib.pc.cmakein
+@@ -11,5 +11,5 @@
+ Version: @ZLIB_FULL_VERSION@
+ 
+ Requires:
+-Libs: -L${libdir} -L${sharedlibdir} -lz@SUFFIX@
++Libs: -L${libdir} -L${sharedlibdir} -l@PKG_CONFIG_LIBNAME@
+ Cflags: -I${includedir} @PKG_CONFIG_CFLAGS@

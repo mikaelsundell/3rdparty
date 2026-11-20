@@ -32,99 +32,43 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# inc dir
-SET( inc_dir
-    harfbuzz
-)
+# include files
+set( inc_files harfbuzz/hb.h harfbuzz/hb-subset.h )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
 
 # lib files
-set( lib_files
-    harfbuzz
-    harfbuzz-subset
-)
+set( lib_files harfbuzz harfbuzz-subset )
+build_add_libs( "${lib_files}" "${build_lib_dir}" "${lib_prefix}" "${lib_suffix}" lib_output )
 
-if( UNIX )
+# CMake package files
+string( TOLOWER "${CMAKE_BUILD_TYPE}" build_variant )
+set( cmake_files harfbuzzConfig.cmake "harfbuzzConfig-${build_variant}.cmake" )
+build_add_files( "${cmake_files}" "${build_lib_dir}/cmake/harfbuzz" cmake_output )
 
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
+# patch
+if( WIN32 )
+    build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch
+        "${project_src_dir}/msvc/install-subset-runtime.patch"
     )
-
-    # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
-    )
-    
-ENDIF()
-
-# build configuration
-
-# unix
-
-IF( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
-    )
-
-    # options
-    if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=true )
-    else()
-        SET( build_options -DBUILD_SHARED_LIBS=false )
-    endif()
-
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-        cd ${project_pkg} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            ${build_options} &&
-        make ${build_flags} &&
-        make install
-    )
-
-    # scripts
-    if ( CMAKE_SHARED_LIBS )
-        set( build_output ${build_output} ${lib_output} )
-    endif()
-    
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
-        build_script
-    )
-
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
 endif()
 
-# Custom target builds missing installed outputs.
-add_custom_target(
-    ${project_name} ALL
-    DEPENDS ${lib_output}
+# configure, make and install
+set( build_options
+    -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+    # The upstream target refers to this before including GNUInstallDirs.
+    -DCMAKE_INSTALL_INCLUDEDIR=include
 )
+build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options} )
+
+# scripts
+if( CMAKE_SHARED_LIBS )
+    build_install_script(
+        "${lib_output}" "${build_dir}" "${build_prefix_lib}" "${build_prefix_framework}" build_script
+    )
+endif()
+
+# run
+set( build_output ${lib_output} ${inc_output} ${cmake_output} )
+build_add_archive_rule()
+add_custom_target( ${project_name} ALL DEPENDS ${build_output} )
