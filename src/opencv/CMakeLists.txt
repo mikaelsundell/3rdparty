@@ -60,7 +60,7 @@ build_add_files(
 
 # inc dir
 build_add_dir(
-    "${inc_dir}" "${build_inc_dir}" include_output
+    "${inc_dir}" "${build_inc_dir}" dir_output
 )
 
 # lib files
@@ -120,7 +120,7 @@ set( build_make
     cd ${project_pkg} &&
     mkdir -p ${build_cmake} &&
     cd ${build_cmake} &&
-    cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
+    cmake ../ -G \"${CMAKE_GENERATOR}\" -DCMAKE_PREFIX_PATH=${build_dir}
         -DCMAKE_INSTALL_PREFIX=${build_dir}
         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
         -DPYTHON_EXECUTABLE=${build_python3}
@@ -131,8 +131,8 @@ set( build_make
         -DCMAKE_CXX_STANDARD=17
         ${build_options}
         ${build_config} &&
-    cmake --build . --parallel &&
-    make install
+    cmake --build . --parallel ${num_cpus} -- -l ${num_cpus} &&
+    cmake --install .
 )
 
 string( JOIN " " build_make ${build_make} )
@@ -163,7 +163,7 @@ build_add_archive_rule()
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${build_output} ${include_output}
+    DEPENDS ${build_output} ${dir_output}
 )
 
 # dependencies

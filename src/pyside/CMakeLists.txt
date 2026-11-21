@@ -65,7 +65,7 @@ else()
 
     # inc dir
     build_add_dir(
-        "${inc_dir}" "${build_dir}" include_output
+        "${inc_dir}" "${build_dir}" dir_output
     )
 
     # lib files
@@ -210,7 +210,7 @@ build_add_archive_rule()
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${build_output} ${dir_output} ${include_output}
+    DEPENDS ${build_output} ${dir_output}
 )
 
 # dependencies

@@ -44,11 +44,21 @@ build_add_libs(
 
 # build configuration
 
+if( APPLE )
+    build_patch_commands( "${project_bin_dir}/${project_name}" build_patch
+        "${project_src_dir}/macos-deployment-target.patch"
+    )
+endif()
+
 # options
 if( CMAKE_SHARED_LIBS )
     SET( build_options -DBUILD_SHARED_LIBS=true )
 else()
     SET( build_options -DBUILD_SHARED_LIBS=false )
+endif()
+
+if( APPLE )
+    list( APPEND build_options -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET} )
 endif()
 
 # configure, make and install
@@ -57,11 +67,11 @@ set( build_make
     cd ${project_name} &&
     mkdir -p ${build_cmake} &&
     cd ${build_cmake} &&
-    cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir}
+    cmake ../ -G \"${CMAKE_GENERATOR}\" -DCMAKE_INSTALL_PREFIX=${build_dir}
         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
         ${build_options} &&
-    make ${build_flags} &&
-    make install
+    cmake --build . --parallel ${num_cpus} -- -l ${num_cpus} &&
+    cmake --install .
 )
 
 # copy include

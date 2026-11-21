@@ -71,6 +71,11 @@ build_add_files(
 
 # build configuration
 
+# patch
+build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch
+    "${project_src_dir}/reinstall-host-tool.patch"
+)
+
 # options
 if( CMAKE_SHARED_LIBS )
     set( build_options --enable-shared --disable-static )

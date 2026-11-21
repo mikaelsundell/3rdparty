@@ -72,7 +72,7 @@ else()
 
     # inc dir
     build_add_dir(
-        "${inc_dir}" "${build_inc_dir}" include_output
+        "${inc_dir}" "${build_inc_dir}" dir_output
     )
 
     # lib files
@@ -83,16 +83,21 @@ endif()
 
 # build configuration
 
+# patches
+set( patch "${project_src_dir}/sdr-unused-include.patch" )
+if( WIN32 )
+    list( APPEND patch
+        "${project_src_dir}/msvc/contain-python-copysign-macro.patch"
+        "${project_src_dir}/msvc/sort-hydra-repr-selectors.patch"
+    )
+endif()
+build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch ${patch} )
+
 if( WIN32 )
     set( build_prepare
         ${build_python_check}
         COMMAND "${build_python3}" -B "${build_scripts_dir}/check_openusd_python.py"
             "${build_sitepackages_dir}"
-    )
-    # patches
-    build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch
-        "${project_src_dir}/msvc/contain-python-copysign-macro.patch"
-        "${project_src_dir}/msvc/sort-hydra-repr-selectors.patch"
     )
     set( build_runtime_path "${build_dir}/bin" "${build_lib_dir}" )
     set( build_python_path "${build_sitepackages_dir}" )
@@ -172,7 +177,7 @@ build_add_archive_rule()
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${build_output} ${dir_output} ${include_output}
+    DEPENDS ${build_output} ${dir_output}
 )
 
 build_add_dependencies( ${project_name} alembic draco materialx onetbb opensubdiv ptex pyside )

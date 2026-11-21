@@ -1,125 +1,22 @@
 # Copyright 2023-present Contributors to the 3rdparty project.
 # SPDX-License-Identifier: BSD-3-Clause
-# https://github.com/mikaelsundell/3rdparty
 
-# bin files
+# LLVM 20.1.3 with native code generation and the Clang driver/libclang.
 set( bin_files
-    llvm-as
-    llvm-bcanalyzer
-    llvm-bitcode-strip
-    llvm-c-test
-    llvm-cat
-    llvm-cfi-verify
-    llvm-config
-    llvm-cov
-    llvm-cvtres
-    llvm-cxxdump
-    llvm-cxxfilt
-    llvm-cxxmap
-    llvm-debuginfo-analyzer
-    llvm-debuginfod
-    llvm-debuginfod-find
-    llvm-diff
-    llvm-dis
-    llvm-dlltool
-    llvm-dwarfdump
-    llvm-dwarfutil
-    llvm-dwp
-    llvm-exegesis
-    llvm-extract
-    llvm-gsymutil
-    llvm-ifs
-    llvm-install-name-tool
-    llvm-jitlink
-    llvm-lib
-    llvm-libtool-darwin
-    llvm-link
-    llvm-lipo
-    llvm-lto
-    llvm-lto2
-    llvm-mc
-    llvm-mca
-    llvm-ml
-    llvm-modextract
-    llvm-mt
-    llvm-nm
-    llvm-objcopy
-    llvm-objdump
-    llvm-opt-report
-    llvm-otool
-    llvm-pdbutil
-    llvm-profdata
-    llvm-profgen
-    llvm-ranlib
-    llvm-rc
-    llvm-readelf
-    llvm-readobj
-    llvm-reduce
-    llvm-remarkutil
-    llvm-rtdyld
-    llvm-sim
-    llvm-size
-    llvm-split
-    llvm-stress
-    llvm-strings
-    llvm-strip
-    llvm-symbolizer
-    llvm-tblgen
-    llvm-tli-checker
-    llvm-undname
-    llvm-windres
-    llvm-xray
     clang-20
+    clang
     clang++
-    clang-check
     clang-cl
     clang-cpp
-    clang-extdef-mapping
-    clang-format
-    clang-linker-wrapper
-    clang-offload-bundler
-    clang-offload-packager
-    clang-refactor
-    clang-repl
-    clang-scan-deps
     clang-tblgen
+    llvm-tblgen
 )
 
-# lib files
 set( lib_files
-    LLVMAArch64AsmParser
-    LLVMAArch64CodeGen
-    LLVMAArch64Desc
-    LLVMAArch64Disassembler
-    LLVMAArch64Info
-    LLVMAArch64Utils
-    LLVMAMDGPUAsmParser
-    LLVMAMDGPUCodeGen
-    LLVMAMDGPUDesc
-    LLVMAMDGPUDisassembler
-    LLVMAMDGPUInfo
-    LLVMAMDGPUTargetMCA
-    LLVMAMDGPUUtils
-    LLVMARMAsmParser
-    LLVMARMCodeGen
-    LLVMARMDesc
-    LLVMARMDisassembler
-    LLVMARMInfo
-    LLVMARMUtils
-    LLVMAVRAsmParser
-    LLVMAVRCodeGen
-    LLVMAVRDesc
-    LLVMAVRDisassembler
-    LLVMAVRInfo
     LLVMAggressiveInstCombine
     LLVMAnalysis
     LLVMAsmParser
     LLVMAsmPrinter
-    LLVMBPFAsmParser
-    LLVMBPFCodeGen
-    LLVMBPFDesc
-    LLVMBPFDisassembler
-    LLVMBPFInfo
     LLVMBinaryFormat
     LLVMBitReader
     LLVMBitWriter
@@ -149,11 +46,6 @@ set( lib_files
     LLVMDlltoolDriver
     LLVMExecutionEngine
     LLVMExegesis
-    LLVMExegesisAArch64
-    LLVMExegesisMips
-    LLVMExegesisPowerPC
-    LLVMExegesisRISCV
-    LLVMExegesisX86
     LLVMExtensions
     LLVMFileCheck
     LLVMFrontendAtomic
@@ -165,11 +57,6 @@ set( lib_files
     LLVMFuzzMutate
     LLVMFuzzerCLI
     LLVMGlobalISel
-    LLVMHexagonAsmParser
-    LLVMHexagonCodeGen
-    LLVMHexagonDesc
-    LLVMHexagonDisassembler
-    LLVMHexagonInfo
     LLVMHipStdPar
     LLVMIRPrinter
     LLVMIRReader
@@ -179,38 +66,15 @@ set( lib_files
     LLVMInterpreter
     LLVMJITLink
     LLVMLTO
-    LLVMLanaiAsmParser
-    LLVMLanaiCodeGen
-    LLVMLanaiDesc
-    LLVMLanaiDisassembler
-    LLVMLanaiInfo
     LLVMLibDriver
     LLVMLineEditor
     LLVMLinker
-    LLVMLoongArchAsmParser
-    LLVMLoongArchCodeGen
-    LLVMLoongArchDesc
-    LLVMLoongArchDisassembler
-    LLVMLoongArchInfo
     LLVMMC
     LLVMMCA
     LLVMMCDisassembler
     LLVMMCJIT
     LLVMMCParser
     LLVMMIRParser
-    LLVMMSP430AsmParser
-    LLVMMSP430CodeGen
-    LLVMMSP430Desc
-    LLVMMSP430Disassembler
-    LLVMMSP430Info
-    LLVMMipsAsmParser
-    LLVMMipsCodeGen
-    LLVMMipsDesc
-    LLVMMipsDisassembler
-    LLVMMipsInfo
-    LLVMNVPTXCodeGen
-    LLVMNVPTXDesc
-    LLVMNVPTXInfo
     LLVMObjCARCOpts
     LLVMObjCopy
     LLVMObject
@@ -222,39 +86,14 @@ set( lib_files
     LLVMOrcShared
     LLVMOrcTargetProcess
     LLVMPasses
-    LLVMPowerPCAsmParser
-    LLVMPowerPCCodeGen
-    LLVMPowerPCDesc
-    LLVMPowerPCDisassembler
-    LLVMPowerPCInfo
     LLVMProfileData
-    LLVMRISCVAsmParser
-    LLVMRISCVCodeGen
-    LLVMRISCVDesc
-    LLVMRISCVDisassembler
-    LLVMRISCVInfo
-    LLVMRISCVTargetMCA
     LLVMRemarks
     LLVMRuntimeDyld
-    LLVMSPIRVAnalysis
-    LLVMSPIRVCodeGen
-    LLVMSPIRVDesc
-    LLVMSPIRVInfo
     LLVMSandboxIR
     LLVMScalarOpts
     LLVMSelectionDAG
-    LLVMSparcAsmParser
-    LLVMSparcCodeGen
-    LLVMSparcDesc
-    LLVMSparcDisassembler
-    LLVMSparcInfo
     LLVMSupport
     LLVMSymbolize
-    LLVMSystemZAsmParser
-    LLVMSystemZCodeGen
-    LLVMSystemZDesc
-    LLVMSystemZDisassembler
-    LLVMSystemZInfo
     LLVMTableGen
     LLVMTableGenBasic
     LLVMTableGenCommon
@@ -264,36 +103,14 @@ set( lib_files
     LLVMTextAPI
     LLVMTextAPIBinaryReader
     LLVMTransformUtils
-    LLVMVEAsmParser
-    LLVMVECodeGen
-    LLVMVEDesc
-    LLVMVEDisassembler
-    LLVMVEInfo
     LLVMVectorize
-    LLVMWebAssemblyAsmParser
-    LLVMWebAssemblyCodeGen
-    LLVMWebAssemblyDesc
-    LLVMWebAssemblyDisassembler
-    LLVMWebAssemblyInfo
-    LLVMWebAssemblyUtils
     LLVMWindowsDriver
     LLVMWindowsManifest
-    LLVMX86AsmParser
-    LLVMX86CodeGen
-    LLVMX86Desc
-    LLVMX86Disassembler
-    LLVMX86Info
-    LLVMX86TargetMCA
-    LLVMXCoreCodeGen
-    LLVMXCoreDesc
-    LLVMXCoreDisassembler
-    LLVMXCoreInfo
     LLVMXRay
     LLVMipo
     LTO
     Remarks
     clang
-    clang-cpp
     clangAPINotes
     clangARCMigrate
     clangAST
@@ -313,8 +130,6 @@ set( lib_files
     clangFormat
     clangFrontend
     clangFrontendTool
-    clangHandleCXX
-    clangHandleLLVM
     clangIndex
     clangIndexSerialization
     clangInstallAPI
@@ -338,3 +153,27 @@ set( lib_files
     clangToolingSyntax
     clangTransformer
 )
+
+if( lib_arch MATCHES "^(arm64|aarch64)$" )
+    list( APPEND lib_files
+        LLVMAArch64AsmParser
+        LLVMAArch64CodeGen
+        LLVMAArch64Desc
+        LLVMAArch64Disassembler
+        LLVMAArch64Info
+        LLVMAArch64Utils
+        LLVMExegesisAArch64
+    )
+elseif( lib_arch MATCHES "^(x86_64|AMD64|amd64)$" )
+    list( APPEND lib_files
+        LLVMExegesisX86
+        LLVMX86AsmParser
+        LLVMX86CodeGen
+        LLVMX86Desc
+        LLVMX86Disassembler
+        LLVMX86Info
+        LLVMX86TargetMCA
+    )
+else()
+    build_error( "Unsupported native LLVM architecture: ${lib_arch}" )
+endif()

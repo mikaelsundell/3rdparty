@@ -32,112 +32,107 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
+# required headers and compiler resources
+set( inc_files clang-c/Index.h )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
+build_add_files( "stddef.h" "${build_lib_dir}/clang/20/include" resource_output )
+
 # platform-specific outputs
 if( WIN32 )
     set( bin_files libclang.dll )
-    set( inc_files clang-c/Index.h )
-    build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
-    build_add_files( "stddef.h" "${build_lib_dir}/clang/20/include" resource_output )
     build_add_files( "libclang.lib" "${build_lib_dir}" lib_output )
     build_add_files( "LLVMConfig.cmake" "${build_lib_dir}/cmake/llvm" cmake_output )
     build_add_files( "ClangConfig.cmake" "${build_lib_dir}/cmake/clang" clang_output )
 else()
     include( "${CMAKE_CURRENT_LIST_DIR}/outputs-unix.cmake" )
+    build_add_libs( "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output )
 
-    # lib files
-    build_add_libs(
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
-    )
+    string( TOLOWER "${CMAKE_BUILD_TYPE}" build_variant )
+    set( cmake_files LLVMConfig.cmake LLVMConfigVersion.cmake LLVMExports.cmake "LLVMExports-${build_variant}.cmake" )
+    build_add_files( "${cmake_files}" "${build_lib_dir}/cmake/llvm" cmake_output )
+    set( cmake_files ClangConfig.cmake ClangConfigVersion.cmake ClangTargets.cmake "ClangTargets-${build_variant}.cmake" )
+    build_add_files( "${cmake_files}" "${build_lib_dir}/cmake/clang" clang_output )
+    build_add_dir( "include/llvm;include/llvm-c;include/clang;include/clang-c;lib/clang/20/include" "${build_dir}" dir_output )
+    build_add_files( "hmaptool" "${build_bin_dir}" script_output )
 endif()
-
 build_add_files( "${bin_files}" "${build_bin_dir}" bin_output )
 
 # build configuration
 
+# patches
+build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch
+    "${project_src_dir}/rdf-comparators.patch"
+)
+
+# options
+set( build_options
+    -DLLVM_ENABLE_PROJECTS=clang
+    -DLLVM_PARALLEL_COMPILE_JOBS=4
+    -DLLVM_PARALLEL_LINK_JOBS=1
+    -DLLVM_INCLUDE_TESTS=OFF
+    -DLLVM_INCLUDE_BENCHMARKS=OFF
+    -DLLVM_INCLUDE_EXAMPLES=OFF
+    -DCLANG_INCLUDE_TESTS=OFF
+    -DLLVM_BUILD_TOOLS=OFF
+    -DLLVM_ENABLE_ZLIB=OFF
+    -DLLVM_ENABLE_ZSTD=OFF
+    -DLLVM_ENABLE_LIBXML2=OFF
+    -DLIBCLANG_BUILD_STATIC=OFF
+)
 if( WIN32 )
-    # patches
-    build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch
-        "${project_src_dir}/rdf-comparators.patch"
-    )
-    # options
-    set( build_options
+    list( APPEND build_options
         -DBUILD_SHARED_LIBS=OFF
-        -DLLVM_ENABLE_PROJECTS=clang
         -DLLVM_TARGETS_TO_BUILD=X86
-        -DLLVM_PARALLEL_COMPILE_JOBS=4
-        -DLLVM_PARALLEL_LINK_JOBS=1
-        -DLLVM_INCLUDE_TESTS=OFF
-        -DLLVM_INCLUDE_BENCHMARKS=OFF
-        -DLLVM_INCLUDE_EXAMPLES=OFF
-        -DCLANG_INCLUDE_TESTS=OFF
-        -DLLVM_BUILD_TOOLS=OFF
         -DCLANG_BUILD_TOOLS=OFF
-        -DLLVM_ENABLE_ZLIB=OFF
-        -DLLVM_ENABLE_ZSTD=OFF
-        -DLLVM_ENABLE_LIBXML2=OFF
-        -DLIBCLANG_BUILD_STATIC=OFF
     )
-
-    # configure, make and install
-    build_cmake_commands( "${project_bin_dir}/${project_pkg}/llvm" build_make ${build_options} )
-
-    set( build_output ${bin_output} ${lib_output} ${inc_output} ${cmake_output} ${clang_output} ${resource_output} )
 else()
-    # patch
-    set( build_patch
-        COMMAND patch -p1 -d ${project_bin_dir}/${project_pkg}
-              -i ${project_src_dir}/rdf-comparators.patch
+    list( APPEND build_options
+        -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+        -DLLVM_TARGETS_TO_BUILD=Native
+        -DCLANG_BUILD_TOOLS=ON
+        -DCLANG_TOOL_AMDGPU_ARCH_BUILD=OFF
+        -DCLANG_TOOL_APINOTES_TEST_BUILD=OFF
+        -DCLANG_TOOL_ARCMT_TEST_BUILD=OFF
+        -DCLANG_TOOL_C_ARCMT_TEST_BUILD=OFF
+        -DCLANG_TOOL_C_INDEX_TEST_BUILD=OFF
+        -DCLANG_TOOL_CLANG_CHECK_BUILD=OFF
+        -DCLANG_TOOL_CLANG_DIFF_BUILD=OFF
+        -DCLANG_TOOL_CLANG_EXTDEF_MAPPING_BUILD=OFF
+        -DCLANG_TOOL_CLANG_FORMAT_BUILD=OFF
+        -DCLANG_TOOL_CLANG_FUZZER_BUILD=OFF
+        -DCLANG_TOOL_CLANG_IMPORT_TEST_BUILD=OFF
+        -DCLANG_TOOL_CLANG_INSTALLAPI_BUILD=OFF
+        -DCLANG_TOOL_CLANG_LINKER_WRAPPER_BUILD=OFF
+        -DCLANG_TOOL_CLANG_NVLINK_WRAPPER_BUILD=OFF
+        -DCLANG_TOOL_CLANG_OFFLOAD_BUNDLER_BUILD=OFF
+        -DCLANG_TOOL_CLANG_OFFLOAD_PACKAGER_BUILD=OFF
+        -DCLANG_TOOL_CLANG_REFACTOR_BUILD=OFF
+        -DCLANG_TOOL_CLANG_REPL_BUILD=OFF
+        -DCLANG_TOOL_CLANG_SCAN_DEPS_BUILD=OFF
+        -DCLANG_TOOL_CLANG_SHLIB_BUILD=OFF
+        -DCLANG_TOOL_CLANG_SYCL_LINKER_BUILD=OFF
+        -DCLANG_TOOL_DIAGTOOL_BUILD=OFF
+        -DCLANG_TOOL_NVPTX_ARCH_BUILD=OFF
+        -DCLANG_TOOL_SCAN_BUILD_BUILD=OFF
+        -DCLANG_TOOL_SCAN_BUILD_PY_BUILD=OFF
+        -DCLANG_TOOL_SCAN_VIEW_BUILD=OFF
     )
+endif()
 
-    # options
-    if( CMAKE_SHARED_LIBS )
-        set( build_options -DBUILD_SHARED_LIBS=true )
-    else()
-        set( build_options -DBUILD_SHARED_LIBS=false )
-    endif()
+# configure, make and install
+build_cmake_commands( "${project_bin_dir}/${project_pkg}/llvm" build_make ${build_options} )
 
-    # config
-    set( build_config ${build_config} -DLLVM_ENABLE_PROJECTS=clang )
-
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-        cd ${project_pkg} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../llvm -DCMAKE_INSTALL_PREFIX=${build_dir}
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            ${build_options}
-            ${build_config} &&
-        make ${build_flags} &&
-        make install
-    )
-
-    string( JOIN " " build_make ${build_make} )
-    set( build_make COMMAND sh -c "${build_make}" )
-
-    # scripts
-    set( build_output ${bin_output} )
-
-    if ( CMAKE_SHARED_LIBS )
-        set( build_output ${build_output} ${lib_output} )
-    endif()
-
+# scripts
+if( UNIX )
     build_install_script(
-        "${build_output}"
+        "${bin_output};${lib_output}"
         ${build_dir}
         ${build_prefix_lib}
         ${build_prefix_framework}
         build_script
     )
-
-    build_install_check(
-        "${build_output}"
-        build_check
-    )
-
-    set( build_output ${bin_output} ${lib_output} )
 endif()
+set( build_output ${bin_output} ${lib_output} ${inc_output} ${resource_output} ${cmake_output} ${clang_output} ${script_output} )
 
 # run
 build_add_archive_rule()

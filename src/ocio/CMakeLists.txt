@@ -49,13 +49,15 @@ else()
     # bin files
     set( bin_files
         ociobakelut
+        ocioarchive
         ociocheck
+        ociocpuinfo
         ociodisplay
         ociowrite
         ociomakeclf
         ociochecklut
         ocioconvert
-        ociodisplay
+        ociomergeconfigs
         ocioperf
         ociolutimage
     )
@@ -92,6 +94,12 @@ endif()
 
 # build configuration
 
+set( build_config
+    -DOCIO_BUILD_TESTS=OFF
+    -DOCIO_BUILD_GPU_TESTS=OFF
+    -DOCIO_USE_OIIO_FOR_APPS=OFF
+)
+
 if( WIN32 )
     set( build_prepare ${build_python_check} )
     # patches
@@ -100,15 +108,13 @@ if( WIN32 )
     set( build_runtime_path "${build_dir}/bin" "${build_lib_dir}" )
     # options
     set( build_options
+        ${build_config}
         -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
         "-DCMAKE_PREFIX_PATH=${build_dir}"
         "-DOCIO_LIBNAME_SUFFIX=${build_python3_postfix}"
         -DOCIO_PYTHON_INSTALL_DIR=site-packages
         -DOCIO_BUILD_PYTHON=ON
-        -DOCIO_BUILD_TESTS=OFF
-        -DOCIO_BUILD_GPU_TESTS=OFF
         -DOCIO_BUILD_DOCS=OFF
-        -DOCIO_USE_OIIO_FOR_APPS=OFF
         -DOCIO_INSTALL_EXT_PACKAGES=MISSING
         -DPYBIND11_FINDPYTHON=ON
         ${build_python_options}
@@ -123,9 +129,9 @@ else()
     # options
     set( build_options -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} )
     set( build_options ${build_options} -DCMAKE_VERBOSE_MAKEFILE=true )
-
-    # config
-    set( build_config ${build_config} -DOCIO_USE_OIIO_CMAKE_CONFIG=true )
+    if( APPLE )
+        list( APPEND build_options -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET} )
+    endif()
 
     if( project_cfg_cmake_prefix )
         set( build_make
@@ -147,13 +153,13 @@ else()
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
         export OIIO_PATH=${build_dir} &&
-        cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
+        cmake ../ -G \"${CMAKE_GENERATOR}\" -DCMAKE_PREFIX_PATH=${build_dir}
               -DCMAKE_INSTALL_PREFIX=${build_dir}
               -DPYTHON_SITE_DIR=${build_sitepackages_dir}
               ${build_options}
               ${build_config} &&
-        make ${build_flags} &&
-        make install
+        cmake --build . --parallel ${num_cpus} -- -l ${num_cpus} &&
+        cmake --install .
     )
 
     string( JOIN " " build_make ${build_make} )

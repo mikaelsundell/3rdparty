@@ -1,0 +1,8 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+ cmake_minimum_required (VERSION 3.13..3.18)
+-set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14)
++set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14 CACHE STRING "Minimum macOS deployment version")
+ 
+ # Extract project version from source

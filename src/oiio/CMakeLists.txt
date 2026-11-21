@@ -123,6 +123,8 @@ else()
 
     # cmake flags
 
+    set( build_cmakeflags ${build_cmakeflags} -G Ninja )
+
     # Boost - use non cmake
     set( build_cmakeflags ${build_cmakeflags} -DBoost_NO_BOOST_CMAKE:BOOL=OFF )
 
@@ -132,17 +134,8 @@ else()
     # cmake prefix path
     set( build_cmakeflags ${build_cmakeflags} -DCMAKE_PREFIX_PATH=${build_dir} )
 
-    # dependencies
-    # JPEGTurbo = Not used
-    # OpenColorIO = Not used
-    # Rebuild after oiio build as OpenColorIO requires oiio
-    # OpenCV = Not used
-    # LibHeif = Not used
-    # OpenVDB = Not used
-    # PTex = Not used
-    # R3DSDK = Not used
-    # Nuke = Not used
-    # Libsquish = Not used
+    # Use the project's JPEG library, as on Windows.
+    set( build_cmakeflags ${build_cmakeflags} -DCMAKE_DISABLE_FIND_PACKAGE_libjpeg-turbo=ON )
 
     set( build_config ${build_config} Boost_ROOT=${build_dir} )
     set( build_config ${build_config} FFmpeg_ROOT=${build_dir} )
@@ -172,8 +165,10 @@ else()
         ${build_make}
         export PATH=${build_bin_dir}:$PATH &&
         export PKG_CONFIG_PATH=${build_pkgconfig_dir}:$PKG_CONFIG_PATH &&
+        export CMAKE_BUILD_PARALLEL_LEVEL=${num_cpus} &&
         make clean &&
         make
+            USE_NINJA=1
             INSTALL_PREFIX=${build_dir}
             "MY_CMAKE_FLAGS=\"${build_cmakeflags}\""
             ${build_options}

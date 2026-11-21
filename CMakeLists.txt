@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 #
-# Master CMakeLists.txt for 3rdparty. Run 'make help' for build options.
+# Master CMakeLists.txt for 3rdparty. Run the build launcher with --help for options.
 
 cmake_minimum_required( VERSION 3.27 )
 
@@ -333,9 +333,13 @@ if( build_base )
     )
 endif()
 
-if( WIN32 AND build_qt_prerequisites )
+if( build_qt_prerequisites )
     add_custom_target( qt-prerequisites )
-    build_add_dependencies( qt-prerequisites jpeg libpng zlib-ng ninja )
+    if( WIN32 )
+        build_add_dependencies( qt-prerequisites jpeg libpng zlib-ng ninja )
+    else()
+        build_add_dependencies( qt-prerequisites freetype harfbuzz jasper jpeg libpng libwebp pcre2 tiff zlib-ng ninja )
+    endif()
 endif()
 
 if( build_libs )

@@ -18,6 +18,7 @@ else()
     # lib files
     set( lib_files
         boost_atomic
+        boost_charconv
         boost_chrono
         boost_container
         boost_context
@@ -25,12 +26,18 @@ else()
         boost_coroutine
         boost_date_time
         boost_exception
+        boost_fiber
         boost_filesystem
         boost_graph
         boost_iostreams
+        boost_json
+        boost_locale
         boost_log_setup
         boost_log
+        boost_nowide
+        boost_numpy${build_python3_versiontag}
         boost_prg_exec_monitor
+        boost_process
         boost_program_options
         boost_python${build_python3_versiontag}
         boost_random
@@ -45,6 +52,8 @@ else()
         boost_timer
         boost_type_erasure
         boost_unit_test_framework
+        boost_url
+        boost_wave
         boost_wserialization
     )
 endif()
