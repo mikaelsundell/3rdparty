@@ -3,10 +3,11 @@
 ## Build entry points
 
 - Use `build.sh` on macOS or `build.bat` on Windows to start `build.py`.
-  During the migration, macOS still uses the root `Makefile` to configure CMake
-  and invoke its generated Makefiles. Windows uses CMake with Ninja.
-- Use `MY_MAKE_FLAGS` to select a generated target. Keep prerequisite edges in
-  `build_add_dependencies`; do not duplicate the dependency graph in `build.sh`.
+  The shared driver configures CMake and invokes `cmake --build` directly.
+  CMake package builds use Ninja on both platforms. Autotools and native Make
+  projects retain their package-specific build tools.
+- Use `--project` to select a generated target. Keep prerequisite edges in
+  `build_add_dependencies`; do not duplicate the dependency graph in the driver.
 - Use the normal `build/macosx/<architecture>.debug` and `.release` directories.
   Do not introduce an alternative permanent build layout for selected projects.
 - A selected library build must skip Qt and unrelated package targets.
@@ -17,23 +18,33 @@
   PySide must use Qt installed in its selected Debug or Release prefix; do not
   allow a missing installation to fall back to the other prefix.
 
-## macOS migration handoff
+## Shared build driver
 
-- The Windows port and shared-recipe refactor are in place. Selected Windows
-  x64 Debug and Release installs and an installed-Qt AUTOMOC consumer passed.
-  The macOS recipe branches were checked through generated-rule comparisons
-  on Windows. Native macOS builds are still pending.
-- Establish a native baseline before replacing the root Makefile. Start with
-  fresh selected Debug and Release builds of `json` for the shared CMake flow,
-  `libpng` for Autotools and Mach-O install handling, and `opentimelineio` for
-  C++ and Python installation with prerequisites. Use `--build-dir` with
-  selected targets to keep validation separate from existing installs.
-- The selected macOS path is `build.sh → build.py → Makefile`. The full path
-  calls `src/scripts/build_macos_full.sh` from `build.py` and builds base
-  dependencies, Qt, then libraries and extras. Preserve that order and the
-  current prefixes when moving orchestration into the shared driver. Validate
-  Qt's installed package with AUTOMOC and confirm PySide uses the matching
-  prefix before removing the legacy entry points.
+- On Mac, reuse an external Ninja or bootstrap the existing Ninja recipe with
+  Unix Makefiles in `build/tools`. Keep the host tool separate from SDK prefixes
+  so a package install cannot overwrite the Ninja running that build. Windows
+  still requires Ninja on PATH. Keep Mac package commands serial and use the
+  existing CPU count for inner compiler jobs. Do not convert or delete old
+  generator caches automatically; validate with fresh build directories.
+- Preserve the full-build order: base dependencies, Qt, then libraries and
+  extras. Keep Qt's Mac module exclusions, `FEATURE_dup3=OFF`, system FreeType
+  and zlib, deployment target, SDK, and default multi-config install behavior.
+- Add only the selected `ninja` directory to Mac Qt's tool path. Do not prepend
+  the prefix's `bin` directory: its LLVM tools can replace the system compiler
+  and break Clang's system-header discovery.
+- In the shared driver, remove project Debug/Release `bin` entries inherited
+  from the shell and append the selected prefix's `bin` after system tools.
+  Set CMake and pkg-config search paths for each selected prefix so Release
+  cannot pick up Debug dependencies from the shell setup.
+- Check mandatory Python modules before building, using the interpreter passed
+  to CMake. Keep checks specific to the selected build; unrelated header-only
+  builds must not require UI Python packages. Report the interpreter and an
+  install command when modules are missing. Update the preflight checks when a
+  library or its prerequisite targets add Python module requirements.
+- Use fresh selected Debug and Release builds of `json`, `libpng`, and
+  `opentimelineio` to validate shared CMake, Autotools/Mach-O, and Python/C++
+  installation. Validate installed Qt with AUTOMOC and check PySide against its
+  matching prefix. Record native build results separately for Mac and Windows.
 
 ## Cross-platform recipe style
 
@@ -76,15 +87,18 @@ as the model when the build commands differ by platform and
    actual source-root name; it may differ from its filename. For Unix CMake
    builds, configure from the extracted source's `${build_cmake}` directory
    using the established
-   `${build_env} && cd ... && mkdir -p ... && cd ... && cmake ... && make ... &&
-   make install` sequence in `build_make`.
+   `${build_env} && cd ... && mkdir -p ... && cd ... && cmake ... &&
+   cmake --build ... && cmake --install ...` sequence in `build_make`.
+   Pass the existing CMake generator to CMake subprojects. Keep Autotools
+   configure/Make commands unchanged. Bound inner compiler jobs using the
+   existing `num_cpus`; the Mac driver runs one package command at a time.
 4. Forward the existing build type, shared-library option, prefix, and selected
    Python interpreter where relevant. Ordinary fresh builds inherit
-   `MACOSX_DEPLOYMENT_TARGET` from `build.sh` and use CMake's native architecture
+   `MACOSX_DEPLOYMENT_TARGET` from `build.py` and use CMake's native architecture
    and SDK selection. Do not add blanket architecture/deployment/SDK arguments
    to recipes. Override architecture and deployment target only for packages
-   that set their own defaults, such as OTIO; reuse `lib_arch` and the existing
-   deployment-target variable. Do not force an SDK unless it is required.
+   that set their own defaults, such as OTIO and OCIO; reuse `lib_arch` and the
+   existing deployment-target variable. Do not force an SDK unless it is required.
 5. Declare real installed outputs using `build_add_files`, `build_add_dir`, and
    `build_add_libs` where appropriate. Match the upstream library version,
    Debug suffix, and Python ABI suffix. Track headers/directories, libraries,
@@ -96,8 +110,8 @@ as the model when the build commands differ by platform and
    not perform those steps. List the outputs in both the custom command and
    the custom target's dependencies. Use CMake's built-in `add_custom_command`
    with output-based build decisions. Do not add automatic recipe/flag/script
-   invalidation, completion stamps, or timestamp-touch workarounds. Changes to
-   flags alone are intentionally not tracked. Preserve explicit dependencies
+   invalidation, completion stamps, or timestamp-touch workarounds. Use Ninja's
+   native command tracking without a separate flag-invalidation layer. Preserve explicit dependencies
    needed for specific functionality, such as installed Qt module configs.
 7. Reuse `build_install_script` for Mach-O path normalization and
    `build_install_check` for required files. Pass binary files to path rewriting
@@ -110,6 +124,8 @@ as the model when the build commands differ by platform and
    in `src/<library>/msvc/`. Reuse `build_patch` and run
    `COMMAND ${build_patch}` after extraction and before configuration/build,
    following `src/llvm`. Prefer upstream fixes and record their commit or PR.
+   Keep Git patch application isolated from the parent checkout and verify
+   that files changed; Git can report success after skipping archive paths.
    Validate patches against the original archive and compile the actual affected
    source files for Debug and Release. Recheck each patch when upgrading versions.
    Document the exact archive, extracted root, version/commit, and applied patches
@@ -129,12 +145,10 @@ as the model when the build commands differ by platform and
   ./build.sh release --project opentimelineio --target 12
   ```
 
-- For disposable fresh prefixes, reuse the existing Makefile `build_dir`
-  override, for example:
+- For disposable fresh prefixes, use the shared driver's override:
 
   ```sh
-  MAKEFLAGS='-- build_dir=build-validation' \
-    ./build.sh all --project opentimelineio --target 12
+  ./build.sh all --project opentimelineio --build-dir build-validation --target 12
   ```
 
 - Check every declared output, architecture, and non-system runtime dependency

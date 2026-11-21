@@ -57,7 +57,7 @@ copyright notices; their LICENSES directories list license texts, not every auth
 | openjpeg | `openjpeg-2.5.4` | [AUTHORS.md](licenses/third-party/openjpeg/AUTHORS.md), [LICENSE](licenses/third-party/openjpeg/LICENSE) |
 | opensubdiv | `OpenSubdiv-master-250306` | [LICENSE.txt](licenses/third-party/opensubdiv/LICENSE.txt), [NOTICE.txt](licenses/third-party/opensubdiv/NOTICE.txt) |
 | opentimelineio | `opentimelineio-master-250205` | [LICENSE.txt](licenses/third-party/opentimelineio/LICENSE.txt), [NOTICE.txt](licenses/third-party/opentimelineio/NOTICE.txt) |
-| openusd | `OpenUSD-25.11` | [LICENSE.txt](licenses/third-party/openusd/LICENSE.txt), [NOTICE.txt](licenses/third-party/openusd/NOTICE.txt) |
+| openusd | `OpenUSD-25.11` with the [upstream sdr include fix](src/openusd/sdr-unused-include.patch) | [LICENSE.txt](licenses/third-party/openusd/LICENSE.txt), [NOTICE.txt](licenses/third-party/openusd/NOTICE.txt) |
 | pcre2 | `pcre2-10.32` | [AUTHORS](licenses/third-party/pcre2/AUTHORS), [COPYING](licenses/third-party/pcre2/COPYING) |
 | pkg-config | `pkg-config-0.28` | [AUTHORS](licenses/third-party/pkg-config/AUTHORS), [COPYING](licenses/third-party/pkg-config/COPYING) |
 | ptex | `ptex-master-220319` | [LICENSE](licenses/third-party/ptex/LICENSE) |

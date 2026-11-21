@@ -176,6 +176,10 @@ else()
         set( build_options ${build_options} link=static )
     endif()
 
+    if( APPLE )
+        list( APPEND build_options linkflags=-Wl,-headerpad_max_install_names )
+    endif()
+
     # config
     if( project_cfg_without_mpi )
         set( build_config --without-mpi )

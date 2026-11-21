@@ -123,11 +123,10 @@ function( build_cmake_commands source_dir output_make )
 
     if( UNIX )
         string( JOIN " " cmake_env ${build_env} )
-        string( JOIN " " make_flags ${build_flags} )
         set( commands
             COMMAND sh -c
-                "${cmake_env} && cd \"$1\" && mkdir -p \"$2\" && cd \"$2\" && shift 2 && \"$@\" && make ${make_flags} && make install"
-                sh "${source_dir}" "${build_cmake}" "${CMAKE_COMMAND}" ../ ${configure_options}
+                "${cmake_env} && cd \"$1\" && mkdir -p \"$2\" && cd \"$2\" && shift 2 && \"$@\" && \"${CMAKE_COMMAND}\" --build . --parallel ${num_cpus} -- -l ${num_cpus} && \"${CMAKE_COMMAND}\" --install ."
+                sh "${source_dir}" "${build_cmake}" "${CMAKE_COMMAND}" ../ -G "${CMAKE_GENERATOR}" ${configure_options}
         )
     else()
         set( cmake_dir "${source_dir}/${build_cmake}" )
@@ -154,6 +153,12 @@ endfunction()
 ##-*****************************************************************************
 
 function( build_add_archive_rule )
+    # Stream nested Ninja progress instead of buffering a whole package build.
+    set( terminal_options )
+    if( APPLE )
+        set( terminal_options USES_TERMINAL )
+    endif()
+
     # Some recipes already select the files checked after install.
     if( NOT DEFINED build_check )
         build_install_check( "${build_output}" build_check )
@@ -170,6 +175,8 @@ function( build_add_archive_rule )
         COMMAND ${build_check}
         COMMAND ${sitepackage_script}
         WORKING_DIRECTORY "${project_bin_dir}"
+        COMMENT "Building ${project_name}"
+        ${terminal_options}
         VERBATIM
     )
 endfunction()
@@ -177,10 +184,15 @@ endfunction()
 ##-*****************************************************************************
 
 function( build_patch_commands source_dir output )
+    # Do not let Git discover the enclosing 3rdparty checkout and skip paths
+    # relative to an extracted archive. LLVM's backport uses zero-context hunks.
+    get_filename_component( patch_dir "${source_dir}" DIRECTORY )
     set( commands )
     foreach( patch IN LISTS ARGN )
         list( APPEND commands
-            COMMAND ${CMAKE_COMMAND} -E chdir "${source_dir}" git apply --no-index "${patch}"
+            COMMAND ${CMAKE_COMMAND} -E chdir "${source_dir}"
+                ${CMAKE_COMMAND} -E env "GIT_CEILING_DIRECTORIES=${patch_dir}"
+                git apply --no-index --unidiff-zero --verbose "${patch}"
         )
     endforeach()
     set( ${output} ${commands} PARENT_SCOPE )

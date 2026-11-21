@@ -177,21 +177,21 @@ else()
         cd OpenTimelineIO-system-dependencies-261115 &&
         mkdir -p ${build_cmake} &&
         cd ${build_cmake} &&
-        cmake ../ -DCMAKE_PREFIX_PATH=${build_dir}
+        cmake ../ -G \"${CMAKE_GENERATOR}\" -DCMAKE_PREFIX_PATH=${build_dir}
             -DCMAKE_INSTALL_PREFIX=${build_dir}
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
             -DCMAKE_OSX_ARCHITECTURES=${lib_arch}
             -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
             ${build_options}
             ${build_config} &&
-        make ${build_flags} &&
-        make install &&
+        cmake --build . --parallel ${num_cpus} -- -l ${num_cpus} &&
+        cmake --install . &&
         cd .. &&
         ${build_python3} setup.py build_py --build-lib ${build_sitepackages_dir} &&
         cd ${build_cmake} &&
-        cmake ../ -DOTIO_PYTHON_INSTALL=OFF -DOTIO_CXX_INSTALL=ON &&
-        make ${build_flags} &&
-        make install
+        cmake ../ -G \"${CMAKE_GENERATOR}\" -DOTIO_PYTHON_INSTALL=OFF -DOTIO_CXX_INSTALL=ON &&
+        cmake --build . --parallel ${num_cpus} -- -l ${num_cpus} &&
+        cmake --install .
     )
 
     string( JOIN " " build_make ${build_make} )

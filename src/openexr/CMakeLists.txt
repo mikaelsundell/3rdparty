@@ -58,8 +58,11 @@ else()
         exrinfo
         exrmakepreview
         exrmaketiled
+        exrmanifest
+        exrmetrics
         exrmultipart
         exrmultiview
+        exrstdattr
     )
 
     # lib files
@@ -106,11 +109,23 @@ else()
     build_add_files(
         "${pkg_files}" "${build_lib_dir}/pkgconfig" pkg_output
     )
+
+    if( APPLE )
+        list( APPEND lib_output
+            ${build_python_dir}/OpenEXR/OpenEXR.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
+        )
+    endif()
+    build_add_files( "Imath.py" "${build_python_dir}/OpenEXR" sitepackages_output )
 endif()
 
 build_add_files( "${bin_files}" "${build_dir}/bin" bin_output )
 
 # build configuration
+
+set( build_options
+    "-DCMAKE_PREFIX_PATH=${build_dir}"
+    -DOPENEXR_BUILD_PYTHON=ON
+)
 
 if( WIN32 )
     set( build_prepare ${build_python_check} )
@@ -120,9 +135,7 @@ if( WIN32 )
         "${project_src_dir}/msvc/export-keycode-comparison.patch"
     )
     # options
-    set( build_options
-        "-DCMAKE_PREFIX_PATH=${build_dir}"
-        -DOPENEXR_BUILD_PYTHON=ON
+    list( APPEND build_options
         -DBUILD_TESTING=OFF
         -DOPENEXR_INSTALL_DOCS=OFF
         "-DImath_DIR=${build_lib_dir}/cmake/Imath"
@@ -133,6 +146,12 @@ if( WIN32 )
 
     build_add_dependencies( ${project_name} imath pybind )
 else()
+    if( APPLE )
+        build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch
+            "${project_src_dir}/python-debug-postfix.patch"
+        )
+    endif()
+
     # scripts
     set( build_output ${bin_output} )
 
@@ -148,15 +167,14 @@ else()
         build_script
     )
 
-    set( build_output ${bin_output} ${lib_output} )
+    set( build_output ${bin_output} ${lib_output} ${sitepackages_output} )
 
-    set( build_options
+    list( APPEND build_options
         "-DZLIB_ROOT=${build_dir}"
-        -DOPENEXR_BUILD_PYTHON_LIBS=TRUE
-        ${build_options}
+        "-DPython3_EXECUTABLE=${build_python3}"
     )
 
-    build_add_dependencies( ${project_name} imath boost zlib-ng )
+    build_add_dependencies( ${project_name} imath boost pybind zlib-ng )
 endif()
 
 # configure, make and install
