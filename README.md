@@ -23,6 +23,7 @@ The project began as a manually maintained collection of third-party library bui
     - [Build on Windows](#build-on-windows)
       - [Windows prerequisites](#windows-prerequisites)
       - [Windows build commands](#windows-build-commands)
+      - [Windows Security and Qt Multimedia](#windows-security-and-qt-multimedia)
       - [Windows SDK shell](#windows-sdk-shell)
   - [Advanced configuration](#advanced-configuration)
     - [CMake configuration](#cmake-configuration)
@@ -294,8 +295,10 @@ build.bat debug --project boost
 ```
 
 The SDK prefixes are `build\win\x64.debug` and `build\win\x64.release`.
-Use `--build-dir` to choose a different build root. Builds resume existing
-outputs without prompting to clean.
+Use `--build-dir` to choose a different build root. A full interactive
+`build.bat all` prompts before removing an existing build root and keeps it
+by default. Non-interactive, single-configuration, selected, and base-only
+builds reuse existing outputs without prompting.
 
 `--project qt` builds the Qt prerequisites and Qt. Other selected targets build
 only their CMake prerequisites. For PySide or OpenUSD, install Qt with the same
@@ -313,6 +316,22 @@ Use `python_d.exe` with extensions from the Debug prefix and `python.exe` with
 extensions from the Release prefix. When importing extensions directly, use
 `os.add_dll_directory()` with the absolute paths of the prefix's runtime DLL
 directories.
+
+#### Windows Security and Qt Multimedia ####
+
+Smart App Control can block a locally built Qt DLL during shader generation.
+On the Windows 11 26H2 test machine, `qsb.exe --version` returned
+`0xC0E90002`, and Windows recorded Code Integrity event `3077` for
+`Qt6Gui.dll`. Check **Event Viewer → Applications and Services Logs →
+Microsoft → Windows → CodeIntegrity → Operational** for the blocked file.
+[Microsoft’s Code Integrity event reference](https://learn.microsoft.com/en-us/windows/security/application-security/application-control/app-control-for-business/operations/event-id-explanations)
+
+For a temporary local test, open **Windows Security → App & browser control →
+Smart App Control settings** and select **Off**. This setting applies system-wide.
+Run `build.bat debug --project qt` to resume the Debug Qt build, then return
+to the same settings and select **On** after the test. Recent Windows updates
+support re-enabling Smart App Control without reinstalling Windows.
+[Microsoft’s Smart App Control FAQ](https://support.microsoft.com/en-us/windows/security/threat-malware-protection/smart-app-control-frequently-asked-questions)
 
 #### Windows SDK shell ####
 
@@ -381,7 +400,7 @@ Update this table as additional operating-system versions are tested.
 | Operating system | Version | Architecture | Validation |
 | --- | --- | --- | --- |
 | macOS Tahoe | 26.7.1 | Apple Silicon (arm64) | Debug and Release builds, installed C++/Python consumers, Qt and Shiboken checks |
-| Windows | Version not recorded | x64 | Selected Debug and Release builds and an installed-Qt AUTOMOC consumer |
+| Windows 11 | 26H2 (OS build 26300.9974) | x64 | Selected Debug and Release builds and an installed-Qt AUTOMOC consumer |
 
 The current Mac checks use Xcode 27.0 and AppleClang 21. Windows builds use MSVC
 and Python 3.9. Validation covers the packages and consumers exercised on each

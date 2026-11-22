@@ -21,6 +21,24 @@ QT_MODULES = (
 )
 
 
+def confirm_clean(args, build_dir, parser):
+    if args.configuration != "all" or args.project is not None or args.base_only:
+        return
+    if not build_dir.is_dir() or not sys.stdin.isatty():
+        return
+
+    answer = input(f"Remove existing build directory {build_dir}? (y/N): ")
+    if answer.lower() not in ("y", "yes"):
+        return
+
+    resolved = build_dir.resolve()
+    if resolved == ROOT or resolved in ROOT.parents:
+        parser.error("the build directory must not contain the source tree")
+    if args.build_dir is None and ROOT not in resolved.parents:
+        parser.error("the default build directory must be inside the source tree")
+    shutil.rmtree(build_dir)
+
+
 def check_macos_python(project):
     requirements = []
     if project is None or project in (
@@ -61,13 +79,7 @@ def build_macos(args, configurations, parser):
     check_macos_python("boost" if args.base_only else args.project)
 
     build_dir = args.build_dir.resolve() if args.build_dir is not None else ROOT / "build"
-    # Preserve the full-build clean choice; selected and base-only builds resume.
-    if args.configuration == "all" and args.project is None and not args.base_only and build_dir.exists():
-        answer = input(f"Remove existing build directory {build_dir}? (y/N): ") if sys.stdin.isatty() else "n"
-        if answer.lower() in ("y", "yes"):
-            if build_dir == ROOT or build_dir in ROOT.parents:
-                parser.error("the build directory must not contain the source tree")
-            shutil.rmtree(build_dir)
+    confirm_clean(args, build_dir, parser)
 
     # An SDK shell exposes its LLVM tools for consumers. Dependency builds
     # must still select the system compiler unless CC/CXX explicitly override it.
@@ -265,6 +277,7 @@ def build_windows(args, configurations, parser):
             parser.error(f"{tool} is required on PATH")
 
     build_dir = args.build_dir.resolve() if args.build_dir is not None else ROOT / "build"
+    confirm_clean(args, build_dir, parser)
     if not args.base_only and args.project in (None, "openusd"):
         for configuration in configurations:
             python_name = "python_d.exe" if configuration == "debug" else "python.exe"

@@ -1,0 +1,2 @@
+# Preserve the line endings expected by patches against upstream archives.
+*.patch text eol=lf
