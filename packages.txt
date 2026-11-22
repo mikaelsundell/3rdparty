@@ -152,6 +152,12 @@ openusd
 ---------------------------------
 * OpenUSD-25.11.tar.gz extracts as OpenUSD-25.11; keep the original S3 archive.
   SHA256: 73ebbed5ac930d0bfafe0d282eb8dcdc12935d0a88b8d96fea5a6453f58c54d8
+* Disable upstream USD unit tests in the Mac SDK build, matching Windows.
+  OpenUSD 25.11 testVdfSpeculation includes ef/executor.h without declaring ef
+  as a prerequisite and can fail in a fresh parallel build. The SDK recipe
+  does not run these tests. Keep the production libraries, bindings and tools.
+* Add the selected prefix's lib/python<version>/site-packages to the Mac USD
+  build environment so CMake can import its installed PySide6 prerequisite.
 * Apply src/openusd/sdr-unused-include.patch on both platforms before CMake.
   Upstream commit: 22b237135b439a012fe8b8b9514aaaba828b070a (fixes #3972).
   https://github.com/PixarAnimationStudios/OpenUSD/commit/22b237135b439a012fe8b8b9514aaaba828b070a

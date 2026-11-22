@@ -119,6 +119,11 @@ if( WIN32 )
 
     set( build_output ${lib_output} ${runtime_output} ${bin_output} ${inc_output} ${cmake_output} ${sitepackages_output} )
 else()
+    # Python modules installed by the matching PySide prerequisite.
+    set( build_env ${build_env} &&
+        export PYTHONPATH=${build_lib_dir}/python${build_python3_version}/site-packages:$PYTHONPATH
+    )
+
     # options
     if( CMAKE_SHARED_LIBS )
         set( build_options -DBUILD_SHARED_LIBS=TRUE )
@@ -130,6 +135,7 @@ else()
     set( build_config ${build_config} -DCMAKE_CXX_STANDARD=14 )
     set( build_config ${build_config} -DBoost_NO_BOOST_CMAKE=false )
     set( build_config ${build_config} -DPXR_BUILD_USDVIEW=true )
+    set( build_config ${build_config} -DPXR_BUILD_TESTS=OFF )
     set( build_config ${build_config} -DPXR_ENABLE_PYTHON_SUPPORT=true )
     set( build_config ${build_config} -DPXR_ENABLE_MATERIALX_SUPPORT=true )
     set( build_config ${build_config} -DPYSIDEUICBINARY=${build_dir}/libexec/uic )
