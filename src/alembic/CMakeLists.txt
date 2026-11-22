@@ -32,118 +32,89 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# bin files
-set( bin_files
-    abcdiff
-    abcecho
-    abcechobounds
-    abcls
-    abcstitcher
-    abctree
-)
-
-# inc dir
-SET( inc_dir
-    Alembic
-)
-
-# lib files
-set( lib_files
-    Alembic
-)
-
-if( UNIX )
-
+# platform-specific outputs
+if( WIN32 )
+    build_add_files( "Alembic${CMAKE_STATIC_LIBRARY_SUFFIX}" "${build_dir}/lib" lib_output )
+    if( CMAKE_SHARED_LIBS )
+        build_add_files( "Alembic${CMAKE_SHARED_LIBRARY_SUFFIX}" "${build_dir}/lib" runtime_output )
+    endif()
+    set( bin_files abcecho abcls abctree )
+    list( TRANSFORM bin_files APPEND "${CMAKE_EXECUTABLE_SUFFIX}" )
+    set( inc_files Alembic/Abc/All.h )
+    build_add_files( "${inc_files}" "${build_dir}/include" inc_output )
+    set( cmake_files AlembicConfig.cmake AlembicConfigVersion.cmake AlembicTargets.cmake )
+    build_add_files( "${cmake_files}" "${build_dir}/lib/cmake/Alembic" cmake_output )
+else()
     # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
-    )
-
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
+    set( bin_files
+        abcdiff
+        abcecho
+        abcechobounds
+        abcls
+        abcstitcher
+        abctree
     )
 
     # lib files
-    build_add_libs( 
+    set( lib_files
+        Alembic
+    )
+
+    # lib files
+    build_add_libs(
         "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
     )
-    
 endif()
+
+build_add_files( "${bin_files}" "${build_dir}/bin" bin_output )
 
 # build configuration
 
-# unix
-
-IF( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
-    )
-
+if( WIN32 )
     # options
-    if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=true )
-    else()
-        SET( build_options -DBUILD_SHARED_LIBS=false )
-    endif()
-
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-        cd alembic &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            ${build_options} &&
-        make ${build_flags} &&
-        make install
+    set( build_options
+        "-DCMAKE_PREFIX_PATH=${build_dir}"
+        -DALEMBIC_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+        -DUSE_TESTS=OFF
+        -DUSE_HDF5=OFF
+        "-DImath_DIR=${build_lib_dir}/cmake/Imath"
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     )
 
+    set( build_output ${lib_output} ${runtime_output} ${bin_output} ${inc_output} ${cmake_output} ${sitepackages_output} )
+
+    build_add_dependencies( ${project_name} imath )
+else()
     # scripts
     set( build_output ${bin_output} )
 
     if ( CMAKE_SHARED_LIBS )
         set( build_output ${build_output} ${lib_output} )
     endif()
-    
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+
+    build_install_script(
+        "${build_output}"
+        ${build_dir}
+        ${build_prefix_lib}
+        ${build_prefix_framework}
         build_script
     )
 
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
+    set( build_output ${bin_output} ${lib_output} )
 
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
+    build_add_dependencies( ${project_name} llvm )
 endif()
+
+# configure, make and install
+build_cmake_commands( "${project_bin_dir}/alembic" build_make ${build_options}
+    -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+)
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )
-
-# dependencies
-build_add_dependencies( ${project_name} llvm )

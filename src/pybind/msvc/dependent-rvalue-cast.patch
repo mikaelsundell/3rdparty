@@ -1,0 +1,13 @@
+--- a/include/pybind11/cast.h
++++ b/include/pybind11/cast.h
+@@ -40,7 +40,8 @@
+ }
+ template <typename T> typename make_caster<T>::template cast_op_type<typename std::add_rvalue_reference<T>::type>
+ cast_op(make_caster<T> &&caster) {
+-    return std::move(caster).operator
+-        typename make_caster<T>::template cast_op_type<typename std::add_rvalue_reference<T>::type>();
++    using result_type =
++        typename make_caster<T>::template cast_op_type<typename std::add_rvalue_reference<T>::type>;
++    return static_cast<result_type>(std::move(caster));
+ }
+ 

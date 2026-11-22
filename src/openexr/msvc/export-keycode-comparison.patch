@@ -1,0 +1,10 @@
+--- a/src/lib/OpenEXR/ImfKeyCode.h
++++ b/src/lib/OpenEXR/ImfKeyCode.h
+@@ -93,6 +93,7 @@
+     IMF_EXPORT
+     KeyCode& operator= (const KeyCode& other);
+ 
++    IMF_EXPORT
+     bool operator== (const KeyCode& other) const;
+ 
+     //----------------------------

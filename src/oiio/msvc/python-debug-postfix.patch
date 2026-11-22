@@ -1,0 +1,16 @@
+--- a/src/cmake/pythonutils.cmake
++++ b/src/cmake/pythonutils.cmake
+@@ -138,8 +138,8 @@
+ 
+-#    if (WIN32)
+-#        set_target_properties (${target_name} PROPERTIES
+-#                               DEBUG_POSTFIX "_d"
+-#                               SUFFIX ".pyd")
+-#    endif()
++    if (WIN32)
++        set_target_properties (${target_name} PROPERTIES
++                               DEBUG_POSTFIX "_d"
++                               SUFFIX ".pyd")
++    endif()
+ 
+     if (SKBUILD)

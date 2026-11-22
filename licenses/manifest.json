@@ -364,15 +364,6 @@
       "status": "Copied from local extracted source"
     },
     {
-      "package": "jpeg2000_images",
-      "recipe": "src/jpeg2000_images/CMakeLists.txt",
-      "source_package": "jpeg2000_images",
-      "archive": null,
-      "notices": [],
-      "status": "Unverified: media archive not available locally",
-      "archive_expression": "${project_pkg}.tar.gz"
-    },
-    {
       "package": "json",
       "recipe": "src/json/CMakeLists.txt",
       "source_package": "json-master-231214",
@@ -644,15 +635,6 @@
       "status": "Copied from local extracted source"
     },
     {
-      "package": "ocio-images",
-      "recipe": "src/ocio-images/CMakeLists.txt",
-      "source_package": "ocio-images.1.0v1",
-      "archive": null,
-      "notices": [],
-      "status": "Unverified: media archive not available locally",
-      "archive_expression": "${project_pkg}.tgz"
-    },
-    {
       "package": "oiio",
       "recipe": "src/oiio/CMakeLists.txt",
       "source_package": "OpenImageIO-3.1.8.0",
@@ -665,15 +647,6 @@
         }
       ],
       "status": "Copied from local extracted source"
-    },
-    {
-      "package": "oiio-images",
-      "recipe": "src/oiio-images/CMakeLists.txt",
-      "source_package": "OpenImageIO-oiio-images-3819677",
-      "archive": null,
-      "notices": [],
-      "status": "Unverified: media archive not available locally",
-      "archive_expression": "${project_pkg}.tgz"
     },
     {
       "package": "onetbb",
@@ -721,15 +694,6 @@
         }
       ],
       "status": "Copied from local extracted source"
-    },
-    {
-      "package": "openexr-images",
-      "recipe": "src/openexr-images/CMakeLists.txt",
-      "source_package": "openexr-images-1.7.0",
-      "archive": null,
-      "notices": [],
-      "status": "Unverified: media archive not available locally",
-      "archive_expression": "${project_pkg}.tar.gz"
     },
     {
       "package": "openjpeg",
@@ -806,7 +770,15 @@
           "sha256": "f6ad9d41f77b1bd8edaecd64bd1e13f4224876b010e2415e308267a84862bc14"
         }
       ],
-      "status": "Copied from local extracted source"
+      "status": "Notices verified against the original archive; upstream sdr include patch applied cleanly and affected source compiled for Mac Debug and Release 2026-11-21; full build/install rerun pending",
+      "archive_sha256": "73ebbed5ac930d0bfafe0d282eb8dcdc12935d0a88b8d96fea5a6453f58c54d8",
+      "patches": [
+        {
+          "path": "src/openusd/sdr-unused-include.patch",
+          "source": "https://github.com/PixarAnimationStudios/OpenUSD/commit/22b237135b439a012fe8b8b9514aaaba828b070a",
+          "sha256": "d4dc137ed9a71c372019f940c555862a575a733f37c53f9bb555388153c22dd0"
+        }
+      ]
     },
     {
       "package": "pcre2",

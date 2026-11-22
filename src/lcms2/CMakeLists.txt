@@ -32,6 +32,9 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
+# inc files
+set( inc_files lcms2.h lcms2_plugin.h )
+
 # bin files
 set( bin_files
     jpgicc
@@ -41,62 +44,50 @@ set( bin_files
     transicc
 )
 
-# inc files
-set( inc_files
-    lcms2.h
-    lcms2_plugin.h
-)
-
-# lib files
-set( lib_files
-    lcms2.2
-)
-
-# pkgfiles
-set( pkg_files
-    lcms2.pc
-)
-
-if( UNIX )
-
-    # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
-    )
-
-    # inc files
-    build_add_files( 
-        "${inc_files}" "${build_inc_dir}" inc_output
-    )
-
+# platform-specific outputs
+if( WIN32 )
+    set( lib_files lcms2 )
+    list( TRANSFORM bin_files APPEND "${CMAKE_EXECUTABLE_SUFFIX}" )
+else()
     # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
+    set( lib_files
+        lcms2.2
+    )
+
+    # pkgfiles
+    set( pkg_files
+        lcms2.pc
     )
 
     # pkg files
-    build_add_files( 
+    build_add_files(
         "${pkg_files}" "${build_lib_dir}/pkgconfig" pkg_output
     )
-    
 endif()
+
+build_add_libs( "${lib_files}" "${build_lib_dir}" "${lib_prefix}" "${lib_suffix}" lib_output )
+build_add_files( "${bin_files}" "${build_bin_dir}" bin_output )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
 
 # build configuration
 
-# unix
-
-IF( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
+if( WIN32 )
+    # patches
+    set( build_patch
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${project_src_dir}/msvc/CMakeLists.txt" "${project_bin_dir}/${project_pkg}/CMakeLists.txt"
+    )
+    # options
+    set( build_options
+        -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+        "-DCMAKE_PREFIX_PATH=${build_dir}"
     )
 
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
-    )
+    # configure, make and install
+    build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options} )
 
+    set( build_output ${lib_output} ${bin_output} ${inc_output} )
+else()
     # options
     if( CMAKE_SHARED_LIBS )
         set( build_options --enable-shared --disable-static )
@@ -105,10 +96,10 @@ IF( UNIX )
     endif()
 
     # configure, make and install
-    SET( build_make
+    set( build_make
         ${build_env} &&
         cd ${project_pkg} &&
-        ./configure 
+        ./configure
             --prefix=${build_dir}
             CFLAGS=-I${build_inc_dir}
             CPPFLAGS=-I${build_inc_dir}
@@ -118,26 +109,29 @@ IF( UNIX )
         make install
     )
 
+    string( JOIN " " build_make ${build_make} )
+    set( build_make COMMAND sh -c "${build_make}" )
+
     # scripts
-    
+
     IF ( APPLE )
-    
+
         # build output
 
-        SET( build_output ${bin_output} )
+        set( build_output ${bin_output} )
 
         IF ( CMAKE_SHARED_LIBS )
-            SET( build_output ${build_output} ${lib_output} )
-        ENDIF()
-    
-        SET( build_script 
-            ${PROJECT_SOURCE_DIR}/src/scripts/install_name.sh 
+            set( build_output ${build_output} ${lib_output} )
+        endif()
+
+        set( build_script
+            ${PROJECT_SOURCE_DIR}/src/scripts/install_name.sh
                 --prefix-lib ${build_prefix_lib}
                 --prefix-framework ${build_prefix_framework}
                 --absolute-path ${build_dir}
                 ${build_output}
         )
-    ENDIF()
+    endif()
 
     # scripts
     set( build_output ${bin_output} )
@@ -146,36 +140,33 @@ IF( UNIX )
         set( build_output ${build_output} ${lib_output} )
     endif()
 
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+    build_install_script(
+        "${build_output}"
+        ${build_dir}
+        ${build_prefix_lib}
+        ${build_prefix_framework}
         build_script
     )
 
-    build_install_check( 
-        "${build_output}" 
+    build_install_check(
+        "${build_output}"
         build_check
     )
 
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )    
+    set( build_output ${bin_output} ${lib_output} )
+endif()
 
-ENDIF()
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${project_name} ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )
 
-# dependencies
-build_add_dependencies( ${project_name} jpeg tiff zlib-ng )
+build_add_dependencies( ${project_name} jpeg tiff )
+
+if( UNIX )
+    build_add_dependencies( ${project_name} zlib-ng )
+endif()

@@ -38,75 +38,52 @@ set( bin_files
     ndisasm
 )
 
-IF( UNIX )
-
-    # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
-    )
-    
-ENDIF()
+# bin files
+build_add_files(
+    "${bin_files}" "${build_bin_dir}" bin_output
+)
 
 # build configuration
 
-# unix
+# configure, make and install
+set( build_make
+    ${build_env} &&
+    export PATH=${build_bin_dir}:$PATH &&
+    cd ${project_pkg} &&
+    touch nasm.1 ndisasm.1 &&
+    ./autogen.sh &&
+    ./configure
+        --prefix=${build_dir}
+        ${build_options} &&
+    make nasm ndisasm ${build_flags} &&
+    make install
+)
 
-if( UNIX )
+string( JOIN " " build_make ${build_make} )
+set( build_make COMMAND sh -c "${build_make}" )
 
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
+# scripts
+build_install_script(
+    "${build_output}"
+    ${build_dir}
+    ${build_prefix_lib}
+    ${build_prefix_framework}
+    build_script
+)
 
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
+build_install_check(
+    "${build_output}"
+    build_check
+)
 
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-        export PATH=${build_bin_dir}:$$PATH &&
-        cd ${project_pkg} &&
-        touch nasm.1 ndisasm.1 &&
-        ./autogen.sh &&
-        ./configure 
-            --prefix=${build_dir}
-            ${build_options} &&
-        make nasm ndisasm ${build_flags} &&
-        make install
-    )
-
-    # scripts
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
-        build_script
-    )
-
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    ) 
-
-endif()
+# run
+set( build_output ${bin_output} )
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output}
+    DEPENDS ${build_output}
 )
 
 # dependencies

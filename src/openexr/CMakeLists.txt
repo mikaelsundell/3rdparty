@@ -32,46 +32,50 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# bin files
-set( bin_files
-    exr2aces
-    exrenvmap
-    exrheader
-    exrinfo
-    exrmakepreview
-    exrmaketiled
-    exrmultipart
-    exrmultiview
-)
-
-# inc dir
-set( inc_dir
-    OpenEXR
-)
-
-# lib files
-set( lib_files
-    Iex-3_4
-    IlmThread-3_4
-    OpenEXR-3_4
-    OpenEXRCore-3_4
-    OpenEXRUtil-3_4   
-)
-
-# pkgfiles
-set( pkg_files
-)
-
-IF( UNIX )
-
+# platform-specific outputs
+if( WIN32 )
+    set( lib_files OpenEXR-3_4 OpenEXRCore-3_4 OpenEXRUtil-3_4 Iex-3_4 IlmThread-3_4 )
+    if( CMAKE_BUILD_TYPE STREQUAL Debug )
+        list( TRANSFORM lib_files APPEND "_d" )
+    endif()
+    build_add_libs( "${lib_files}" "${build_lib_dir}" "${lib_prefix}" "${lib_suffix}" lib_output )
+    set( bin_files exrheader exrinfo )
+    list( TRANSFORM bin_files APPEND "${CMAKE_EXECUTABLE_SUFFIX}" )
+    set( inc_files OpenEXR/ImfHeader.h OpenEXR/OpenEXRConfig.h )
+    build_add_files( "${inc_files}" "${build_dir}/include" inc_output )
+    set( cmake_files OpenEXRConfig.cmake OpenEXRConfigVersion.cmake OpenEXRTargets.cmake )
+    build_add_files( "${cmake_files}" "${build_dir}/lib/cmake/OpenEXR" cmake_output )
+    build_add_files(
+        "OpenEXR${build_python3_postfix}.pyd;Imath.py"
+        "${build_dir}/python/OpenEXR" sitepackages_output
+    )
+else()
     # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
+    set( bin_files
+        exr2aces
+        exrenvmap
+        exrheader
+        exrinfo
+        exrmakepreview
+        exrmaketiled
+        exrmanifest
+        exrmetrics
+        exrmultipart
+        exrmultiview
+        exrstdattr
     )
 
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
+    # lib files
+    set( lib_files
+        Iex-3_4
+        IlmThread-3_4
+        OpenEXR-3_4
+        OpenEXRCore-3_4
+        OpenEXRUtil-3_4
+    )
+
+    # pkgfiles
+    set( pkg_files
     )
 
     # lib files
@@ -80,71 +84,73 @@ IF( UNIX )
     endif()
 
     foreach( lib_file ${lib_files} )
-    
+
         if ( APPLE )
-            list( APPEND lib_output 
+            list( APPEND lib_output
                 ${build_lib_dir}/${lib_prefix}${lib_file}${lib_dtag}.33.3.4.6${lib_suffix}
             )
 
-	    else()
+        else()
             # INFO: on UNIX lib files appends version after suffix
-            string( REGEX REPLACE 
-                "^([^.]+)([.]*)(.*)" 
-                "${lib_prefix}\\1${lib_suffix}\\2\\3" 
+            string( REGEX REPLACE
+                "^([^.]+)([.]*)(.*)"
+                "${lib_prefix}\\1${lib_suffix}\\2\\3"
                 lib_file "${lib_file}"
             )
 
-            list( APPEND lib_output 
+            list( APPEND lib_output
                 ${build_lib_dir}/${lib_file}
             )
-	    endif()
-    
+        endif()
+
     endforeach()
 
     # pkg files
-    build_add_files( 
+    build_add_files(
         "${pkg_files}" "${build_lib_dir}/pkgconfig" pkg_output
     )
-    
+
+    if( APPLE )
+        list( APPEND lib_output
+            ${build_python_dir}/OpenEXR/OpenEXR.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
+        )
+    endif()
+    build_add_files( "Imath.py" "${build_python_dir}/OpenEXR" sitepackages_output )
 endif()
+
+build_add_files( "${bin_files}" "${build_dir}/bin" bin_output )
 
 # build configuration
 
-# unix
+set( build_options
+    "-DCMAKE_PREFIX_PATH=${build_dir}"
+    -DOPENEXR_BUILD_PYTHON=ON
+)
 
-IF( UNIX )
-
-    # download
-    SET( build_download 
-        ${download} ${project_url}
+if( WIN32 )
+    set( build_prepare ${build_python_check} )
+    # patches
+    build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch
+        "${project_src_dir}/msvc/python-debug-postfix.patch"
+        "${project_src_dir}/msvc/export-keycode-comparison.patch"
     )
-
-    # tar uncompress
-    SET( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
-
     # options
-    if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=TRUE )
-    ELSE()
-        SET( build_options -DBUILD_SHARED_LIBS=FALSE )
-    ENDIF()
-
-    # configure, make and install
-    SET( build_make
-        ${build_env} &&
-        cd ${project_pkg} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DZLIB_ROOT=${build_dir}
-              -DOPENEXR_BUILD_PYTHON_LIBS=TRUE
-              -DCMAKE_INSTALL_PREFIX=${build_dir}
-              -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-              ${build_options} &&
-        make ${build_flags} &&
-        make install
+    list( APPEND build_options
+        -DBUILD_TESTING=OFF
+        -DOPENEXR_INSTALL_DOCS=OFF
+        "-DImath_DIR=${build_lib_dir}/cmake/Imath"
+        ${build_python_options}
     )
+
+    set( build_output ${lib_output} ${runtime_output} ${bin_output} ${inc_output} ${cmake_output} ${sitepackages_output} )
+
+    build_add_dependencies( ${project_name} imath pybind )
+else()
+    if( APPLE )
+        build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch
+            "${project_src_dir}/python-debug-postfix.patch"
+        )
+    endif()
 
     # scripts
     set( build_output ${bin_output} )
@@ -153,37 +159,34 @@ IF( UNIX )
         set( build_output ${build_output} ${lib_output} )
     endif()
 
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+    build_install_script(
+        "${build_output}"
+        ${build_dir}
+        ${build_prefix_lib}
+        ${build_prefix_framework}
         build_script
     )
 
-    build_install_check( 
-        "${build_output}" 
-        build_check
+    set( build_output ${bin_output} ${lib_output} ${sitepackages_output} )
+
+    list( APPEND build_options
+        "-DZLIB_ROOT=${build_dir}"
+        "-DPython3_EXECUTABLE=${build_python3}"
     )
 
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_patch}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )     
-
+    build_add_dependencies( ${project_name} imath boost pybind zlib-ng )
 endif()
+
+# configure, make and install
+build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options}
+    -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+)
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )
-
-# dependencies
-build_add_dependencies( ${project_name} imath boost zlib-ng )

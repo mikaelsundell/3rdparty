@@ -35,42 +35,35 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# bin files
-set( bin_files
-    idiff
-    igrep
-    iinfo
-    iv
-    maketx
-    oiiotool
-)
-
-# inc dir
-SET( inc_dir
-    OpenImageIO
-)
-
 # lib files
-set( lib_files
-    OpenImageIO
-    OpenImageIO_Util
-)
+set( lib_files OpenImageIO OpenImageIO_Util )
 
-# site-packages
-set( sitepackages_files
-    OpenImageIO
-)
-
-if( UNIX )
-
+# platform-specific outputs
+if( WIN32 )
+    list( TRANSFORM lib_files APPEND "${build_python3_postfix}" )
+    build_add_libs( "${lib_files}" "${build_lib_dir}" "${lib_prefix}" "${lib_suffix}" lib_output )
+    build_add_files( "OpenImageIO/imageio.h" "${build_inc_dir}" inc_output )
+    build_add_files( "OpenImageIOConfig.cmake" "${build_lib_dir}/cmake/OpenImageIO" cmake_output )
+    build_add_files( "OpenImageIO${build_python3_postfix}.pyd;__init__.py" "${build_sitepackages_dir}/OpenImageIO" sitepackages_output )
+else()
     # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
+    set( bin_files
+        idiff
+        igrep
+        iinfo
+        iv
+        maketx
+        oiiotool
     )
 
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
+    # site-packages
+    set( sitepackages_files
+        OpenImageIO
+    )
+
+    # bin files
+    build_add_files(
+        "${bin_files}" "${build_bin_dir}" bin_output
     )
 
     # lib files
@@ -81,7 +74,7 @@ if( UNIX )
     set( lib_version "3.1.8" )
 
     foreach( lib_file ${lib_files} )
-        list( APPEND lib_output 
+        list( APPEND lib_output
             ${build_lib_dir}/${lib_prefix}${lib_file}${lib_dtag}.${lib_version}${lib_suffix}
         )
     endforeach()
@@ -89,36 +82,48 @@ if( UNIX )
     # site packages files
     foreach( lib_file ${sitepackages_files} )
         if ( APPLE )
-            list( APPEND lib_output 
+            list( APPEND lib_output
                 ${build_sitepackages_dir}/OpenImageIO/${lib_file}.cpython-${build_python3_versiontag}-darwin${sitepackage_suffix}
             )
-        endif()    
+        endif()
     endforeach()
-
 endif()
 
 # build configuration
 
-# unix
-
-if( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
+if( WIN32 )
+    set( build_prepare ${build_python_check} )
+    # patches
+    set( patch "${project_src_dir}/msvc/python-debug-postfix.patch" )
+    build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch "${patch}" )
+    set( build_runtime_path "${build_dir}/bin" "${build_lib_dir}" )
+    # options
+    set( build_options
+        -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+        "-DCMAKE_PREFIX_PATH=${build_dir}"
+        "-DPYTHON_SITE_DIR=${build_sitepackages_dir}/OpenImageIO"
+        -DUSE_PYTHON=ON
+        -DOIIO_BUILD_TESTS=OFF
+        -DUSE_FFMPEG=OFF
+        -DCMAKE_DISABLE_FIND_PACKAGE_libjpeg-turbo=ON
+        -DPYBIND11_FINDPYTHON=ON
+        ${build_python_options}
+        ${build_python_find_options}
     )
 
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
+    # configure, make and install
+    build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options} )
 
+    set( build_output ${lib_output} ${runtime_output} ${inc_output} ${cmake_output} ${sitepackages_output} )
+else()
     # options
     if( CMAKE_BUILD_TYPE STREQUAL Debug )
         set( build_options debug )
     endif()
 
     # cmake flags
+
+    set( build_cmakeflags ${build_cmakeflags} -G Ninja )
 
     # Boost - use non cmake
     set( build_cmakeflags ${build_cmakeflags} -DBoost_NO_BOOST_CMAKE:BOOL=OFF )
@@ -129,17 +134,8 @@ if( UNIX )
     # cmake prefix path
     set( build_cmakeflags ${build_cmakeflags} -DCMAKE_PREFIX_PATH=${build_dir} )
 
-    # dependencies
-    # JPEGTurbo = Not used
-    # OpenColorIO = Not used
-    # Rebuild after oiio build as OpenColorIO requires oiio
-    # OpenCV = Not used
-    # LibHeif = Not used
-    # OpenVDB = Not used
-    # PTex = Not used
-    # R3DSDK = Not used
-    # Nuke = Not used
-    # Libsquish = Not used
+    # Use the project's JPEG library, as on Windows.
+    set( build_cmakeflags ${build_cmakeflags} -DCMAKE_DISABLE_FIND_PACKAGE_libjpeg-turbo=ON )
 
     set( build_config ${build_config} Boost_ROOT=${build_dir} )
     set( build_config ${build_config} FFmpeg_ROOT=${build_dir} )
@@ -154,6 +150,7 @@ if( UNIX )
     set( build_config ${build_config} USE_TBB=0 )
 
     # make and install
+    string( JOIN " " build_cmakeflags ${build_cmakeflags} )
     set( build_make
     	cd ${project_pkg} &&
     )
@@ -163,19 +160,24 @@ if( UNIX )
         ${build_make}
         export CMAKE_PREFIX_PATH=${build_dir}:${build_cmake_dir} &&
     )
-    
+
     set( build_make
         ${build_make}
-        export PATH=${build_bin_dir}:$$PATH &&
-        export PKG_CONFIG_PATH=${build_pkgconfig_dir}:$$PKG_CONFIG_PATH &&
+        export PATH=${build_bin_dir}:$PATH &&
+        export PKG_CONFIG_PATH=${build_pkgconfig_dir}:$PKG_CONFIG_PATH &&
+        export CMAKE_BUILD_PARALLEL_LEVEL=${num_cpus} &&
         make clean &&
         make
+            USE_NINJA=1
             INSTALL_PREFIX=${build_dir}
-            MY_CMAKE_FLAGS="${build_cmakeflags}"
+            "MY_CMAKE_FLAGS=\"${build_cmakeflags}\""
             ${build_options}
             ${build_config}
     )
-    
+
+    string( JOIN " " build_make ${build_make} )
+    set( build_make COMMAND sh -c "${build_make}" )
+
     # scripts
     set( build_output ${bin_output} )
 
@@ -183,36 +185,35 @@ if( UNIX )
         set( build_output ${build_output} ${lib_output} )
     endif()
 
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
-        build_script 
+    build_install_script(
+        "${build_output}"
+        ${build_dir}
+        ${build_prefix_lib}
+        ${build_prefix_framework}
+        build_script
     )
 
-    build_install_check( 
-        "${build_output}" 
+    build_install_check(
+        "${build_output}"
         build_check
     )
 
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
+    set( build_output ${bin_output} ${lib_output} )
 endif()
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )
 
-# dependencies
-build_add_dependencies( ${project_name} boost freetype glew jasper giflib jpeg libpng libraw libwebp ocio openjpeg openexr pkg-config ptex pybind tiff ffmpeg zlib-ng )
+build_add_dependencies( ${project_name} boost freetype glew jasper giflib jpeg libpng libraw libwebp ocio openjpeg openexr ptex pybind tiff zlib-ng )
+
+if( WIN32 )
+    build_add_dependencies( ${project_name} onetbb )
+else()
+    build_add_dependencies( ${project_name} pkg-config ffmpeg )
+endif()

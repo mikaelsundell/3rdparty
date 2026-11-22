@@ -32,41 +32,24 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# inc dir
-set( inc_dir
-    tclap
-)
-
-if( UNIX )
-
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" include_output
-    )
-    
-ENDIF()
+# inc dir and files
+set( inc_dir tclap )
+set( inc_files tclap/CmdLine.h )
+build_add_dir( "${inc_dir}" "${build_inc_dir}" dir_output )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
 
 # build configuration
 
-# unix
-
-IF( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
+if( WIN32 )
+    set( build_make
+        COMMAND ${copy_dir} "${project_bin_dir}/${project_pkg}/include/tclap" "${build_inc_dir}/tclap"
     )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
-    )
-
+else()
     # configure, make and install
     set( build_make
         ${build_env} &&
         cd ${project_pkg} &&
-        ./configure 
+        ./configure
             --prefix=${build_dir}
             ${CFLAGS}
             CPPFLAGS=-I${build_inc_dir}
@@ -75,23 +58,16 @@ IF( UNIX )
         make install
     )
 
-    # scripts
-    if ( CMAKE_SHARED_LIBS )
-        set( build_output ${build_output} ${lib_output} )
-    endif()
-    
-    # run
-    add_custom_command(
-        OUTPUT ${include_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-    )
-
+    string( JOIN " " build_make ${build_make} )
+    set( build_make COMMAND sh -c "${build_make}" )
 endif()
+
+# run
+set( build_output ${inc_output} )
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${include_output}
+    DEPENDS ${build_output} ${dir_output}
 )

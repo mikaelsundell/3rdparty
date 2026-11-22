@@ -54,82 +54,60 @@ set( lib_files
 set( pkg_files
 )
 
-IF( UNIX )
+# bin files
+build_add_files(
+    "${bin_files}" "${build_bin_dir}" bin_output
+)
 
-    # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
-    )
+# inc files
+build_add_files(
+    "${inc_files}" "${build_inc_dir}" inc_output
+)
 
-    # inc files
-    build_add_files( 
-        "${inc_files}" "${build_inc_dir}" inc_output
-    )
+# lib files
+# yasm only provides static libraries
+build_add_libs(
+    "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${static_lib_suffix} lib_output
+)
 
-    # lib files
-    # yasm only provides static libraries
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${static_lib_suffix} lib_output
-    )
-
-    # pkg files
-    build_add_files( 
-        "${pkg_files}" "${build_lib_dir}/pkgconfig" pkg_output
-    )
-    
-endif()
+# pkg files
+build_add_files(
+    "${pkg_files}" "${build_lib_dir}/pkgconfig" pkg_output
+)
 
 # build configuration
 
-# unix
+# configure, make and install
+SET( build_make
+    ${build_env} &&
+    cd ${project_pkg} &&
+    ./configure
+        --prefix=${build_dir}
+        CFLAGS=-I${build_inc_dir}
+        CPPFLAGS=-I${build_inc_dir}
+        LDFLAGS=-L${build_lib_dir}
+        ${build_options} &&
+    make ${build_flags} &&
+    make install
+)
 
-IF( UNIX )
+string( JOIN " " build_make ${build_make} )
+set( build_make COMMAND sh -c "${build_make}" )
 
-    # download
-    SET( build_download 
-        ${download} ${project_url}
-    )
+# scripts
+set( build_output ${bin_output} ${lib_output} )
 
-    # tar uncompress
-    SET( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
+build_install_check(
+    "${build_output}"
+    build_check
+)
 
-    # configure, make and install
-    SET( build_make
-        ${build_env} &&
-        cd ${project_pkg} &&
-        ./configure 
-            --prefix=${build_dir}
-            CFLAGS=-I${build_inc_dir}
-            CPPFLAGS=-I${build_inc_dir}
-            LDFLAGS=-L${build_lib_dir}
-            ${build_options} &&
-        make ${build_flags} &&
-        make install
-    )
-
-    # scripts
-    set( build_output ${bin_output} ${lib_output} )
-
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-
-    # run
-    ADD_CUSTOM_COMMAND( 
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_check}
-    )
-
-endif()
+# run
+set( build_output ${bin_output} ${lib_output} )
+build_add_archive_rule()
 
 # Custom target builds missing or outdated installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${lib_output}
+    DEPENDS ${build_output}
 )

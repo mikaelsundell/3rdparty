@@ -1,0 +1,18 @@
+--- a/sources/shiboken6/shibokenmodule/files.dir/shibokensupport/signature/layout.py
++++ b/sources/shiboken6/shibokenmodule/files.dir/shibokensupport/signature/layout.py
+@@ -31,4 +31,4 @@
+ from shibokensupport.signature.parser import using_snake_case
+ from shibokensupport.signature import make_snake_case_name
+-from collections.abc import Sequence, Iterable
++from collections.abc import Callable, Sequence, Iterable
+ 
+@@ -352,5 +352,9 @@
+                 if last == _VAR_POSITIONAL:
+                     kind = _KEYWORD_ONLY
+         if default is None:
++            # Python 3.9.0 can store Callable's parameters in an unhashable list.
++            if sys.version_info[:3] == (3, 9, 0) and isinstance(ann, types.GenericAlias):
++                if ann.__origin__ is Callable and ann.__args__ and isinstance(ann.__args__[0], list):
++                    ann = typing.Callable[ann.__args__]
+             ann = typing.Union[ann]
+             ann = typing.Optional[ann]

@@ -1,0 +1,3 @@
+#!/bin/sh
+# SPDX-License-Identifier: BSD-3-Clause
+exec "${THIRDPARTY_PYTHON:?Start tools/3rdparty-shell.sh first}" "$@"

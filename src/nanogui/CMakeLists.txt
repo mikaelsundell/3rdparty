@@ -31,113 +31,94 @@ set( project_src_dir
 set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
-# inc dir
-SET( inc_dir
-    nanogui
-)
 
 # lib files
 set( lib_files
     nanogui
 )
 
-if( UNIX )
-
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
-    )
-
-    # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
-    )
-    
-ENDIF()
+# lib files
+build_add_libs(
+    "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
+)
 
 # build configuration
 
-# unix
-
-IF( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
+if( APPLE )
+    build_patch_commands( "${project_bin_dir}/${project_name}" build_patch
+        "${project_src_dir}/macos-deployment-target.patch"
     )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
-    )
-
-    # options
-    if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=true )
-    else()
-        SET( build_options -DBUILD_SHARED_LIBS=false )
-    endif()
-
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-        cd ${project_name} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            ${build_options} &&
-        make ${build_flags} &&
-        make install
-    )
-
-    # copy include
-    set( build_include
-        cd ${project_name} &&
-        ${copy_dir} ./ext/glfw/include/GLFW ${build_dir}/include/GLFW &&
-        ${copy} ./ext/nanovg/src/fontstash.h ${build_dir}/include/fontstash.h &&
-        ${copy} ./ext/nanovg/src/nanovg_gl_utils.h ${build_dir}/include/nanovg_gl_utils.h &&
-        ${copy} ./ext/nanovg/src/nanovg_gl.h ${build_dir}/include/nanovg_gl.h &&
-        ${copy} ./ext/nanovg/src/nanovg.h ${build_dir}/include/nanovg.h &&
-        ${copy} ./ext/nanovg/src/stb_image.h ${build_dir}/include/stb_image.h &&
-        ${copy} ./ext/nanovg/src/stb_truetype.h ${build_dir}/include/stb_truetype.h
-    )
-
-    # scripts
-    if ( CMAKE_SHARED_LIBS )
-        set( build_output ${build_output} ${lib_output} )
-    endif()
-    
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
-        build_script
-    )
-
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_include}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
 endif()
+
+# options
+if( CMAKE_SHARED_LIBS )
+    SET( build_options -DBUILD_SHARED_LIBS=true )
+else()
+    SET( build_options -DBUILD_SHARED_LIBS=false )
+endif()
+
+if( APPLE )
+    list( APPEND build_options -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET} )
+endif()
+
+# configure, make and install
+set( build_make
+    ${build_env} &&
+    cd ${project_name} &&
+    mkdir -p ${build_cmake} &&
+    cd ${build_cmake} &&
+    cmake ../ -G \"${CMAKE_GENERATOR}\" -DCMAKE_INSTALL_PREFIX=${build_dir}
+        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+        ${build_options} &&
+    cmake --build . --parallel ${num_cpus} -- -l ${num_cpus} &&
+    cmake --install .
+)
+
+# copy include
+set( build_include
+    cd ${project_name} &&
+    "\"${CMAKE_COMMAND}\" -E copy_directory" ./ext/glfw/include/GLFW ${build_dir}/include/GLFW &&
+    ${copy} ./ext/nanovg/src/fontstash.h ${build_dir}/include/fontstash.h &&
+    ${copy} ./ext/nanovg/src/nanovg_gl_utils.h ${build_dir}/include/nanovg_gl_utils.h &&
+    ${copy} ./ext/nanovg/src/nanovg_gl.h ${build_dir}/include/nanovg_gl.h &&
+    ${copy} ./ext/nanovg/src/nanovg.h ${build_dir}/include/nanovg.h &&
+    ${copy} ./ext/nanovg/src/stb_image.h ${build_dir}/include/stb_image.h &&
+    ${copy} ./ext/nanovg/src/stb_truetype.h ${build_dir}/include/stb_truetype.h
+)
+
+string( JOIN " " build_make ${build_make} )
+string( JOIN " " build_include ${build_include} )
+set( build_make
+    COMMAND sh -c "${build_make}"
+    COMMAND sh -c "${build_include}"
+)
+
+# scripts
+if ( CMAKE_SHARED_LIBS )
+    set( build_output ${build_output} ${lib_output} )
+endif()
+
+build_install_script(
+    "${build_output}"
+    ${build_dir}
+    ${build_prefix_lib}
+    ${build_prefix_framework}
+    build_script
+)
+
+build_install_check(
+    "${build_output}"
+    build_check
+)
+
+# run
+set( build_output ${bin_output} ${lib_output} )
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${lib_output}
+    DEPENDS ${build_output}
 )
 
 # dependencies

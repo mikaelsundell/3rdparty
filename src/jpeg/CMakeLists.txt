@@ -32,6 +32,14 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
+# inc files
+set( inc_files
+    jconfig.h
+    jerror.h
+    jmorecfg.h
+    jpeglib.h
+)
+
 # bin files
 set( bin_files
     cjpeg
@@ -41,59 +49,47 @@ set( bin_files
     wrjpgcom
 )
 
-# inc files
-set( inc_files
-    jconfig.h
-    jerror.h
-    jmorecfg.h
-    jpeglib.h
-)
-
-# lib files
-SET( lib_files
-    jpeg.9
-)
-# 9.3.0 is not built on apple
-if( LINUX )
-    SET( ${lib_files}
-         jpeg.9.3.0
-    )
-endif()
-
-if( UNIX )
-
-    # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
-    )
-
-    # inc files
-    build_add_files( 
-        "${inc_files}" "${build_inc_dir}" inc_output
-    )
-
+# platform-specific outputs
+if( WIN32 )
+    set( lib_files jpeg )
+    list( TRANSFORM bin_files APPEND "${CMAKE_EXECUTABLE_SUFFIX}" )
+else()
     # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
+    set( lib_files
+        jpeg.9
     )
-
+    # 9.3.0 is not built on apple
+    if( LINUX )
+        set( ${lib_files}
+             jpeg.9.3.0
+        )
+    endif()
 endif()
+
+build_add_libs( "${lib_files}" "${build_lib_dir}" "${lib_prefix}" "${lib_suffix}" lib_output )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
+build_add_files( "${bin_files}" "${build_bin_dir}" bin_output )
 
 # build configuration
 
-# unix
-if( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
+if( WIN32 )
+    # patches
+    set( build_patch
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${project_src_dir}/msvc/CMakeLists.txt"
+            "${project_bin_dir}/${project_pkg}-9f/CMakeLists.txt"
+    )
+    # options
+    set( build_options
+        -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+        "-DCMAKE_PREFIX_PATH=${build_dir}"
     )
 
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
+    # configure, make and install
+    build_cmake_commands( "${project_bin_dir}/${project_pkg}-9f" build_make ${build_options} )
 
+    set( build_output ${lib_output} ${bin_output} ${inc_output} )
+else()
     # options
     if( CMAKE_SHARED_LIBS )
         set( build_options --enable-shared --disable-static )
@@ -105,47 +101,44 @@ if( UNIX )
     set( build_make
         ${build_env} &&
     	cd ${project_pkg}-9f &&
-        ./configure 
+        ./configure
             --prefix=${build_dir}
             ${build_options} &&
         make ${build_flags} &&
         make install
     )
-    
+
+    string( JOIN " " build_make ${build_make} )
+    set( build_make COMMAND sh -c "${build_make}" )
+
     # scripts
     set( build_output ${bin_output} )
 
     IF ( CMAKE_SHARED_LIBS )
         set( build_output ${build_output} ${lib_output} )
-    ENDIF()
+    endif()
 
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+    build_install_script(
+        "${build_output}"
+        ${build_dir}
+        ${build_prefix_lib}
+        ${build_prefix_framework}
         build_script
     )
 
-    build_install_check( 
-        "${build_output}" 
+    build_install_check(
+        "${build_output}"
         build_check
     )
 
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${inc_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
+    set( build_output ${bin_output} ${inc_output} ${lib_output} )
 endif()
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )

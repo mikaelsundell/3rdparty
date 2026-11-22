@@ -1,19 +1,114 @@
 3rdparty packages:
 
-In progress improvements
+Shared Mac and Windows build driver
 ---------------------------------
-* Break for Qt builds in build.sh if not successful
-* Fix verbose consistency across projects
-* Zlib pkg-config path is in root instead of lib
-* Qt and PySide use Ninja; switching other dependency recipes remains experimental
+* build.sh and build.bat start build.py, which configures and builds CMake
+  directly. CMake projects use Ninja on both platforms; Mac retains Autotools/
+  Make builds, its normal prefixes, deployment target and SDK, Qt module
+  options, and multi-config tool installation.
+* Check required Python modules for the selected Mac build using the same
+  interpreter passed to CMake. Full builds retain base, Qt, libraries/extras
+  ordering and stop when any stage fails.
+* Select Mac tool and package search paths per configuration. Remove inherited
+  project Debug/Release bin entries, append the selected prefix after system
+  tools, and set CMAKE_PREFIX_PATH and PKG_CONFIG_PATH for that prefix.
+* Build Boost's Mac dylibs with -headerpad_max_install_names so post-install
+  normalization can replace short library IDs with the install-prefix paths.
+  Include the additional Boost 1.87 dylibs in output tracking and normalization.
+* Use OPENEXR_BUILD_PYTHON for OpenEXR 3.4.6 on Mac as well as Windows. Pass
+  the selected prefix and interpreter, declare the pybind prerequisite, and
+  track the upstream python/OpenEXR module installation. The Mac patch
+  src/openexr/python-debug-postfix.patch clears the Python target's Debug suffix
+  so it imports as OpenEXR; C++ library Debug suffixes are preserved. Track the
+  new exrmanifest, exrmetrics, and exrstdattr tools for path normalization.
+* Share OCIO's disabled CPU/GPU test settings and default OpenEXR app backend
+  across platforms. OCIO tests must not discover OIIO during bootstrap, since
+  OIIO itself requires OCIO. Keep the OCIO applications enabled.
+  Forward the selected Mac deployment target explicitly because OCIO sets its
+  own 10.15 default before project(), overriding the environment's default.
+  Track and normalize all OCIO 2.5 command-line apps, including ocioarchive,
+  ociocpuinfo, and ociomergeconfigs.
+* pkg-config-0.28.tar.gz remains unchanged. The in-tree
+  src/pkg-config/reinstall-host-tool.patch replaces its host-tool hard link
+  during installation, allowing a normal repeat install into the same prefix.
+* OIIO's Mac recipe explicitly uses the project JPEG dependency, matching the
+  Windows option and avoiding optional libjpeg-turbo package discovery.
+* CMake recipes configure with the selected generator and use cmake --build
+  and cmake --install. Preserve the Mac CPU/load limits with num_cpus; the
+  driver runs one Mac package command at a time. OIIO keeps its upstream
+  wrapper and settings with USE_NINJA=1 and a bounded compiler job count.
+  Qt and PySide retain their existing Ninja configurations. Mac bootstraps
+  the existing Ninja recipe with Make in build/tools when no external Ninja
+  is available. Windows still requires Ninja on PATH. Old Makefile caches
+  require a fresh build directory when switching generators.
+* nanogui-master-240216.tar.gz remains unchanged. The in-tree
+  src/nanogui/macos-deployment-target.patch makes its hard-coded 10.14 target a
+  default, allowing the recipe to forward the selected Mac deployment target.
 
-In progress notes
+Windows base dependencies
 ---------------------------------
-* ninja moved to build_dir/ninja to not conflict in projects with clang, pyside.
-  Clang system includes will not be generated properly when 3rdparty 
-  clang binaries are exposed prior to system clang.
+* The MSVC recipes use the existing S3 source archives.
+* Windows port patches live in the corresponding src/<package>/msvc directory.
+* giflib-5.1.4.tar.gz extracts as giflib-5.1.4. windows-exports.patch adds
+  Windows DLL import/export declarations for the font array.
+* harfbuzz-4.3.0.tar.gz extracts as harfbuzz-4.3.0. install-subset-runtime.patch
+  installs the subset DLL even when building without the CLI tools.
+* libwebp-1.2.2.tar.gz extracts as libwebp-1.2.2. msvc-tool-data-imports.patch
+  selects the upstream DLL mode for the command-line tools and uses a DSP
+  function to avoid linking a data symbol from the extras tool.
+* pcre2-10.32.tar.gz extracts as pcre2-10.32. modern-cmake-tests.patch replaces
+  the removed CMake LOCATION policy with a configuration-specific test script.
+* tiff-4.0.3.tar.gz extracts as tiff-4.0.3. modern-msvc-stdio.patch retains the
+  snprintf compatibility macro for older toolchains.
+  export-exif-directory-api.patch exports the two EXIF directory functions
+  used by OpenImageIO.
+* zlib-ng-2.3.3.tar.gz extracts as zlib-ng-2.3.3.
+  windows-pkg-config-library.patch records the MSVC library name in zlib.pc.
+* The MSVC recipes in src/bzip2/msvc, src/giflib/msvc, src/jpeg/msvc, and
+  src/tiff/msvc supply build entry points for archives without upstream CMake
+  projects. jpegsrc.v9f.tar.gz extracts as jpeg-9f.
 
-Fixes:
+Windows libraries and extras
+---------------------------------
+* lcms2-master.tar.gz and libraw-0.21.1.tar.gz use native MSVC CMake entry
+  points in their recipe's msvc directory.
+* ceres-solver-master.tar.gz extracts as ceres-solver-master.
+  ignore-appledouble-sources.patch excludes the macOS resource metadata
+  entries accompanying generated C++ sources in the archive.
+* ptex-master-220319.tar.gz extracts as ptex. cmake-zlib-dependency.patch
+  resolves the exported Ptex target's ZLIB::ZLIB dependency through CMake.
+* OpenSubdiv-master-250306.tar.gz extracts as OpenSubdiv.
+  cmake-tbb-dependency.patch resolves oneTBB for the exported static targets.
+* boost_1_87_0.tar.gz extracts as boost_1_87_0. The MSVC recipe selects the
+  Python Debug ABI in B2. cmake-debug-python-definition.patch exports the
+  matching BOOST_DEBUG_PYTHON definition on the installed Boost targets.
+* OpenColorIO-2.5.0.tar.gz extracts as OpenColorIO-2.5.0 and
+  OpenImageIO-3.1.8.0.tar.gz extracts as OpenImageIO-3.1.8.0. Their respective
+  msvc/python-debug-postfix.patch files install Debug extensions with the
+  _d.pyd postfix expected by Windows Debug CPython.
+* pybind11-2.9.1.tar.gz extracts as pybind11-2.9.1. debug-python-abi.patch
+  exports Py_DEBUG for MSVC Debug consumers, including OpenEXR, MaterialX
+  and OpenTimelineIO. dependent-rvalue-cast.patch selects the intended
+  conversion for rvalue string casters under MSVC.
+* openexr-3.4.6.tar.gz extracts as openexr-3.4.6.
+  Its python-debug-postfix.patch gives the Debug module a stable _d.pyd name
+  and uses the Python3::Module linkage from Python3_add_library.
+  export-keycode-comparison.patch exports KeyCode::operator== for the Python
+  bindings on Windows (OpenEXR PR #2594, commit 964631f85b4e).
+* pyside-setup-6.10.1.tar.gz extracts as pyside-setup-6.10.1.
+  designer-python-api.patch keeps the Qt
+  Designer bindings on the same full Python API as the rest of PySide.
+  detect-debug-python.patch detects Windows Debug CPython when sysconfig
+  does not expose Py_DEBUG. load-sdk-dlls.patch lets Shiboken and PySide
+  load the runtime DLLs from their own install prefix.
+  python39-callable-annotations.patch normalizes Callable annotations from
+  Python 3.9.0 so QtCore type stubs can be generated.
+* OpenUSD-25.11.tar.gz extracts as OpenUSD-25.11.
+  contain-python-copysign-macro.patch keeps the Windows CPython macro from
+  rewriting C++ calls to std::copysign.
+  sort-hydra-repr-selectors.patch orders the Hydra render index's representation
+  selectors before the dirty list merges them. An unordered list can trigger
+  MSVC's Debug STL assertion during viewport startup.
 
 bzip2 / freetype
 ---------------------------------
@@ -46,61 +141,34 @@ qt 6.10.1
 * Disable dup3 for compatibility with macOS deployment targets before 27.
 * Use Qt's default multi-config build/install targets so Release tools such as
   moc are installed alongside Debug frameworks.
+* qt-everywhere-src-6.10.1.tar.xz extracts as qt-everywhere-src-6.10.1 on
+  Windows. The MSVC build uses Qt Multimedia's native Windows backend.
+  SHA256: 0ed08b079719394303cd2054b66b2dc0c5895ceeb88fb6131c18991c980bf00f
 * Stop on Qt build/install failures and require PySide's Qt package from the
   selected prefix to avoid mixing Debug and Release Qt/LLVM libraries.
 
-boost
----------------------------------
-* TODO: Fix numpy python dependency on Mac M1/ arm64
-
-eigen
------
-CMakeLists.txt
-* Line 695: Removed export PACKAGE to prevent conflict with install
-
-nasm
----------------------------------
-* Build with empty nasm.1 and ndisasm.1 to skip pdf documentation dependencies
-
-ocio
----------------------------------
-src/bindings/python/CMakeLists.txt
-* Line 241-249: Added PYTHON_SITE_DIR for site-packages
-
-ocio
----------------------------------
-* TODO: Fix libyaml dependency
-* TODO: Fix pystring dependency
-
-opencv
----------------------------------
-* Requires cmake > 3.27.0 for file download
-
-Bug 24093:
-https://gitlab.kitware.com/cmake/cmake/-/issues/24093
-
-ptex
----------------------------------
-CMakeLists.txt
-* Line 40: Removed pkgconfig from cmake
-* TODO: Remove export PACKAGE to prevent conflict with install
-
-pcre2
----------------------------------
-* CMakeLists.txt: Added DPCRE2_BUILD_PCRE2_16 to build for 16 bit character support
-
-pyside
----------------------------------
-sources/pyside6/cmake/Macros/PySideModules.cmake
-* Line 355: Added "${CMAKE_BINARY_DIR}/sources" for build path to Shiboken6
-
-zlib
----------------------------------
-CMakeLists.txt
-* Fixed pkgconfig for CMake
 
 openusd
 ---------------------------------
+* OpenUSD-25.11.tar.gz extracts as OpenUSD-25.11; keep the original S3 archive.
+  SHA256: 73ebbed5ac930d0bfafe0d282eb8dcdc12935d0a88b8d96fea5a6453f58c54d8
+* Disable upstream USD unit tests in the Mac SDK build, matching Windows.
+  OpenUSD 25.11 testVdfSpeculation includes ef/executor.h without declaring ef
+  as a prerequisite and can fail in a fresh parallel build. The SDK recipe
+  does not run these tests. Keep the production libraries, bindings and tools.
+* Add the selected prefix's lib/python<version>/site-packages to the Mac USD
+  build environment so CMake can import its installed PySide6 prerequisite.
+* Apply src/openusd/sdr-unused-include.patch on both platforms before CMake.
+  Upstream commit: 22b237135b439a012fe8b8b9514aaaba828b070a (fixes #3972).
+  https://github.com/PixarAnimationStudios/OpenUSD/commit/22b237135b439a012fe8b8b9514aaaba828b070a
+  Remove an unused usd/pyConversions.h include from the sdr Python wrapper.
+  sdr has no usd dependency, so a fresh Ninja build can compile the wrapper
+  before that header is staged. No additional Python package is required.
+  Patch SHA256: d4dc137ed9a71c372019f940c555862a575a733f37c53f9bb555388153c22dd0
+  Reproduced the original error and compiled the patched wrapper in Debug and
+  Release without installed USD headers. Full build/install rerun remains
+  with the user. Archive LICENSE.txt and NOTICE.txt match the copied notices.
+
 pxr/imaging/hdSt/materialXShaderGen.cpp
 
 Patch:
@@ -111,3 +179,27 @@ https://github.com/mistafunk/USD/commit/4978aa8143bdd64f07c410828278aacf1b2bb005
 Amazon S3:
 --------------------------------- 
 * https://s3.console.aws.amazon.com/s3/buckets/mikaelsundell
+
+Existing Mac SDK runtime observation
+---------------------------------
+* In the previously built OpenUSD 25.11 Mac Debug and Release SDKs, importing
+  pxr.Tf alone segfaults during Python shutdown. This also reproduces outside
+  the new SDK shell. Loading Usd and creating an in-memory stage exits cleanly.
+  No OpenUSD source change or runtime workaround has been applied here.
+
+Shared lean LLVM recipe
+-----------------------
+* Keep llvm-project-20.1.3.src.tar.xz and rdf-comparators.patch unchanged.
+  Share the existing Windows LLVM/Clang options and configure/build/install
+  helper between platforms. Disable tests, examples, benchmarks, LLVM tools,
+  and optional zlib, zstd, and libxml2 dependencies. Limit compilation to four
+  jobs and linking to one job.
+* Windows retains its X86 backend, static LLVM components, and libclang DLL.
+  Mac retains shared libraries and the Clang driver for PySide header discovery,
+  builds only the native AArch64 or X86 backend, and disables unrelated Clang
+  tool directories. Track the installed driver aliases, TableGen tools, shared
+  libraries, compiler resources, headers, and LLVM/Clang CMake exports.
+* Isolate Git patch application from the enclosing checkout using the extracted
+  source's parent as GIT_CEILING_DIRECTORIES. Otherwise Git can silently skip
+  archive-relative paths under an ignored build directory. Allow the existing
+  LLVM backport's zero-context hunks and report applied files explicitly.

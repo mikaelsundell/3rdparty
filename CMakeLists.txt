@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # https://github.com/mikaelsundell/3rdparty
 #
-# Master CMakeLists.txt for 3rdparty. Run 'make help' for build options.
+# Master CMakeLists.txt for 3rdparty. Run the build launcher with --help for options.
 
 cmake_minimum_required( VERSION 3.27 )
 
@@ -40,13 +40,6 @@ set( build_extras
     CACHE
     BOOL
     "Build extras"
-)
-
-set( build_media
-    OFF
-    CACHE
-    BOOL
-    "Build media" 
 )
 
 set( build_summary
@@ -109,7 +102,6 @@ set( build_pkgconfig_dir ${build_dir}/pkgconfig )
 set( build_plugins_dir ${build_dir}/plugins )
 set( build_python_dir ${build_dir}/python )
 set( build_test_dir ${build_dir}/test )
-set( build_media_dir ${build_dir}/media )
 set( build_cmake_dir ${build_dir}/cmake )
 
 IF( APPLE )
@@ -140,7 +132,10 @@ endif()
 
 # test if wget is present
 find_program( wget wget )
-if ( wget )
+if( WIN32 )
+    set( download curl.exe --fail --location --remote-name )
+    set( untar ${CMAKE_COMMAND} -E tar xf )
+elseif ( wget )
     SET( download wget -N --verbose )
 else()
     set( download curl -OJL --verbose )
@@ -203,6 +198,8 @@ if(UNIX)
         build_python3_library
     )
     get_filename_component(build_python3_library_dir "${build_python3_library}" DIRECTORY)
+elseif( WIN32 )
+    include( windows_python )
 endif()
 
 # define environment
@@ -239,87 +236,110 @@ if( build_base )
     build_add_project( 
               bzip2
               DIR ${CMAKE_SOURCE_DIR}/src/bzip2
+              WIN32
               DESCRIPTION "Bzip2"
               BUILD ON
     )
     build_add_project(
               boost
               DIR ${CMAKE_SOURCE_DIR}/src/boost
+              WIN32
               DESCRIPTION "Boost C++ Libraries"
               BUILD ON
     )
     build_add_project(
               jasper
               DIR ${CMAKE_SOURCE_DIR}/src/jasper
+              WIN32
               DESCRIPTION "Jasper"
               BUILD ON
     )
     build_add_project(
               giflib
               DIR ${CMAKE_SOURCE_DIR}/src/giflib
+              WIN32
               DESCRIPTION "Giflib"
               BUILD ON
     )
     build_add_project(
               jpeg
               DIR ${CMAKE_SOURCE_DIR}/src/jpeg
+              WIN32
               DESCRIPTION "Jpeg"
               BUILD ON
     )
     build_add_project(
               freetype
               DIR ${CMAKE_SOURCE_DIR}/src/freetype
+              WIN32
               DESCRIPTION "Freetype"
               BUILD ON
     )
     build_add_project(
               harfbuzz
               DIR ${CMAKE_SOURCE_DIR}/src/harfbuzz
+              WIN32
               DESCRIPTION "Harfbuzz"
               BUILD ON
     )
     build_add_project(
               libpng
               DIR ${CMAKE_SOURCE_DIR}/src/libpng
+              WIN32
               DESCRIPTION "LibPNG"
               BUILD ON
     )
     build_add_project(
               libwebp
               DIR ${CMAKE_SOURCE_DIR}/src/libwebp
+              WIN32
               DESCRIPTION "LibWebp"
               BUILD ON
     )
     build_add_project(
               ninja
               DIR ${CMAKE_SOURCE_DIR}/src/ninja
+              WIN32
               DESCRIPTION "Ninja"
               BUILD ON
     )
     build_add_project(
               openjpeg
               DIR ${CMAKE_SOURCE_DIR}/src/openjpeg
+              WIN32
               DESCRIPTION "OpenJpeg"
               BUILD ON
     )
     build_add_project(
               pcre2
               DIR ${CMAKE_SOURCE_DIR}/src/pcre2
+              WIN32
               DESCRIPTION "Pcre2"
               BUILD ON
     )
     build_add_project(
               tiff
               DIR ${CMAKE_SOURCE_DIR}/src/tiff
+              WIN32
               DESCRIPTION "LibTiff - TIFF Libraries and Utilities"
               BUILD ON
     )
     build_add_project(
               zlib-ng
               DIR ${CMAKE_SOURCE_DIR}/src/zlib-ng
+              WIN32
               DESCRIPTION "Zlib-ng"
               BUILD ON
     )
+endif()
+
+if( build_qt_prerequisites )
+    add_custom_target( qt-prerequisites )
+    if( WIN32 )
+        build_add_dependencies( qt-prerequisites jpeg libpng zlib-ng ninja )
+    else()
+        build_add_dependencies( qt-prerequisites freetype harfbuzz jasper jpeg libpng libwebp pcre2 tiff zlib-ng ninja )
+    endif()
 endif()
 
 if( build_libs )
@@ -334,30 +354,35 @@ if( build_libs )
     build_add_project(
               glew
               DIR ${CMAKE_SOURCE_DIR}/src/glew
+              WIN32
               DESCRIPTION "The OpenGL Extension Wrangler Library"
               BUILD ON
     )
     build_add_project(
               glm
               DIR ${CMAKE_SOURCE_DIR}/src/glm
+              WIN32
               DESCRIPTION "OpenGL Mathematics (GLM)"
               BUILD ON
     )
     build_add_project(
               imath
               DIR ${CMAKE_SOURCE_DIR}/src/imath
+              WIN32
               DESCRIPTION "Imath"
               BUILD ON
     )
     build_add_project(
               lcms2
               DIR ${CMAKE_SOURCE_DIR}/src/lcms2
+              WIN32
               DESCRIPTION "Lcms2"
               BUILD ON
     )
     build_add_project(
               libraw
               DIR ${CMAKE_SOURCE_DIR}/src/libraw
+              WIN32
               DESCRIPTION "LibRaw"
               BUILD ON
     )
@@ -370,12 +395,14 @@ if( build_libs )
     build_add_project(
               oiio
               DIR ${CMAKE_SOURCE_DIR}/src/oiio
+              WIN32
               DESCRIPTION "OpenImageIO"
               BUILD ON
     )
     build_add_project(
               ocio
               DIR ${CMAKE_SOURCE_DIR}/src/ocio
+              WIN32
               DESCRIPTION "OpenColorIO"
               BUILD ON
     )
@@ -388,6 +415,7 @@ if( build_libs )
     build_add_project(
               openexr
               DIR ${CMAKE_SOURCE_DIR}/src/openexr
+              WIN32
               DESCRIPTION "OpenEXR"
               BUILD ON
     )
@@ -400,12 +428,14 @@ if( build_libs )
     build_add_project(
               ptex
               DIR ${CMAKE_SOURCE_DIR}/src/ptex
+              WIN32
               DESCRIPTION "ptex"
               BUILD ON
     )
     build_add_project(
               pybind
               DIR ${CMAKE_SOURCE_DIR}/src/pybind
+              WIN32
               DESCRIPTION "Pybind"
               BUILD ON
     )
@@ -453,66 +483,77 @@ if( build_extras )
     build_add_project(
               alembic
               DIR ${CMAKE_SOURCE_DIR}/src/alembic
+              WIN32
               DESCRIPTION "alembic"
               BUILD ON
     )
     build_add_project(
               ceres-solver
               DIR ${CMAKE_SOURCE_DIR}/src/ceres-solver
+              WIN32
               DESCRIPTION "ceres-solver"
               BUILD ON
     )    
     build_add_project(
               draco
               DIR ${CMAKE_SOURCE_DIR}/src/draco
+              WIN32
               DESCRIPTION "draco"
               BUILD ON
     )
     build_add_project(
               eigen3
               DIR ${CMAKE_SOURCE_DIR}/src/eigen
+              WIN32
               DESCRIPTION "eigen"
               BUILD ON
     )
     build_add_project(
               glog
               DIR ${CMAKE_SOURCE_DIR}/src/glog
+              WIN32
               DESCRIPTION "glog"
               BUILD ON
     )  
     build_add_project(
               json
               DIR ${CMAKE_SOURCE_DIR}/src/json
+              WIN32
               DESCRIPTION "json"
               BUILD ON
     )
     build_add_project(
               libjpeg-turbo
               DIR ${CMAKE_SOURCE_DIR}/src/libjpeg-turbo
+              WIN32
               DESCRIPTION "libJpeg-turbo"
               BUILD ON
     )
     build_add_project(
               llvm
               DIR ${CMAKE_SOURCE_DIR}/src/llvm
+              WIN32
               DESCRIPTION "LLVM"
               BUILD ON
     )
     build_add_project(
               materialx
               DIR ${CMAKE_SOURCE_DIR}/src/materialx
+              WIN32
               DESCRIPTION "MaterialX"
               BUILD ON
     )
     build_add_project(
               minizip-ng
               DIR ${CMAKE_SOURCE_DIR}/src/minizip-ng
+              WIN32
               DESCRIPTION "minizip-ng"
               BUILD ON
     )
     build_add_project(
               nanobind
               DIR ${CMAKE_SOURCE_DIR}/src/nanobind
+              WIN32
               DESCRIPTION "nanobind"
               BUILD ON
     )
@@ -525,75 +566,53 @@ if( build_extras )
     build_add_project(
               onetbb
               DIR ${CMAKE_SOURCE_DIR}/src/onetbb
+              WIN32
               DESCRIPTION "Onetbb"
               BUILD ON
     )
     build_add_project(
               opensubdiv
               DIR ${CMAKE_SOURCE_DIR}/src/opensubdiv
+              WIN32
               DESCRIPTION "opensubdiv"
               BUILD ON
     )
     build_add_project(
               rapidjson
               DIR ${CMAKE_SOURCE_DIR}/src/rapidjson
+              WIN32
               DESCRIPTION "RapidJSON"
               BUILD ON
     )
     build_add_project(
               tclap
               DIR ${CMAKE_SOURCE_DIR}/src/tclap
+              WIN32
               DESCRIPTION "tclap"
               BUILD ON
     )
     build_add_project(
               opentimelineio
               DIR ${CMAKE_SOURCE_DIR}/src/opentimelineio
+              WIN32
               DESCRIPTION "OpenTimelineIO"
               BUILD ON
     )
     build_add_project(
               pyside
               DIR ${CMAKE_SOURCE_DIR}/src/pyside
+              WIN32
               DESCRIPTION "pyside"
               BUILD ON
     )
     build_add_project(
               openusd
               DIR ${CMAKE_SOURCE_DIR}/src/openusd
+              WIN32
               DESCRIPTION "openusd"
               BUILD ON
     )
 
-endif()
- 
-if( build_media )
-
-    build_info( "Adding media" )
-    build_add_project(
-              jpeg2000_images
-              DIR ${CMAKE_SOURCE_DIR}/src/jpeg2000_images
-              DESCRIPTION "Jpeg2000 images"
-              BUILD ON
-    )
-    build_add_project(
-              ocio-images
-              DIR ${CMAKE_SOURCE_DIR}/src/ocio-images
-              DESCRIPTION "OpenColorIO images"
-              BUILD ON
-    )
-    build_add_project(
-              oiio-images
-              DIR ${CMAKE_SOURCE_DIR}/src/oiio-images
-              DESCRIPTION "OpenImageIO images"
-              BUILD ON
-    )
-    build_add_project(
-              openexr-images
-              DIR ${CMAKE_SOURCE_DIR}/src/openexr-images
-              DESCRIPTION "OpenEXR images"
-              BUILD ON
-    )
 endif()
 
 # Validate dependencies after every enabled target has been registered.
@@ -617,7 +636,6 @@ if( build_summary )
     build_info( " build_base = ${build_base}")
     build_info( " build_libs = ${build_libs}")
     build_info( " build_extras = ${build_extras}")
-    build_info( " build_media = ${build_media}")
     build_info( "Usage" )
     build_info( " Change a configuration value with: cmake -D<variable>=<value>" )
 endif()

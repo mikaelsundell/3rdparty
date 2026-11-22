@@ -33,87 +33,42 @@ set( project_bin_dir
 )
 
 # inc dir
-set( inc_dir
-    nlohmann
+set( inc_dir nlohmann )
+set( inc_files
+    nlohmann/json.hpp
+    nlohmann/json_fwd.hpp
 )
 
-if( UNIX )
+# pkg files
+set( pkg_files nlohmann_json.pc )
+set( cmake_files
+    nlohmann_jsonConfig.cmake
+    nlohmann_jsonConfigVersion.cmake
+    nlohmann_jsonTargets.cmake
+)
 
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" include_output
-    )
-    
-ENDIF()
+build_add_dir( "${inc_dir}" "${build_inc_dir}" dir_output )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
+build_add_files( "${pkg_files}" "${build_dir}/share/pkgconfig" pkg_output )
+build_add_files( "${cmake_files}" "${build_dir}/share/cmake/nlohmann_json" cmake_output )
 
 # build configuration
 
-# unix
+# options
+set( build_options
+    -DJSON_BuildTests=OFF
+    -DJSON_Install=ON
+)
 
-IF( UNIX )
+# configure, make and install
+build_cmake_commands( "${project_bin_dir}/${project_name}" build_make ${build_options} )
 
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
-    )
-
-    # options
-    if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=true )
-    else()
-        SET( build_options -DBUILD_SHARED_LIBS=false )
-    endif()
-
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-        cd ${project_name} &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir} 
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            ${build_options} &&
-        make ${build_flags} &&
-        make install
-    )
-
-    # scripts
-    if ( CMAKE_SHARED_LIBS )
-        set( build_output ${build_output} ${lib_output} )
-    endif()
-    
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
-        build_script
-    )
-
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-
-    # run
-    add_custom_command(
-        OUTPUT ${include_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )
-
-endif()
+# run
+set( build_output ${inc_output} ${pkg_output} ${cmake_output} )
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${include_output}
+    DEPENDS ${build_output} ${dir_output}
 )

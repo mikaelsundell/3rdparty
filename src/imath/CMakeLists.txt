@@ -32,142 +32,64 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# bin files
-set( bin_files
-)
-
 # inc dir
-set( inc_dir
-    Imath
-)
+set( inc_dir Imath )
+set( inc_files Imath/half.h Imath/ImathConfig.h )
 
 # lib files
-set( lib_files
-    Imath-3_2
-)
-
-# pkgfiles
-set( pkg_files
-)
-
-IF( UNIX )
-
-    # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
-    )
-
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
-    )
-
-    # lib files
-    if( CMAKE_BUILD_TYPE STREQUAL Debug )
-        set( lib_dtag "_d" )
-    endif()
-
-    foreach( lib_file ${lib_files} )
-    
-        if ( APPLE )
-            list( APPEND lib_output 
-                ${build_lib_dir}/${lib_prefix}${lib_file}${lib_dtag}.30.3.2.2${lib_suffix}
-            )
-
-	    else()
-            # INFO: on UNIX lib files appends version after suffix
-            string( REGEX REPLACE 
-                "^([^.]+)([.]*)(.*)" 
-                "${lib_prefix}\\1${lib_suffix}\\2\\3" 
-                lib_file "${lib_file}"
-            )
-
-            list( APPEND lib_output 
-                ${build_lib_dir}/${lib_file}
-            )
-	    endif()
-    
-    endforeach()
-
-    # pkg files
-    build_add_files( 
-        "${pkg_files}" "${build_lib_dir}/pkgconfig" pkg_output
-    )
-    
+set( lib_files Imath-3_2 )
+string( TOLOWER "${CMAKE_BUILD_TYPE}" build_config_name )
+if( build_config_name STREQUAL "debug" )
+    string( APPEND lib_files "_d" )
+elseif( build_config_name STREQUAL "" )
+    set( build_config_name noconfig )
 endif()
+
+# pkg files
+set( pkg_files Imath.pc )
+set( cmake_files
+    ImathConfig.cmake
+    ImathConfigVersion.cmake
+    ImathTargets.cmake
+    ImathTargets-${build_config_name}.cmake
+)
+
+build_add_dir( "${inc_dir}" "${build_inc_dir}" dir_output )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
+build_add_versioned_lib( "${lib_files}" 30.3.2.2 30 lib_output shared_output )
+build_add_files( "${pkg_files}" "${build_lib_dir}/pkgconfig" pkg_output )
+build_add_files( "${cmake_files}" "${build_lib_dir}/cmake/Imath" cmake_output )
 
 # build configuration
 
-# unix
+# options
+set( build_options
+    -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+    -DBUILD_TESTING=OFF
+    -DCMAKE_INSTALL_LIBDIR=lib
+)
 
-IF( UNIX )
+# configure, make and install
+build_cmake_commands( "${project_bin_dir}/Imath-3.2.2" build_make ${build_options} )
 
-    # download
-    SET( build_download 
-        ${download} ${project_url}
-    )
+# scripts
+set( build_output ${lib_output} ${inc_output} ${pkg_output} ${cmake_output} )
 
-    # tar uncompress
-    SET( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
-
-    # options
-    if( CMAKE_SHARED_LIBS )
-        SET( build_options -DBUILD_SHARED_LIBS=TRUE )
-    ELSE()
-        SET( build_options -DBUILD_SHARED_LIBS=FALSE )
-    ENDIF()
-
-    # configure, make and install
-    SET( build_make
-        ${build_env} &&
-        cd Imath-3.2.2 &&
-        mkdir -p ${build_cmake} &&
-        cd ${build_cmake} &&
-        cmake ../ -DCMAKE_INSTALL_PREFIX=${build_dir}
-              -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-              -DBUILD_TESTING=OFF
-              ${build_options} &&
-        make ${build_flags} &&
-        make install
-    )
-
-    # scripts
-    set( build_output ${bin_output} )
-
-    if ( CMAKE_SHARED_LIBS )
-        set( build_output ${build_output} ${lib_output} )
-    endif()
-
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+if( shared_output )
+    build_install_script(
+        "${shared_output}"
+        "${build_dir}"
+        "${build_prefix_lib}"
+        "${build_prefix_framework}"
         build_script
     )
-
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_patch}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )     
-
 endif()
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )

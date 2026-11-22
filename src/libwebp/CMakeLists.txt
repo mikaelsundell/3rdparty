@@ -32,77 +32,69 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# bin files
-set( bin_files
-    cwebp
-    dwebp
-)
-
-# inc dir
-set( inc_dir
-    webp
-)
-
-# lib files
-if ( CMAKE_SHARED_LIBS )
-    set( lib_files
-        webp.7
-        webpdemux.2
-        webpmux.3
-    )
+# platform-specific outputs
+if( WIN32 )
+    set( lib_files webp webpdecoder webpdemux webpmux )
+    set( bin_files cwebp dwebp gif2webp img2webp webpinfo webpmux )
+    list( TRANSFORM bin_files APPEND "${CMAKE_EXECUTABLE_SUFFIX}" )
+    set( inc_files webp/decode.h webp/encode.h webp/demux.h webp/mux.h )
+    build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
+    string( TOLOWER "${CMAKE_BUILD_TYPE}" build_variant )
+    set( cmake_files WebPConfig.cmake WebPConfigVersion.cmake WebPTargets.cmake "WebPTargets-${build_variant}.cmake" )
+    build_add_files( "${cmake_files}" "${build_dir}/share/WebP/cmake" cmake_output )
+    set( pkg_files libwebp.pc libwebpdecoder.pc libwebpdemux.pc libwebpmux.pc )
 else()
-    set( lib_files
-        webp
-        webpdemux
-        webpmux
-    )
-endif()
-
-# pkgfiles
-set( pkg_files
-    libwebp.pc
-)
-
-if( UNIX )
-
     # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
-    )
-
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
+    set( bin_files
+        cwebp
+        dwebp
     )
 
     # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
-    )
+    if ( CMAKE_SHARED_LIBS )
+        set( lib_files
+            webp.7
+            webpdemux.2
+            webpmux.3
+        )
+    else()
+        set( lib_files
+            webp
+            webpdemux
+            webpmux
+        )
+    endif()
 
-    # pkg files
-    build_add_files( 
-        "${pkg_files}" "${build_lib_dir}/pkgconfig" pkg_output
+    # pkgfiles
+    set( pkg_files
+        libwebp.pc
     )
-    
 endif()
+
+build_add_libs( "${lib_files}" "${build_lib_dir}" "${lib_prefix}" "${lib_suffix}" lib_output )
+build_add_files( "${bin_files}" "${build_bin_dir}" bin_output )
+build_add_files( "${pkg_files}" "${build_lib_dir}/pkgconfig" pkg_output )
 
 # build configuration
 
-# unix
-
-IF( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
+if( WIN32 )
+    # patches
+    build_patch_commands( "${project_bin_dir}/${project_pkg}" build_patch
+        "${project_src_dir}/msvc/msvc-tool-data-imports.patch"
+    )
+    # options
+    set( build_options
+        -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+        "-DCMAKE_PREFIX_PATH=${build_dir}"
+        -DWEBP_BUILD_VWEBP=OFF
+        -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON
     )
 
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_pkg}.tar.gz -C ${project_bin_dir}
-    )
+    # configure, make and install
+    build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options} )
 
+    set( build_output ${lib_output} ${bin_output} ${inc_output} ${pkg_output} ${cmake_output} )
+else()
     # options
     if( CMAKE_BUILD_TYPE STREQUAL Debug )
         set( build_options --enable-debug )
@@ -119,7 +111,7 @@ IF( UNIX )
     set( build_make
         ${build_env} &&
     	cd ${project_pkg} &&
-        ./configure 
+        ./configure
             --prefix=${build_dir}
             ${CFLAGS}
             CPPFLAGS=-I${build_inc_dir}
@@ -129,6 +121,9 @@ IF( UNIX )
         make install
     )
 
+    string( JOIN " " build_make ${build_make} )
+    set( build_make COMMAND sh -c "${build_make}" )
+
     # scripts
     set( build_output ${bin_output} )
 
@@ -136,33 +131,31 @@ IF( UNIX )
         set( build_output ${build_output} ${lib_output} )
     endif()
 
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+    build_install_script(
+        "${build_output}"
+        ${build_dir}
+        ${build_prefix_lib}
+        ${build_prefix_framework}
         build_script
     )
 
-    build_install_check( 
-        "${build_output}" 
+    build_install_check(
+        "${build_output}"
         build_check
     )
 
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )     
-
+    set( build_output ${bin_output} ${lib_output} )
 endif()
+
+# run
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )
+
+if( WIN32 )
+    build_add_dependencies( ${project_name} giflib jpeg libpng tiff )
+endif()

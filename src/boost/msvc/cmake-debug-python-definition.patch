@@ -1,0 +1,22 @@
+--- a/tools/boost_install/boost-install.jam
++++ b/tools/boost_install/boost-install.jam
+@@ -444,6 +444,19 @@
+         ""
+         : true ;
+ 
++    if $(lname) in python numpy
++    {
++        local python-debugging = [ $(ps).get <python-debugging> ] ;
++        if $(python-debugging) = "on"
++        {
++            print.text
++
++                "set_property(TARGET $(target) APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS BOOST_DEBUG_PYTHON)"
++                ""
++                : true ;
++        }
++    }
++
+     print.text "# Target file name: $(fname)" "" : true ;
+ 
+     .info "  lib-target-type=" $(lib-target-type) ;

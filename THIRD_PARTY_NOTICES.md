@@ -35,7 +35,6 @@ copyright notices; their LICENSES directories list license texts, not every auth
 | imath | `imath-3.2.2` | [LICENSE.md](licenses/third-party/imath/LICENSE.md) |
 | jasper | `jasper-master` | [COPYRIGHT](licenses/third-party/jasper/COPYRIGHT), [LICENSE](licenses/third-party/jasper/LICENSE) |
 | jpeg | `jpeg` | [README](licenses/third-party/jpeg/README) |
-| jpeg2000_images | `jpeg2000_images` | Not verified: media archive unavailable locally |
 | json | `json-master-231214` | [LICENSE.MIT](licenses/third-party/json/LICENSE.MIT), [LICENSES/Apache-2.0.txt](licenses/third-party/json/LICENSES/Apache-2.0.txt), [LICENSES/BSD-3-Clause.txt](licenses/third-party/json/LICENSES/BSD-3-Clause.txt), [LICENSES/GPL-3.0-only.txt](licenses/third-party/json/LICENSES/GPL-3.0-only.txt), [LICENSES/MIT.txt](licenses/third-party/json/LICENSES/MIT.txt) |
 | lcms2 | `lcms2-master` | [AUTHORS](licenses/third-party/lcms2/AUTHORS), [COPYING](licenses/third-party/lcms2/COPYING) |
 | libjpeg-turbo | `libjpeg-turbo-2.1.3` | [LICENSE.md](licenses/third-party/libjpeg-turbo/LICENSE.md), [README.ijg](licenses/third-party/libjpeg-turbo/README.ijg) |
@@ -51,17 +50,14 @@ copyright notices; their LICENSES directories list license texts, not every auth
 | nasm | `nasm-nasm-2.16.01` | [AUTHORS](licenses/third-party/nasm/AUTHORS), [LICENSE](licenses/third-party/nasm/LICENSE) |
 | ninja | `ninja-1.11.1` | [COPYING](licenses/third-party/ninja/COPYING) |
 | ocio | `OpenColorIO-2.5.0` | [LICENSE](licenses/third-party/ocio/LICENSE) |
-| ocio-images | `ocio-images.1.0v1` | Not verified: media archive unavailable locally |
 | oiio | `OpenImageIO-3.1.8.0` | [LICENSE.md](licenses/third-party/oiio/LICENSE.md) |
-| oiio-images | `OpenImageIO-oiio-images-3819677` | Not verified: media archive unavailable locally |
 | onetbb | `oneTBB-2022.3.0` | [LICENSE.txt](licenses/third-party/onetbb/LICENSE.txt) |
 | opencv | `opencv-4.x` | [COPYRIGHT](licenses/third-party/opencv/COPYRIGHT), [LICENSE](licenses/third-party/opencv/LICENSE) |
 | openexr | `openexr-3.4.6` | [LICENSE.md](licenses/third-party/openexr/LICENSE.md) |
-| openexr-images | `openexr-images-1.7.0` | Not verified: media archive unavailable locally |
 | openjpeg | `openjpeg-2.5.4` | [AUTHORS.md](licenses/third-party/openjpeg/AUTHORS.md), [LICENSE](licenses/third-party/openjpeg/LICENSE) |
 | opensubdiv | `OpenSubdiv-master-250306` | [LICENSE.txt](licenses/third-party/opensubdiv/LICENSE.txt), [NOTICE.txt](licenses/third-party/opensubdiv/NOTICE.txt) |
 | opentimelineio | `opentimelineio-master-250205` | [LICENSE.txt](licenses/third-party/opentimelineio/LICENSE.txt), [NOTICE.txt](licenses/third-party/opentimelineio/NOTICE.txt) |
-| openusd | `OpenUSD-25.11` | [LICENSE.txt](licenses/third-party/openusd/LICENSE.txt), [NOTICE.txt](licenses/third-party/openusd/NOTICE.txt) |
+| openusd | `OpenUSD-25.11` with the [upstream sdr include fix](src/openusd/sdr-unused-include.patch) | [LICENSE.txt](licenses/third-party/openusd/LICENSE.txt), [NOTICE.txt](licenses/third-party/openusd/NOTICE.txt) |
 | pcre2 | `pcre2-10.32` | [AUTHORS](licenses/third-party/pcre2/AUTHORS), [COPYING](licenses/third-party/pcre2/COPYING) |
 | pkg-config | `pkg-config-0.28` | [AUTHORS](licenses/third-party/pkg-config/AUTHORS), [COPYING](licenses/third-party/pkg-config/COPYING) |
 | ptex | `ptex-master-220319` | [LICENSE](licenses/third-party/ptex/LICENSE) |
@@ -75,13 +71,7 @@ copyright notices; their LICENSES directories list license texts, not every auth
 | yasm | `yasm-1.3.0` | [AUTHORS](licenses/third-party/yasm/AUTHORS), [COPYING](licenses/third-party/yasm/COPYING), [license.c](licenses/third-party/yasm/license.c) |
 | zlib-ng | `zlib-ng-2.3.3` | [LICENSE.md](licenses/third-party/zlib-ng/LICENSE.md), [zlib.h.in](licenses/third-party/zlib-ng/zlib.h.in) |
 
-## Optional media and artwork
-
-The image archives `jpeg2000_images`, `ocio-images.1.0v1`,
-`OpenImageIO-oiio-images-3819677`, and `openexr-images-1.7.0` were not available
-locally during this audit. Their recipe headers no longer repeat unverified
-copyright summaries copied from library recipes. Verify the notices inside the
-specific image archives before redistributing them.
+## Artwork
 
 The repository’s icon was previously credited to [Vectaicon on Flaticon](https://www.flaticon.com/authors/vectaicon).
 That existing attribution is retained here; the original artwork license and

@@ -32,11 +32,6 @@ set( project_bin_dir
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# bin files
-set( bin_files
-    libpng16-config
-)
-
 # inc files
 set( inc_files
     png.h
@@ -44,134 +39,109 @@ set( inc_files
     pnglibconf.h
 )
 
-# inc dir
-set( inc_dir
-    libpng16
-)
-
-# lib files
-if( CMAKE_SHARED_LIBS )
-    set( lib_files
-        png
-        png16
-        png16.16
+# bin and lib files
+if( WIN32 )
+    set( bin_files
+        pngfix.exe
+        png-fix-itxt.exe
     )
+    if( CMAKE_SHARED_LIBS )
+        set( lib_files libpng16 )
+    else()
+        set( lib_files libpng16_static )
+    endif()
+    if( CMAKE_BUILD_TYPE STREQUAL Debug )
+        list( TRANSFORM lib_files APPEND "d" )
+    endif()
 else()
-    set( lib_files
-        png
-    )
+    set( bin_files libpng16-config )
+    set( lib_files png )
+    if( CMAKE_SHARED_LIBS )
+        list( APPEND lib_files png16 png16.16 )
+    endif()
 endif()
 
-# pkgfiles
-set( pkg_files
-    libpng.pc
-    libpng16.pc
-)
-
-if( UNIX )
-
-    # bin files
-    build_add_files( 
-        "${bin_files}" "${build_bin_dir}" bin_output
+# package files
+if( WIN32 )
+    set( cmake_files
+        PNGConfig.cmake
+        PNGConfigVersion.cmake
+        PNGTargets.cmake
     )
-
-    # inc files
-    build_add_files( 
-        "${inc_files}" "${build_inc_dir}" inc_output
+    build_add_files( "${cmake_files}" "${build_lib_dir}/cmake/PNG" cmake_output )
+else()
+    set( inc_dir libpng16 )
+    set( pkg_files
+        libpng.pc
+        libpng16.pc
     )
-
-    # inc dir
-    build_add_dir( 
-        "${inc_dir}" "${build_inc_dir}" dir_output
-    )
-
-    # lib files
-    build_add_libs( 
-        "${lib_files}" "${build_lib_dir}" ${lib_prefix} ${lib_suffix} lib_output
-    )
-
-    # pkg files
-    build_add_files( 
-        "${pkg_files}" "${build_lib_dir}/pkgconfig" pkg_output
-    )
-    
+    build_add_dir( "${inc_dir}" "${build_inc_dir}" dir_output )
+    build_add_files( "${pkg_files}" "${build_lib_dir}/pkgconfig" pkg_output )
 endif()
+
+build_add_files( "${bin_files}" "${build_bin_dir}" bin_output )
+build_add_files( "${inc_files}" "${build_inc_dir}" inc_output )
+build_add_libs( "${lib_files}" "${build_lib_dir}" "${lib_prefix}" "${lib_suffix}" lib_output )
 
 # build configuration
 
-# unix
-
-if( UNIX )
-
-    # download
-    set( build_download 
-        ${download} ${project_url}
-    )
-
-    # tar uncompress
-    set( build_uncompress
-        ${untar} ${project_bin_dir}/${project_arc} -C ${project_bin_dir}
-    )
-
-    # options
-    if( CMAKE_BUILD_TYPE STREQUAL Debug )
-        set( build_options --enable-debug )
-    endif()
-
+# configure, make and install
+if( WIN32 )
     if( CMAKE_SHARED_LIBS )
-        set( build_options ${build_options} --enable-shared --disable-static )
+        set( build_static_libs OFF )
     else()
-        set( build_options ${build_options} --enable-static --disable-shared )
+        set( build_static_libs ON )
     endif()
-
-    # configure, make and install
-    set( build_make
-        ${build_env} &&
-    	cd ${project_pkg} &&
-        ./configure 
-            --prefix=${build_dir}
-            ${build_options} &&
-        make ${build_flags} &&
-        make install
+    set( build_options
+        -DBUILD_SHARED_LIBS=${CMAKE_SHARED_LIBS}
+        "-DCMAKE_PREFIX_PATH=${build_dir}"
+        -DPNG_SHARED=${CMAKE_SHARED_LIBS}
+        -DPNG_STATIC=${build_static_libs}
+        -DPNG_TESTS=OFF
+        -DPNG_TOOLS=ON
+        "-DZLIB_ROOT=${build_dir}"
     )
-
-    # scripts
-    set( build_output ${bin_output} )
-
-    if ( CMAKE_SHARED_LIBS )
-        set( build_output ${build_output} ${lib_output} )
+    build_cmake_commands( "${project_bin_dir}/${project_pkg}" build_make ${build_options} )
+else()
+    # Keep the upstream Autotools build and its versioned install layout.
+    set( build_options "--prefix=${build_dir}" )
+    if( CMAKE_BUILD_TYPE STREQUAL Debug )
+        list( APPEND build_options --enable-debug )
+    endif()
+    if( CMAKE_SHARED_LIBS )
+        list( APPEND build_options --enable-shared --disable-static )
+    else()
+        list( APPEND build_options --enable-static --disable-shared )
     endif()
 
-    build_install_script( 
-        "${build_output}" 
-        ${build_dir} 
-        ${build_prefix_lib} 
-        ${build_prefix_framework} 
+    string( JOIN " " configure_env ${build_env} )
+    string( JOIN " " make_flags ${build_flags} )
+    set( build_make
+        COMMAND sh -c
+            "${configure_env} && cd \"$1\" && shift && ./configure \"$@\" && make ${make_flags} && make install"
+            sh "${project_bin_dir}/${project_pkg}" ${build_options}
+    )
+endif()
+
+# scripts
+if( APPLE AND CMAKE_SHARED_LIBS )
+    build_install_script(
+        "${lib_output}"
+        "${build_dir}"
+        "${build_prefix_lib}"
+        "${build_prefix_framework}"
         build_script
     )
-
-    build_install_check( 
-        "${build_output}" 
-        build_check
-    )
-
-    # run
-    add_custom_command(
-        OUTPUT ${bin_output} ${lib_output}
-        COMMAND ${build_download}
-        COMMAND ${build_uncompress}
-        COMMAND ${build_make}
-        COMMAND ${build_script}
-        COMMAND ${build_check}
-    )     
-
 endif()
+
+# run
+set( build_output ${bin_output} ${lib_output} ${inc_output} ${pkg_output} ${cmake_output} )
+build_add_archive_rule()
 
 # Custom target builds missing installed outputs.
 add_custom_target(
     ${project_name} ALL
-    DEPENDS ${bin_output} ${lib_output}
+    DEPENDS ${build_output} ${dir_output}
 )
 
-# dependencies
-build_add_dependencies(${project_name} zlib-ng)
+build_add_dependencies( ${project_name} zlib-ng )

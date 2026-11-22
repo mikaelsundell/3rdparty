@@ -1,0 +1,34 @@
+From 22b237135b439a012fe8b8b9514aaaba828b070a Mon Sep 17 00:00:00 2001
+From: sunyab <sunyab@users.noreply.github.com>
+Date: Wed, 4 Feb 2026 11:17:58 -0800
+Subject: [PATCH] sdr: Remove unnecessary include
+
+This caused build errors in certain cases since sdr did not declare
+a dependency on usd.
+
+Fixes #3972
+
+(Internal change: 2394414)
+---
+ pxr/usd/sdr/wrapShaderMetadataHelpers.cpp | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/pxr/usd/sdr/wrapShaderMetadataHelpers.cpp b/pxr/usd/sdr/wrapShaderMetadataHelpers.cpp
+index eeade4a7a8e..44f5df84a7e 100644
+--- a/pxr/usd/sdr/wrapShaderMetadataHelpers.cpp
++++ b/pxr/usd/sdr/wrapShaderMetadataHelpers.cpp
+@@ -7,7 +7,6 @@
+ 
+ #include "pxr/pxr.h"
+ #include "pxr/usd/sdr/shaderMetadataHelpers.h"
+-#include "pxr/usd/usd/pyConversions.h"
+ 
+ #include "pxr/external/boost/python.hpp"
+ PXR_NAMESPACE_USING_DIRECTIVE
+@@ -35,4 +34,4 @@ void wrapShaderMetadataHelpers()
+ {
+     class_<_MetadataHelpers>("MetadataHelpers")
+         .def("ParseSdfValue", _ParseSdfValue);
+-}
+\ No newline at end of file
++}
